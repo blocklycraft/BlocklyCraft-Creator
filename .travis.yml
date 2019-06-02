@@ -29,6 +29,7 @@ install:
 - source ~/.bashrc
 - npm install -g xvfb-maybe
 - yarn
+- sudo snap install snapcraft --classic
 script:
 - yarn run arch32
 - yarn run arch64
