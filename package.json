@@ -10,8 +10,8 @@
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
     "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
     "build:web": "cross-env BUILD_TARGET=web node .electron-vue/build.js",
-    "arch32": "node .electron-vue/build.js && electron-builder --ia32",
-    "arch64": "node .electron-vue/build.js && electron-builder --x64",
+    "win32": "node .electron-vue/build.js && electron-builder -w --ia32",
+    "win64": "node .electron-vue/build.js && electron-builder -w --x64",
     "dev": "node .electron-vue/dev-runner.js",
     "pack": "npm run pack:main && npm run pack:renderer",
     "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
@@ -61,11 +61,7 @@
       "icon": "build/icons/icon.ico",
       "target": [
         {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
+          "target": "nsis"
         }
       ]
     },
