@@ -1,23 +1,35 @@
-# crafteditor       
+# 积木编辑器       
 [![Build status](https://ci.appveyor.com/api/projects/status/04rrmwttc7qwhvib/branch/master?svg=true)](https://ci.appveyor.com/project/hempflower/blocklycraft-creator/branch/master)[![Build Status](https://travis-ci.com/blocklycraft/BlocklyCraft-Creator.svg?branch=master)](https://travis-ci.com/blocklycraft/BlocklyCraft-Creator)
 
-> It can easy make bukkit plugin
+> 让Bukkit插件制作变得更容易^-^      
 
-#### Build Setup
+如果你是普通用户，只想下载积木编辑器，请到[发布页面](https://github.com/blocklycraft/BlocklyCraft-Creator/releases)
+
+
+#### 手动构建
 
 ``` bash
-# install dependencies
+# 安装依赖
 npm install
 
-# serve with hot reload at localhost:9080
+# 以开发模式启动
 npm run dev
 
-# build electron application for production
+# 构建成品
 npm run build
-
 
 ```
 
 ---
 
-This project was generated with [electron-vue](https://github.com/SimulatedGREG/electron-vue)@[8fae476](https://github.com/SimulatedGREG/electron-vue/tree/8fae4763e9d225d3691b627e83b9e09b56f6c935) using [vue-cli](https://github.com/vuejs/vue-cli). Documentation about the original structure can be found [here](https://simulatedgreg.gitbooks.io/electron-vue/content/index.html).
+#### 技术信息     
+
+- Electron
+- Vue.js
+- Blockly 
+
+如果你支持这个项目，可以赞助[爱发电](https://afdian.net/@hempflower)或为我们贡献代码。提出一些很好的创意也是可以的。
+
+## 赞助者列表      
+
+暂无
