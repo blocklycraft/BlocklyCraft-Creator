@@ -1,4 +1,5 @@
-# crafteditor
+# crafteditor       
+[![Build status](https://ci.appveyor.com/api/projects/status/04rrmwttc7qwhvib/branch/master?svg=true)](https://ci.appveyor.com/project/hempflower/blocklycraft-creator/branch/master)[![Build Status](https://travis-ci.com/blocklycraft/BlocklyCraft-Creator.svg?branch=master)](https://travis-ci.com/blocklycraft/BlocklyCraft-Creator)
 
 > It can easy make bukkit plugin
 
