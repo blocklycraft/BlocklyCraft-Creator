@@ -33,7 +33,8 @@
       "installerHeaderIcon": "./build/icons/icon.ico",
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "BlocklyCreator 积木编辑器"
+      "shortcutName": "BlocklyCreator 积木编辑器",
+      "artifactName": "${productName} Setup ${version} ${arch}.${ext}"
     },
     "files": [
       "dist/electron/**/*"
@@ -69,7 +70,16 @@
       ]
     },
     "linux": {
-      "icon": "build/icons"
+      "icon": "build/icons",
+      "target": [
+        {
+          "target": "tar.gz",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
     }
   },
   "dependencies": {
