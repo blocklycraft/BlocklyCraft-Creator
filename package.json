@@ -58,6 +58,7 @@
       "icon": "build/icons/icon.icns"
     },
     "win": {
+      "artifactName": "${productName}-${version}-${env.APP_ARCH}.${ext}",
       "icon": "build/icons/icon.ico",
       "target": [
         {
