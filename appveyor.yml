@@ -24,7 +24,9 @@ install:
   - node --version
 
 build_script:
+  - set APP_ARCH=x86
   - yarn win32
+  - set APP_ARCH=x64
   - yarn win64
 
 test: off

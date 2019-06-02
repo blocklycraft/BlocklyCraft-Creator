@@ -34,7 +34,7 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "BlocklyCreator 积木编辑器",
-      "artifactName": "${productName} Setup ${version} ${arch}.${ext}"
+      "artifactName": "${productName} ${version} ${env.APP_ARCH}.${ext}"
     },
     "files": [
       "dist/electron/**/*"
