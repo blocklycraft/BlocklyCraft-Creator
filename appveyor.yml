@@ -24,6 +24,7 @@ install:
   - node --version
 
 build_script:
-  - yarn build
+  - yarn run arch32
+  - yarn run arch64
 
 test: off
