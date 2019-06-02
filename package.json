@@ -22,6 +22,18 @@
     "directories": {
       "output": "build"
     },
+    "nsis": {
+      "oneClick": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "./build/icons/icon.ico",
+      "uninstallerIcon": "./build/icons/icon.ico",
+      "installerHeaderIcon": "./build/icons/icon.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "BlocklyCreator 积木编辑器",
+      "artifactName": "${productName} ${version}.${ext}"
+    },
     "files": [
       "dist/electron/**/*"
     ],
@@ -44,10 +56,28 @@
       "icon": "build/icons/icon.icns"
     },
     "win": {
-      "icon": "build/icons/icon.ico"
+      "icon": "build/icons/icon.ico",
+      "target": [
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
     },
     "linux": {
-      "icon": "build/icons"
+      "icon": "build/icons",
+      "target": [
+        {
+          "target": "tar.gz",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
     }
   },
   "dependencies": {
