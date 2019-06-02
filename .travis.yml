@@ -30,8 +30,7 @@ install:
 - npm install -g xvfb-maybe
 - yarn
 script:
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then yarn run arch32; fi
-- yarn run arch64
+  - yarn build
 branches:
   only:
   - master
