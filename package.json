@@ -58,8 +58,14 @@
     },
     "win": {
       "icon": "build/icons/icon.ico",
-      "arch": [
-        "ia32"
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
       ]
     },
     "linux": {
