@@ -60,7 +60,7 @@
       "icon": "build/icons/icon.ico",
       "target": [
         {
-          "target": "nsis",
+          "target": "zip",
           "arch": [
             "x64",
             "ia32"
