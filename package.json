@@ -56,7 +56,6 @@
       "icon": "build/icons/icon.icns"
     },
     "win": {
-      "artifactName": "${productName}-${version}.${ext}",
       "icon": "build/icons/icon.ico",
       "target": [
         {
