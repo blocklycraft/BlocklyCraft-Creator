@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, Menu } from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -17,6 +17,7 @@ function createWindow () {
   /**
    * Initial window options
    */
+  Menu.setApplicationMenu(null)
   mainWindow = new BrowserWindow({
     height: 768,
     useContentSize: true,
@@ -24,7 +25,8 @@ function createWindow () {
     title:"BlockCreator",
     webPreferences:{
       nodeIntegration:true
-    }
+    },
+
   })
 
   mainWindow.loadURL(winURL)
