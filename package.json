@@ -3,7 +3,7 @@
   "version": "0.0.1-indev",
   "author": "hempflower <1993996310@qq.com>",
   "description": "It can easy make bukkit plugin",
-  "license": "GPL",
+  "license": "GPLV3",
   "main": "./dist/electron/main.js",
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder",
@@ -21,18 +21,6 @@
     "appId": "cn.orecraft.blocklycraft.editor",
     "directories": {
       "output": "build"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowElevation": true,
-      "allowToChangeInstallationDirectory": true,
-      "installerIcon": "./build/icons/icon.ico",
-      "uninstallerIcon": "./build/icons/icon.ico",
-      "installerHeaderIcon": "./build/icons/icon.ico",
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "shortcutName": "BlocklyCreator 积木编辑器",
-      "artifactName": "${productName} ${version}.${ext}"
     },
     "files": [
       "dist/electron/**/*"
@@ -81,8 +69,9 @@
     }
   },
   "dependencies": {
-    "vue": "^2.5.16",
     "axios": "^0.18.0",
+    "element-ui": "^2.9.1",
+    "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
