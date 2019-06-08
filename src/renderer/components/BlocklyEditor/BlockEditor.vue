@@ -1,6 +1,6 @@
 <template>
     <div style="width:100%; height:100%">
-    <webview src="static/index.html" style="display:inline-flex; width:100%; height:100%"></webview>
+    <webview id="editor" src="static/index.html" style="display:inline-flex; width:100%; height:100%" nodeintegration></webview>
     </div>
 </template>
 
@@ -9,6 +9,14 @@
         name: "BlockEditor",
         mounted() {
             this.setHtml("<div>Test</div>");
+            let webview = document.getElementById("editor");
+            webview.addEventListener('console-message', e => {
+                console.log('webview: ' + e.message);
+            });
+            webview.addEventListener('did-finish-load', () => {
+                console.log("正在加载编辑器");
+                webview.executeJavaScript('init()');
+            });
         },
         data(){
             return {
