@@ -29,9 +29,31 @@ function createWindow() {
                 {label: "最小化" ,role:"minimize"},
                 {label: "退出" ,role:"quit"},
             ]
+        },
+        {
+            label:"编辑",
+            type:"submenu",
+            submenu:[
+                {label: "撤销",role:"undo"},
+                {label: "重复",role:"redo"},
+                {label: "-",type:"separator"},
+                {label: "剪切",role:"cut"},
+                {label: "复制",role:"copy"},
+                {label: "粘贴",role:"paste"}
+            ]
+        },
+        {
+            label:"帮助",
+            type:"submenu",
+            submenu:[
+                {label: "BlockCreator 帮助文档"},
+                {label: "积木库文档"},
+                {label: "-",type:"separator"},
+                {label: "关于",role:"about"}
+            ]
         }
     ];
-    const menu = Menu.buildFromTemplate(appMenuTem)
+    const menu = Menu.buildFromTemplate(appMenuTem);
     Menu.setApplicationMenu(menu);
     mainWindow = new BrowserWindow({
         height: 768,
@@ -39,7 +61,8 @@ function createWindow() {
         width: 1024,
         title: "BlockCreator",
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: true,
+            webviewTag:true
         },
 
     })
