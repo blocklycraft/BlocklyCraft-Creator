@@ -19,7 +19,7 @@
     height: 100%;
   }
   body,html{
-    margin: 0px;
+    margin: 0 0 0 3px;
   }
   /* CSS */
 </style>
