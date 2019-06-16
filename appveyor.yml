@@ -18,5 +18,6 @@ install:
   - node --versio
 
 build_script:
+  - npm run build
 
 
