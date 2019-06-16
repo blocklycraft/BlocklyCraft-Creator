@@ -15,7 +15,7 @@ install:
   - ps: Install-Product node 8 x64
   - git reset --hard HEAD
   - yarn
-  - node --versio
+  - node --version
 
 build_script:
   - npm run build
