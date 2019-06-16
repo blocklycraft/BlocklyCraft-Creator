@@ -1,0 +1,29 @@
+sudo: required
+dist: trusty
+
+language: node_js
+node_js: "10"
+
+matrix:
+  include:
+    - name: "macOS"
+      os: osx
+
+    - name: "Windows"
+      os: osx
+
+    - name: "Linux"
+      os: linux
+
+
+cache:
+  directories:
+    - node_modules
+
+install:
+  - nvm install 10
+  - npm install
+
+script:
+  - quasar build -m electron
+
