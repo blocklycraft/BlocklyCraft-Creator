@@ -23,6 +23,7 @@ cache:
 install:
   - nvm install 10
   - npm install
+  - npm install yarn@latest -g
 
 script:
   - quasar build -m electron
