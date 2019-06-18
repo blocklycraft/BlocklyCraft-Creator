@@ -126,34 +126,62 @@ module.exports = function (ctx) {
     },
 
     electron: {
-      // bundler: 'builder', // or 'packager'
+       bundler: 'builder', // or 'packager'
 
       extendWebpack (cfg) {
         // do something with Electron main process Webpack cfg
         // chainWebpack also available besides this extendWebpack
       },
 
-      packager: {
-        // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
-
-        // OS X / Mac App Store
-        // appBundleId: '',
-        // appCategoryType: '',
-        // osxSign: '',
-        // protocol: 'myapp://path',
-
-        // Window only
-        // win32metadata: { ... }
-
-        all:"true",
-        name:"BlockCraft",
-
-      },
 
       builder: {
         // https://www.electron.build/configuration/configuration
 
         // appId: 'quasar-app'
+
+        "appId": "cn.orecraft.blockcraft",
+        "productName":"BlockCreator",
+        "copyright": "Copyright © year ${author}",
+        "dmg": {
+          "contents": [
+            {
+              "x": 410,
+              "y": 150,
+              "type": "link",
+              "path": "/Applications"
+            },
+            {
+              "x": 130,
+              "y": 150,
+              "type": "file"
+            }
+          ]
+        },
+        "mac": {
+        },
+        "win": {
+          "target": [
+            {
+              "target": "zip",
+              "arch": [
+                "x64",
+                "ia32"
+              ]
+            }
+          ]
+        },
+        "linux": {
+          "target": [
+            {
+              "target": "tar.gz",
+              "arch": [
+                "x64",
+                "ia32"
+              ]
+            }
+          ]
+        }
+
       }
     }
   }
