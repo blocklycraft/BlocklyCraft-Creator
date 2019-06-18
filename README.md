@@ -1,5 +1,5 @@
 # 积木编辑器       
-[![Build status](https://ci.appveyor.com/api/projects/status/04rrmwttc7qwhvib/branch/master?svg=true)](https://ci.appveyor.com/project/hempflower/blocklycraft-creator/branch/master)[![Build Status](https://travis-ci.com/blocklycraft/BlocklyCraft-Creator.svg?branch=master)](https://travis-ci.com/blocklycraft/BlocklyCraft-Creator)
+[![Build Status](https://travis-ci.com/blocklycraft/BlocklyCraft-Creator.svg?branch=master)](https://travis-ci.com/blocklycraft/BlocklyCraft-Creator)
 
 > 让Bukkit插件制作变得更容易^-^      
 
