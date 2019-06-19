@@ -21,7 +21,6 @@ cache:
     - node_modules
 
 install:
-  - nvm install 10
   - npm install
   - npm install yarn@latest -g
 
