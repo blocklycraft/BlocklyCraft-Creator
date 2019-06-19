@@ -10,7 +10,7 @@ matrix:
       os: osx
 
     - name: "Windows"
-      os: osx
+      os: windows
 
     - name: "Linux"
       os: linux
