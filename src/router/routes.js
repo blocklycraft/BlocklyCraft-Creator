@@ -2,11 +2,11 @@
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/layouts.vue'),
+    component: () => import('../layouts/layouts.vue'),
     children:[
       {
         path:'/',
-        component: () => import('pages/index.vue')
+        component: () => import('../pages/index.vue')
       }
     ]
 
@@ -17,7 +17,7 @@ const routes = [
 if (process.env.MODE !== 'ssr') {
   routes.push({
     path: '*',
-    component: () => import('layouts/layouts.vue')
+    component: () => import('../layouts/layouts.vue')
   })
 }
 
