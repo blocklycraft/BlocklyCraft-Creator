@@ -17,13 +17,20 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     width: 1000,
     height: 600,
-    useContentSize: true
+    useContentSize: true,
+    frame: false,
+    show:false
+
   })
+
 
   mainWindow.loadURL(process.env.APP_URL)
 
   mainWindow.on('closed', () => {
     mainWindow = null
+  })
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show()
   })
 }
 

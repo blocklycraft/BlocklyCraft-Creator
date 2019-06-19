@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "A Bukkit plugin creator!!",
   "productName": "BlockCraft",
-  "cordovaId": "org.cordova.quasar.app",
+  "cordovaId": "cn.orecraft.blockcraft",
   "author": "hempflower <1993996310@qq.com>",
   "private": true,
   "scripts": {
