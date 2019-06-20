@@ -22,7 +22,7 @@ cache:
 
 install:
   - npm install
-  - curl -o- -L https://yarnpkg.com/install.sh | bash
+  - npm install --global yarn
 
 script:
   - quasar build -m electron
