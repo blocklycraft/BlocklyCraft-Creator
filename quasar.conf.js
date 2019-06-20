@@ -135,6 +135,7 @@ module.exports = function (ctx) {
         "productName":"BlockCreator",
         "copyright": "Copyright © year ${author}",
         "dmg": {
+          "artifactName":"${productName}-${version}-${os}-${arch}.${ext}",
           "contents": [
             {
               "x": 410,
@@ -149,9 +150,8 @@ module.exports = function (ctx) {
             }
           ]
         },
-        "mac": {
-        },
         "win": {
+          "artifactName":"${productName}-${version}-${os}-${arch}.${ext}",
           "target": [
             {
               "target": "zip",
@@ -163,6 +163,7 @@ module.exports = function (ctx) {
           ]
         },
         "linux": {
+          "artifactName":"${productName}-${version}-${os}-${arch}.${ext}",
           "target": [
             {
               "target": "tar.gz",
