@@ -1,5 +1,5 @@
 <template>
-    <div style="box-sizing:border-box;border:2px solid #027BE3;">
+    <div style="box-sizing:border-box;border-bottom:1px solid #027BE3;border-right:1px solid #027BE3;border-left:1px solid #027BE3;">
       <q-layout view="lHh lpr lFf" container  class="" style="height: 100%;">
         <q-header elevated>
           <q-bar class="q-electron-drag">
