@@ -1,6 +1,6 @@
 <template>
-    <div>
-      <q-layout view="lHh lpr lFf" container style="height: 100%" class="shadow-2">
+    <div style="box-sizing:border-box;border:2px solid #027BE3;">
+      <q-layout view="lHh lpr lFf" container  class="" style="height: 100%;">
         <q-header elevated>
           <q-bar class="q-electron-drag">
             <q-icon name="mode_edit" />
@@ -94,9 +94,9 @@
           </div>
         </q-header>
 
-        <q-page-container>
-          <q-page>
-            <router-view></router-view>
+        <q-page-container >
+          <q-page >
+            <router-view style="height: 100%"></router-view>
           </q-page>
         </q-page-container>
       </q-layout>
