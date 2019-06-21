@@ -1,6 +1,11 @@
-// This is just an example,
-// so you can safely delete all default props below
 
 export default {
-  app_name: 'BlockCraft'
+
+  menu:{
+    file: 'File',
+    new: 'New..',
+    open: 'Open',
+    quit: 'Quit'
+
+  }
 }
