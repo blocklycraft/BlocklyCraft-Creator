@@ -10,9 +10,12 @@
       mounted() {
         let webview = document.getElementById('editor_view');
         webview.addEventListener('dom-ready', () => {
-          webview.openDevTools()
-          webview.executeJavaScript("load()")
+          //webview.openDevTools()
+
         })
+      },
+      methods:{
+
       }
     }
 </script>

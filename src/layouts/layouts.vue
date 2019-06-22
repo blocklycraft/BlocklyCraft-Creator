@@ -18,10 +18,10 @@
               {{ $t('menu.file') }}
               <q-menu>
                 <q-list dense style="min-width: 100px">
-                  <q-item clickable v-close-popup>
+                  <q-item clickable v-close-popup @click="new_pro_dl_show = true">
                     <q-item-section>{{ $t('menu.new') }}</q-item-section>
                   </q-item>
-                  <q-item clickable v-close-popup>
+                  <q-item clickable v-close-popup @click="open_porject">
                     <q-item-section>{{ $t('menu.open') }}</q-item-section>
                   </q-item>
 
@@ -53,9 +53,9 @@
           </div>
         </q-header>
 
-        <q-page-container >
-          <q-page >
-            <router-view style="height: 100%"></router-view>
+        <q-page-container style="height: auto">
+          <q-page style="height: auto">
+            <Index style="height: auto"></Index>
           </q-page>
         </q-page-container>
       </q-layout>
@@ -88,14 +88,42 @@
         </q-card>
       </q-dialog>
 
+      <q-dialog v-model="new_pro_dl_show" persistent>
+        <q-card style="min-width: 500px">
+          <q-card-section>
+            <div class="text-h6">{{ $t('project.create') }}</div>
+          </q-card-section>
+          <q-card-section>
+            <q-form class="q-gutter-md">
+              <q-input v-model="create_pro_dl.path"
+                       :label="$t('project.path')"
+                       dense
+              >
+                <template v-slot:after>
+                  <q-btn round dense flat icon="explore" />
+                </template>
+              </q-input>
+              <q-input v-model="create_pro_dl.name" :label="$t('project.name')" dense></q-input>
+            </q-form>
+          </q-card-section>
+
+          <q-card-actions align="right">
+            <q-btn flat :label="$t('dialog.cancel')" color="primary" v-close-popup />
+            <q-btn flat :label="$t('dialog.create')" color="primary" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+
 
     </div>
 </template>
 
 <script>
+  import Index from '../pages/Index'
     export default {
         name: "layouts",
-        methods:{
+      components: {Index},
+      methods:{
           minimize (){
             this.$q.electron.remote.BrowserWindow.getFocusedWindow().minimize()
 
@@ -117,15 +145,35 @@
           openUrl (url){
             let exec = require('child_process').exec;
             exec('start '+url);
+          },
+          open_porject (){
+            const { dialog } = require('electron').remote
+            dialog.showOpenDialog({
+              title:this.$i18n.t('project.open'),
+              properties:['openDirectory'],
+
+            },
+              function (filePaths) {
+                if(filePaths!==undefined && filePaths.length>0){
+                  let path = filePaths[0];
+                  console.log(path)
+                }
+            }
+            );
           }
       },
       data (){
           return {
             about_dl_show: false,
+            new_pro_dl_show: false,
             app_version: '0.0.1-indev',
             electron_version: process.versions.electron,
             chrome_version : process.versions.chrome,
-            node_version: process.versions.node
+            node_version: process.versions.node,
+            create_pro_dl:{
+              path: '',
+              name: ''
+            }
           }
       }
 

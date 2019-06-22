@@ -1,6 +1,5 @@
 <template>
   <q-page style="height: 100%">
-
     <q-splitter
       v-model="splitterModel"
       :limits="[20, 30]"
@@ -18,7 +17,6 @@
 
     </q-splitter>
   </q-page>
-
 </template>
 
 <style>

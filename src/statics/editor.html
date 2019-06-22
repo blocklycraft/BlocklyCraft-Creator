@@ -15,14 +15,12 @@
 <div id="workarea" style="height: 100%"></div>
 <div id="workspace" style="position: absolute"></div>
 <script src="blockly_compressed.js"></script>
-<script src="blocks_compressed.js"></script>
-<script src="zh-hans.js"></script>
+
 <script>
   let toolbox = '<xml>';
   toolbox += '<block type="controls_if"></block>';
     toolbox += '<block type="controls_whileUntil"></block>';
     toolbox += '</xml>';
-
 
   let blocklyArea = document.getElementById('workarea');
   let blocklyDiv = document.getElementById('workspace');
