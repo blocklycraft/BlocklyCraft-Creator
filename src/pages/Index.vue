@@ -8,10 +8,12 @@
     >
       <template v-slot:before>
         <q-page><ProjectArea /></q-page>
-
       </template>
 
       <template v-slot:after>
+        <q-page>
+          <BlocklyEditor></BlocklyEditor>
+        </q-page>
       </template>
 
     </q-splitter>
@@ -24,15 +26,13 @@
 
 <script>
   import ProjectArea from '../components/ProjectArea'
-export default {
-
+  import BlocklyEditor from "../components/BlocklyEditor";
+  export default {
   name: 'PageIndex',
-  components: {ProjectArea},
+  components: {BlocklyEditor, ProjectArea},
   data () {
     return {
       splitterModel: 20
-
-
     }
   }
 }
