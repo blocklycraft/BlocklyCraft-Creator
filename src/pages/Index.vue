@@ -8,7 +8,6 @@
       <template v-slot:before>
         <q-page><ProjectArea /></q-page>
       </template>
-
       <template v-slot:after>
         <q-page>
           <BlocklyEditor></BlocklyEditor>

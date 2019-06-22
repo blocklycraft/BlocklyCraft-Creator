@@ -17,9 +17,34 @@
       <q-separator />
 
       <q-tab-panels v-model="pro_tab">
-        <q-tab-panel name="info">
-          <div class="text-h6">项目信息页面</div>
-          这里将会放置有关项目信息的内容
+        <q-tab-panel style="padding: 0px" name="info">
+          <q-list  separator>
+
+            <q-item clickable v-ripple>
+              <q-item-section>
+                <q-item-label>插件名称</q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <q-item-label caption>测试插件</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section>
+                <q-item-label>作者</q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <q-item-label caption>hempflower</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section>
+                <q-item-label>版本</q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <q-item-label caption>0.0.1</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
         </q-tab-panel>
 
         <q-tab-panel name="blocks">
