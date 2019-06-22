@@ -26,6 +26,9 @@
                   </q-item>
 
                   <q-separator />
+                  <q-item clickable v-close-popup @click="setting_dl_show = true">
+                    <q-item-section>{{ $t('menu.setting') }}</q-item-section>
+                  </q-item>
 
                   <q-item clickable v-close-popup @click="closeApp">
                     <q-item-section>{{ $t('menu.quit') }}</q-item-section>
@@ -64,7 +67,7 @@
       <q-dialog v-model="about_dl_show">
         <q-card style="min-width: 500px">
           <q-card-section>
-            <div class="text-h6">关于 - BlockCraft</div>
+            <div class="text-h6">{{ $t('app.aboutme') }}</div>
           </q-card-section>
 
           <q-card-section>
@@ -113,6 +116,25 @@
           </q-card-actions>
         </q-card>
       </q-dialog>
+
+      <q-dialog v-model="setting_dl_show" persistent>
+        <q-card style="min-width: 500px">
+          <q-card-section>
+            <div class="text-h6">{{ $t('menu.setting') }}</div>
+          </q-card-section>
+          <q-separator />
+          <q-card-section>
+            <q-select  map-options emit-value outlined v-model="setting_lang_sel_model" :options="langs" :label="$t('app.lang')" @input="setlocal"/>
+
+
+          </q-card-section>
+
+          <q-card-actions align="right">
+            <q-btn flat :label="$t('dialog.close')" color="primary" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+
       <vue-snotify></vue-snotify>
 
 
@@ -121,12 +143,22 @@
 
 <script>
   import Index from '../pages/Index'
-
-    export default {
+  function setCookie(name,value)
+  {
+    let Days = 30;
+    let exp = new Date();
+    exp.setTime(exp.getTime() + Days*24*60*60*1000);
+    document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+  }
+  export default {
         name: "layouts",
       components: {Index},
       methods:{
-        openProject (filePaths){
+          setlocal(lang){
+            this.$i18n.locale = lang;
+            setCookie('language',lang);
+          },
+          openProject (filePaths){
           if(filePaths!==undefined && filePaths.length>0){
             let path = filePaths[0];
             this.BlockCraft.project.opened = true;
@@ -173,6 +205,8 @@
           return {
             about_dl_show: false,
             new_pro_dl_show: false,
+            setting_dl_show: false,
+            setting_lang_sel_model: this.$q.lang.getLocale(),
             app_version: '0.0.1-indev',
             electron_version: process.versions.electron,
             chrome_version : process.versions.chrome,
@@ -180,7 +214,17 @@
             create_pro_dl:{
               path: '',
               name: ''
-            }
+            },
+            langs:[
+              {
+                label: '简体中文',
+                value: 'zh-cn',
+              },
+              {
+                label: 'English',
+                value: 'en-us',
+              }
+            ]
           }
       }
 

@@ -1,11 +1,40 @@
 
 export default {
 
+  app:{
+    lang: 'language',
+    aboutme: 'About - BlockCraft'
+  },
   menu:{
     file: 'File',
     new: 'New..',
     open: 'Open',
-    quit: 'Quit'
-
+    setting: 'Setting',
+    quit: 'Quit',
+    help: 'Help',
+    about: 'About..',
+    github: 'Github repo',
+    doc: 'Document'
+  },
+  project:{
+    create: 'Create project',
+    path: 'Project path',
+    name: 'Project name',
+    open: 'Open project',
+    project: 'Project',
+    blocks: 'Blocks'
+  },
+  dialog:{
+    cancel: 'cancel',
+    create: 'create',
+    yes: 'Yes',
+    no: 'No',
+    info: 'info',
+    close: 'close'
+  },
+  plugin:{
+    name: 'Plugin name',
+    version: 'Plugin version',
+    author: 'Author'
   }
 }

@@ -9,8 +9,8 @@
         align="justify"
         narrow-indicator
       >
-        <q-tab name="info" label="项目" />
-        <q-tab name="blocks" label="积木" />
+        <q-tab name="info" :label="$t('project.project')" />
+        <q-tab name="blocks" :label="$t('project.blocks')" />
 
       </q-tabs>
 
@@ -22,7 +22,7 @@
 
             <q-item clickable v-ripple>
               <q-item-section>
-                <q-item-label>插件名称</q-item-label>
+                <q-item-label>{{ $t('plugin.name') }}</q-item-label>
               </q-item-section>
               <q-item-section side>
                 <q-item-label caption>测试插件</q-item-label>
@@ -30,7 +30,7 @@
             </q-item>
             <q-item clickable v-ripple>
               <q-item-section>
-                <q-item-label>作者</q-item-label>
+                <q-item-label>{{ $t('plugin.author') }}</q-item-label>
               </q-item-section>
               <q-item-section side>
                 <q-item-label caption>hempflower</q-item-label>
@@ -38,7 +38,7 @@
             </q-item>
             <q-item clickable v-ripple>
               <q-item-section>
-                <q-item-label>版本</q-item-label>
+                <q-item-label>{{ $t('plugin.version') }}</q-item-label>
               </q-item-section>
               <q-item-section side>
                 <q-item-label caption>0.0.1</q-item-label>
