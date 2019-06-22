@@ -113,6 +113,7 @@
           </q-card-actions>
         </q-card>
       </q-dialog>
+      <vue-snotify></vue-snotify>
 
 
     </div>
@@ -120,10 +121,21 @@
 
 <script>
   import Index from '../pages/Index'
+
     export default {
         name: "layouts",
       components: {Index},
       methods:{
+        openProject (filePaths){
+          if(filePaths!==undefined && filePaths.length>0){
+            let path = filePaths[0];
+            this.BlockCraft.project.opened = true;
+            this.BlockCraft.project.path= path;
+            this.$emit('project-open');
+            this.$snotify.info("项目打开事件")
+          }
+
+        },
           minimize (){
             this.$q.electron.remote.BrowserWindow.getFocusedWindow().minimize()
 
@@ -153,12 +165,7 @@
               properties:['openDirectory'],
 
             },
-              function (filePaths) {
-                if(filePaths!==undefined && filePaths.length>0){
-                  let path = filePaths[0];
-                  console.log(path)
-                }
-            }
+              this.openProject
             );
           }
       },

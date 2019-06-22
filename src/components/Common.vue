@@ -1,6 +1,8 @@
 <script>
     export default {
-        name: "Common",
-        project_path: ""
+        project:{
+          opened: false,
+          path: ''
+        }
     }
 </script>
