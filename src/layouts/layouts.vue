@@ -163,8 +163,8 @@
             let path = filePaths[0];
             this.BlockCraft.project.opened = true;
             this.BlockCraft.project.path= path;
-            this.$emit('project-open');
-            this.$snotify.info("项目打开事件")
+            this.eventHub.$emit('project-open');
+            this.$snotify.info("项目打开事件");
           }
 
         },
