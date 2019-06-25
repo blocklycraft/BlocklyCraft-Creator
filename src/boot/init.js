@@ -9,4 +9,5 @@ export default ({ Vue, app /* app, router, Vue, ... */ }) => {
   Vue.use(Snotify);
 
   Vue.prototype.BlockCraft = Common;
+  Vue.prototype.eventHub= new Vue()
 }

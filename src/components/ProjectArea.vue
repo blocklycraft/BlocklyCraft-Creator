@@ -1,5 +1,5 @@
 <template>
-    <div style="height: 100%">
+    <div style="height: 100%" v-on:project-open="openproject()">
       <q-tabs
         v-model="pro_tab"
         dense
@@ -25,7 +25,7 @@
                 <q-item-label>{{ $t('plugin.name') }}</q-item-label>
               </q-item-section>
               <q-item-section side>
-                <q-item-label caption>测试插件</q-item-label>
+                <q-item-label caption>{{loading}}</q-item-label>
               </q-item-section>
             </q-item>
             <q-item clickable v-ripple>
@@ -61,8 +61,19 @@
         name: "ProjectArea",
       data (){
           return {
-            pro_tab: 'info'
+            pro_tab: 'info',
+            loading: 'no'
           };
+      },
+      mounted (){
+        this.eventHub.$on ('project-open',this.openproject);
+      },
+      methods:{
+
+          openproject(){
+            console.log('Open project');
+            this.loading = "yes"
+          }
       }
     }
 </script>
