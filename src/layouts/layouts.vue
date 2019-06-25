@@ -173,7 +173,7 @@
 
           },
           maximize (){
-            const win = this.$q.electron.remote.BrowserWindow.getFocusedWindow()
+            const win = this.$q.electron.remote.BrowserWindow.getFocusedWindow();
 
             if (win.isMaximized()) {
               win.unmaximize()
@@ -191,7 +191,7 @@
             exec('start '+url);
           },
           open_porject (){
-            const { dialog } = require('electron').remote
+            const { dialog } = require('electron').remote;
             dialog.showOpenDialog({
               title:this.$i18n.t('project.open'),
               properties:['openDirectory'],
@@ -206,7 +206,7 @@
             about_dl_show: false,
             new_pro_dl_show: false,
             setting_dl_show: false,
-            setting_lang_sel_model: this.$q.lang.getLocale(),
+            setting_lang_sel_model: this.$i18n.locale,
             app_version: '0.0.1-indev',
             electron_version: process.versions.electron,
             chrome_version : process.versions.chrome,
