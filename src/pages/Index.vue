@@ -1,21 +1,21 @@
 <template>
-  <q-page style="height: 100%">
+  <div style="height: 100%">
     <q-splitter
       v-model="splitterModel"
       :limits="[20, 30]"
       style="height: 100%"
     >
       <template v-slot:before>
-        <q-page><ProjectArea /></q-page>
+        <div style="height: 100%;"><ProjectArea /></div>
       </template>
       <template v-slot:after>
-        <q-page>
+        <div>
           <BlocklyEditor></BlocklyEditor>
-        </q-page>
+        </div>
       </template>
 
     </q-splitter>
-  </q-page>
+  </div>
 </template>
 
 <style>

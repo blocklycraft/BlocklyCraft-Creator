@@ -1,8 +1,8 @@
 <template>
-    <div style="box-sizing:border-box;border-bottom:1px solid #027BE3;border-right:1px solid #027BE3;border-left:1px solid #027BE3;">
-      <q-layout view="lHh lpr lFf" container  class="" style="height: 100%;">
-        <q-header elevated>
-          <q-bar class="q-electron-drag">
+    <div style="box-sizing:border-box;border-bottom:1px solid #027BE3;border-right:1px solid #027BE3;border-left:1px solid #027BE3;" class="no-scroll">
+      <div class="no-scroll" view="lHh lpr lFf" container style="height: 100%;">
+        <div>
+          <q-bar class="q-electron-drag bg-primary text-white">
             <q-icon name="mode_edit" />
             <div>BlockCraft</div>
 
@@ -13,7 +13,7 @@
             <q-btn dense flat icon="close" @click="closeApp" />
           </q-bar>
 
-          <div class="q-pa-sm q-pl-md row items-center">
+          <div class="q-pa-sm q-pl-md row items-center bg-primary text-white">
             <div class="cursor-pointer non-selectable">
               {{ $t('menu.file') }}
               <q-menu>
@@ -54,14 +54,13 @@
               </q-menu>
             </div>
           </div>
-        </q-header>
+        </div>
 
-        <q-page-container style="height: auto">
-          <q-page style="height: auto">
-            <Index style="height: auto"></Index>
-          </q-page>
-        </q-page-container>
-      </q-layout>
+        <div style="height: 100%">
+            <Index style="height: 100%"></Index>
+        </div>
+      </div>
+
 
       <!-- DIALOGS -->
       <q-dialog v-model="about_dl_show">
