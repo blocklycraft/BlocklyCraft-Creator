@@ -9,7 +9,7 @@
         <div style="height: 100%;"><ProjectArea /></div>
       </template>
       <template v-slot:after>
-        <div>
+        <div style="height: 100%;">
           <BlocklyEditor></BlocklyEditor>
         </div>
       </template>
