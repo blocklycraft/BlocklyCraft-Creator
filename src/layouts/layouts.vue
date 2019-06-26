@@ -142,6 +142,7 @@
 
 <script>
   import Index from '../pages/Index'
+  import Common from "../components/Common";
   function setCookie(name,value)
   {
     let Days = 30;
@@ -154,8 +155,9 @@
       components: {Index},
       methods:{
           setlocal(lang){
+            const settings = require('electron-settings');
             this.$i18n.locale = lang;
-            setCookie('language',lang);
+            settings.set('language',lang);
           },
           openProject (filePaths){
           if(filePaths!==undefined && filePaths.length>0){
