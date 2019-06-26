@@ -1,7 +1,7 @@
 <template>
-    <q-page style="display:flex; width:100%;height: auto">
-      <webview id="editor_view" src="statics/editor.html" style="display:inline-flex; width:100%; height:auto"></webview>
-    </q-page>
+    <div style="display:flex; width:100%;height: 100%">
+      <webview id="editor_view" src="statics/editor.html" style="display:inline-flex; width:100%; height:100%"></webview>
+    </div>
 </template>
 
 <script>
