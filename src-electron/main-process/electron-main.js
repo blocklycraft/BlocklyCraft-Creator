@@ -19,7 +19,7 @@ function createWindow () {
     height: 600,
     useContentSize: true,
     frame: false,
-    show:false
+    show:false,
 
   })
 
