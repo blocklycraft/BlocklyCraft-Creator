@@ -1,7 +1,8 @@
 export default {
   app:{
     lang: '语言',
-    aboutme: '关于 - BlockCraft'
+    aboutme: '关于 - BlockCraft',
+    dark: '黑暗模式'
   },
   menu:{
     file: '文件',

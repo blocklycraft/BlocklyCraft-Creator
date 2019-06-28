@@ -16,10 +16,9 @@
 
       <q-separator />
 
-      <q-tab-panels v-model="pro_tab">
+      <q-tab-panels v-model="pro_tab" class="bg-background text-text">
         <q-tab-panel style="padding: 0px" name="info">
-          <q-list  separator>
-
+          <q-list separator :dark="BlockCraft.dark">
             <q-item clickable v-ripple>
               <q-item-section>
                 <q-item-label>{{ $t('plugin.name') }}</q-item-label>
@@ -33,7 +32,7 @@
                 <q-item-label>{{ $t('plugin.author') }}</q-item-label>
               </q-item-section>
               <q-item-section side>
-                <q-item-label caption>hempflower</q-item-label>
+                <q-item-label  caption>hempflower</q-item-label>
               </q-item-section>
             </q-item>
             <q-item clickable v-ripple>

@@ -1,8 +1,8 @@
 <template>
-    <div style="box-sizing:border-box;border-bottom:1px solid #027BE3;border-right:1px solid #027BE3;border-left:1px solid #027BE3;" class="no-scroll">
+    <div style="box-sizing:border-box;border-bottom:1px solid var(--q-color-secondary);border-right:1px solid var(--q-color-secondary);border-left:1px solid var(--q-color-secondary);" class="no-scroll text-accent">
       <div class="no-scroll" view="lHh lpr lFf" container style="height: 100%;">
         <div>
-          <q-bar class="q-electron-drag bg-primary text-white">
+          <q-bar class="q-electron-drag bg-secondary text-white">
             <q-icon name="mode_edit" />
             <div>BlockCraft</div>
 
@@ -13,7 +13,7 @@
             <q-btn dense flat icon="close" @click="closeApp" />
           </q-bar>
 
-          <div class="q-pa-sm q-pl-md row items-center bg-primary text-white">
+          <div  class="q-pa-sm q-pl-md row items-center bg-secondary text-white">
             <div class="cursor-pointer non-selectable">
               {{ $t('menu.file') }}
               <q-menu>
@@ -56,17 +56,17 @@
           </div>
         </div>
 
-        <div style="height: 100%">
+        <div class="text-text bg-background" style="height: 100%">
             <Index style="height: 100%"></Index>
         </div>
       </div>
 
 
       <!-- DIALOGS -->
-      <q-dialog v-model="about_dl_show">
-        <q-card style="min-width: 500px">
+      <q-dialog  v-model="about_dl_show">
+        <q-card class="bg-background" :dark="BlockCraft.dark" style="min-width: 500px">
           <q-card-section>
-            <div class="text-h6">{{ $t('app.aboutme') }}</div>
+            <div class="text-h6 text-accent">{{ $t('app.aboutme') }}</div>
           </q-card-section>
 
           <q-card-section>
@@ -85,13 +85,13 @@
           </q-card-section>
 
           <q-card-actions align="right">
-            <q-btn flat label="OK" color="primary" v-close-popup />
+            <q-btn flat label="OK"  v-close-popup />
           </q-card-actions>
         </q-card>
       </q-dialog>
 
-      <q-dialog v-model="new_pro_dl_show" persistent>
-        <q-card style="min-width: 500px">
+      <q-dialog  v-model="new_pro_dl_show" persistent>
+        <q-card class="bg-background" :dark="BlockCraft.dark" style="min-width: 500px">
           <q-card-section>
             <div class="text-h6">{{ $t('project.create') }}</div>
           </q-card-section>
@@ -100,12 +100,13 @@
               <q-input v-model="create_pro_dl.path"
                        :label="$t('project.path')"
                        dense
+                       :dark="BlockCraft.dark"
               >
                 <template v-slot:after>
                   <q-btn round dense flat icon="explore" />
                 </template>
               </q-input>
-              <q-input v-model="create_pro_dl.name" :label="$t('project.name')" dense></q-input>
+              <q-input :dark="BlockCraft.dark" v-model="create_pro_dl.name" :label="$t('project.name')" dense></q-input>
             </q-form>
           </q-card-section>
 
@@ -117,19 +118,24 @@
       </q-dialog>
 
       <q-dialog v-model="setting_dl_show" persistent>
-        <q-card style="min-width: 500px">
+        <q-card class="bg-background" :dark="BlockCraft.dark" style="min-width: 500px;">
           <q-card-section>
             <div class="text-h6">{{ $t('menu.setting') }}</div>
           </q-card-section>
-          <q-separator />
+          <q-separator :dark="BlockCraft.dark"/>
           <q-card-section>
-            <q-select  map-options emit-value outlined v-model="setting_lang_sel_model" :options="langs" :label="$t('app.lang')" @input="setlocal"/>
-
-
+            <div class="q-gutter-md">
+              <q-select :dark="BlockCraft.dark" map-options emit-value outlined v-model="setting_lang_sel_model" :options="langs" :label="$t('app.lang')" @input="setlocal"/>
+              <q-toggle :dark="BlockCraft.dark" @input="setDark" :label="$t('app.dark')" v-model="setting_them_sel_model">
+                <q-tooltip>
+                  切换模式后，我们更建议你重启此软件
+                </q-tooltip>
+              </q-toggle>
+            </div>
           </q-card-section>
 
           <q-card-actions align="right">
-            <q-btn flat :label="$t('dialog.close')" color="primary" v-close-popup />
+            <q-btn flat :label="$t('dialog.close')" v-close-popup />
           </q-card-actions>
         </q-card>
       </q-dialog>
@@ -142,16 +148,12 @@
 
 <script>
   import Index from '../pages/Index'
-  import Common from "../components/Common";
-  function setCookie(name,value)
-  {
-    let Days = 30;
-    let exp = new Date();
-    exp.setTime(exp.getTime() + Days*24*60*60*1000);
-    document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
-  }
+  const settings = require('electron-settings');
+  import theme_light from '../theme/light'
+  import theme_dark from '../theme/dark'
+
   export default {
-        name: "layouts",
+    name: "layouts",
       components: {Index},
       methods:{
           setlocal(lang){
@@ -168,6 +170,15 @@
             this.$snotify.info("项目打开事件");
           }
 
+        },
+        setDark (dark){
+          if(dark){
+            this.BlockCraft.applyTheme(theme_dark);
+            this.BlockCraft.dark = true;
+          }else{
+            this.BlockCraft.applyTheme(theme_light);
+            this.BlockCraft.dark = false;
+          }
         },
           minimize (){
             this.$q.electron.remote.BrowserWindow.getFocusedWindow().minimize()
@@ -208,6 +219,7 @@
             new_pro_dl_show: false,
             setting_dl_show: false,
             setting_lang_sel_model: this.$i18n.locale,
+            setting_them_sel_model: settings.get('dark'),
             app_version: '0.0.1-indev',
             electron_version: process.versions.electron,
             chrome_version : process.versions.chrome,
@@ -225,7 +237,8 @@
                 label: 'English',
                 value: 'en-us',
               }
-            ]
+            ],
+
           }
       }
 
