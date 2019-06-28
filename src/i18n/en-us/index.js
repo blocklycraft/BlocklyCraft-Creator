@@ -3,7 +3,8 @@ export default {
 
   app:{
     lang: 'language',
-    aboutme: 'About - BlockCraft'
+    aboutme: 'About - BlockCraft',
+    dark: 'Dark mode'
   },
   menu:{
     file: 'File',
@@ -36,5 +37,8 @@ export default {
     name: 'Plugin name',
     version: 'Plugin version',
     author: 'Author'
+  },
+  tip:{
+    "dark_restart": 'If you change mode,we suggest you restart BlockCraft!'
   }
 }
