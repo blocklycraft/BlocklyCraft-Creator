@@ -128,7 +128,7 @@
               <q-select :dark="BlockCraft.dark" map-options emit-value outlined v-model="setting_lang_sel_model" :options="langs" :label="$t('app.lang')" @input="setlocal"/>
               <q-toggle :dark="BlockCraft.dark" @input="setDark" :label="$t('app.dark')" v-model="setting_them_sel_model">
                 <q-tooltip>
-                  切换模式后，我们更建议你重启此软件
+                  {{$t('tip.dark_restart')}}
                 </q-tooltip>
               </q-toggle>
             </div>
@@ -179,6 +179,7 @@
             this.BlockCraft.applyTheme(theme_light);
             this.BlockCraft.dark = false;
           }
+          settings.set("dark",dark)
         },
           minimize (){
             this.$q.electron.remote.BrowserWindow.getFocusedWindow().minimize()

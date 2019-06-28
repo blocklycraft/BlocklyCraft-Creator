@@ -35,5 +35,8 @@ export default {
     name: '插件名称',
     version: '插件版本',
     author: '作者'
+  },
+  tip:{
+    "dark_restart": '在切换模式后，我们建议您重启软件！'
   }
 }
