@@ -13,6 +13,7 @@
             <q-btn dense flat icon="close" @click="closeApp" />
           </q-bar>
 
+
           <div  class="q-pa-sm q-pl-md row items-center bg-secondary text-white">
             <div class="cursor-pointer non-selectable">
               {{ $t('menu.file') }}
@@ -55,6 +56,7 @@
             </div>
           </div>
         </div>
+        <q-separator :dark="dark" />
 
         <div class="text-text bg-background" style="height: 100%">
             <Index style="height: 100%"></Index>
