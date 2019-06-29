@@ -4,6 +4,7 @@
       v-model="splitterModel"
       :limits="[20, 30]"
       style="height: 100%"
+      :dark="dark"
     >
       <template v-slot:before>
         <div style="height: 100%;"><ProjectArea /></div>
@@ -29,8 +30,22 @@
   components: {BlocklyEditor, ProjectArea},
   data () {
     return {
-      splitterModel: 20
+      splitterModel: 20,
+      dark: false
     }
-  }
+  },
+    methods:{
+      changeDark(mode){
+        this.dark = mode;
+      }
+    },
+    mounted (){
+      this.$eventHub.$on ('dark-change',()=>{
+        this.changeDark(this.$BlockCraft.dark)
+      })
+    },
+    beforeMount (){
+      this.dark = this.$BlockCraft.dark;
+    }
 }
 </script>

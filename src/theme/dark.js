@@ -6,6 +6,6 @@ export default {
   negative: '#940011',
   info: '#0070a3',
   warning: '#9e7b19',
-  background: '#3c3c3c',
+  background: '#333333',
   text: '#ffffff'
 }

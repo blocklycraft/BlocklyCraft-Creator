@@ -14,7 +14,7 @@
 
       </q-tabs>
 
-      <q-separator />
+      <q-separator :dark="dark" />
 
       <q-tab-panels v-model="pro_tab" class="bg-background text-text">
         <q-tab-panel style="padding: 0px" name="info">
