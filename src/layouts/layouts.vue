@@ -64,7 +64,7 @@
 
       <!-- DIALOGS -->
       <q-dialog  v-model="about_dl_show">
-        <q-card class="bg-background" :dark="BlockCraft.dark" style="min-width: 500px">
+        <q-card class="bg-background" :dark="dark" style="min-width: 500px">
           <q-card-section>
             <div class="text-h6 text-accent">{{ $t('app.aboutme') }}</div>
           </q-card-section>
@@ -91,7 +91,7 @@
       </q-dialog>
 
       <q-dialog  v-model="new_pro_dl_show" persistent>
-        <q-card class="bg-background" :dark="BlockCraft.dark" style="min-width: 500px">
+        <q-card class="bg-background" :dark="dark" style="min-width: 500px">
           <q-card-section>
             <div class="text-h6">{{ $t('project.create') }}</div>
           </q-card-section>
@@ -100,13 +100,13 @@
               <q-input v-model="create_pro_dl.path"
                        :label="$t('project.path')"
                        dense
-                       :dark="BlockCraft.dark"
+                       :dark="dark"
               >
                 <template v-slot:after>
                   <q-btn round dense flat icon="explore" />
                 </template>
               </q-input>
-              <q-input :dark="BlockCraft.dark" v-model="create_pro_dl.name" :label="$t('project.name')" dense></q-input>
+              <q-input :dark="dark" v-model="create_pro_dl.name" :label="$t('project.name')" dense></q-input>
             </q-form>
           </q-card-section>
 
@@ -118,15 +118,15 @@
       </q-dialog>
 
       <q-dialog v-model="setting_dl_show" persistent>
-        <q-card class="bg-background" :dark="BlockCraft.dark" style="min-width: 500px;">
+        <q-card class="bg-background" :dark="dark" style="min-width: 500px;">
           <q-card-section>
             <div class="text-h6">{{ $t('menu.setting') }}</div>
           </q-card-section>
-          <q-separator :dark="BlockCraft.dark"/>
+          <q-separator :dark="dark"/>
           <q-card-section>
             <div class="q-gutter-md">
-              <q-select :dark="BlockCraft.dark" map-options emit-value outlined v-model="setting_lang_sel_model" :options="langs" :label="$t('app.lang')" @input="setlocal"/>
-              <q-toggle :dark="BlockCraft.dark" @input="setDark" :label="$t('app.dark')" v-model="setting_them_sel_model">
+              <q-select :dark="dark" map-options emit-value outlined v-model="setting_lang_sel_model" :options="langs" :label="$t('app.lang')" @input="setlocal"/>
+              <q-toggle :dark="dark" @input="setDark" :label="$t('app.dark')" v-model="setting_them_sel_model">
                 <q-tooltip>
                   {{$t('tip.dark_restart')}}
                 </q-tooltip>
@@ -164,22 +164,25 @@
           openProject (filePaths){
           if(filePaths!==undefined && filePaths.length>0){
             let path = filePaths[0];
-            this.BlockCraft.project.opened = true;
-            this.BlockCraft.project.path= path;
-            this.eventHub.$emit('project-open');
+            this.$BlockCraft.project.opened = true;
+            this.$BlockCraft.project.path= path;
+            this.$eventHub.$emit('project-open');
             this.$snotify.info("项目打开事件");
           }
 
         },
         setDark (dark){
           if(dark){
-            this.BlockCraft.applyTheme(theme_dark);
-            this.BlockCraft.dark = true;
+            this.$BlockCraft.applyTheme(theme_dark);
+            this.$BlockCraft.dark = true;
+            this.dark = true;
           }else{
-            this.BlockCraft.applyTheme(theme_light);
-            this.BlockCraft.dark = false;
+            this.$BlockCraft.applyTheme(theme_light);
+            this.$BlockCraft.dark = false;
+            this.dark = false;
           }
-          settings.set("dark",dark)
+          settings.set("dark",dark);
+          this.$eventHub.$emit('dark-change');
         },
           minimize (){
             this.$q.electron.remote.BrowserWindow.getFocusedWindow().minimize()
@@ -212,10 +215,14 @@
             },
               this.openProject
             );
-          }
+          },
+        changeDark (mode){
+            this.dark = mode;
+        }
       },
       data (){
           return {
+            dark:false,
             about_dl_show: false,
             new_pro_dl_show: false,
             setting_dl_show: false,
@@ -241,9 +248,18 @@
             ],
 
           }
-      }
+      },
+    beforeMount() {
+      this.dark = this.$BlockCraft.dark;
+    },
+    mounted() {
+      this.$eventHub.on('dark-change',()=>{
+        tthis.changeDark(this.$BlockCraft.dark);
+      });
 
     }
+
+  }
 </script>
 
 <style scoped>

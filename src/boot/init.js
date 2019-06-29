@@ -13,8 +13,8 @@ export default ({ Vue, /* app, router, Vue, ... */ }) => {
   // something to do
   Vue.use(Snotify);
 
-  Vue.prototype.BlockCraft = Common;
-  Vue.prototype.eventHub= new Vue();
+  Vue.prototype.$BlockCraft = Common;
+  Vue.prototype.$eventHub= new Vue();
   //register themes
 
   //Read theme config from file
