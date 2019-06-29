@@ -18,7 +18,7 @@
 
       <q-tab-panels v-model="pro_tab" class="bg-background text-text">
         <q-tab-panel style="padding: 0px" name="info">
-          <q-list separator :dark="BlockCraft.dark">
+          <q-list separator :dark="dark">
             <q-item clickable v-ripple>
               <q-item-section>
                 <q-item-label>{{ $t('plugin.name') }}</q-item-label>
@@ -61,18 +61,27 @@
       data (){
           return {
             pro_tab: 'info',
-            loading: 'no'
+            loading: 'no',
+            dark: false
           };
       },
+      beforeMount (){
+        this.dark = this.$BlockCraft.dark;
+      },
       mounted (){
-        this.eventHub.$on ('project-open',this.openproject);
+        this.$eventHub.$on ('project-open',this.openproject);
+        this.$eventHub.$on ('dark-change',()=>{
+          this.changeDark(this.$BlockCraft.dark)
+        })
       },
       methods:{
-
           openproject(){
             console.log('Open project');
             this.loading = "yes"
-          }
+          },
+        changeDark(mode){
+            this.dark = mode;
+        }
       }
     }
 </script>
