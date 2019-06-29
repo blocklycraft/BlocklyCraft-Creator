@@ -78,9 +78,9 @@
             <br />
             Node.js: {{ node_version }}
             <br />
-            Author:<a @click="openUrl('https://www.mahua-a.top')" href="#">@hempflower</a>
+            Author: <a @click="openUrl('https://www.mahua-a.top')" href="#">@hempflower</a>
             <br />
-            Github:<a @click="openUrl('https://github.com/blocklycraft/BlocklyCraft-Creator')" href="#">https://github.com/blocklycraft/BlocklyCraft-Creator</a>
+            Github: <a @click="openUrl('https://github.com/blocklycraft/BlocklyCraft-Creator')" href="#">https://github.com/blocklycraft/BlocklyCraft-Creator</a>
 
           </q-card-section>
 
