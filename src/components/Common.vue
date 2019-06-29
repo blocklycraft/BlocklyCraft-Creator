@@ -5,6 +5,9 @@
       opened: false,
       path: ''
     },
+    versions:{
+      blockcraft:'0.0.3-indev'
+    },
     dark: false,
     applyTheme (theme){
       colors.setBrand('primary', theme['primary']);

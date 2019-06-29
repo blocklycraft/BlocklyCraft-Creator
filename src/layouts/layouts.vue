@@ -228,7 +228,7 @@
             setting_dl_show: false,
             setting_lang_sel_model: this.$i18n.locale,
             setting_them_sel_model: settings.get('dark'),
-            app_version: '0.0.1-indev',
+            app_version: this.$BlockCraft.versions.blockcraft,
             electron_version: process.versions.electron,
             chrome_version : process.versions.chrome,
             node_version: process.versions.node,
