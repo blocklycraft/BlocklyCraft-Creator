@@ -6,6 +6,7 @@
   "cordovaId": "cn.orecraft.blockcraft",
   "author": "hempflower <1993996310@qq.com>",
   "private": true,
+  "license": "GPL-3.0-or-later",
   "scripts": {
     "test": "echo \"No test specified\" && exit 0",
     "run": "quasar dev -m electron",
