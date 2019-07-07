@@ -69,114 +69,123 @@
       <q-separator :dark="dark" />
 
       <div class="text-text bg-background" style="height: 100%">
-            <!-- DIALOGS -->
-      <q-dialog v-model="about_dl_show">
-        <q-card class="bg-background" :dark="dark" style="min-width: 500px">
-          <q-card-section>
-            <div class="text-h6 text-accent">{{ $t('app.aboutme') }}</div>
-          </q-card-section>
+        <!-- DIALOGS -->
+        <q-dialog v-model="about_dl_show">
+          <q-card class="bg-background" :dark="dark" style="min-width: 500px">
+            <q-card-section>
+              <div class="text-h6 text-accent">{{ $t('app.aboutme') }}</div>
+            </q-card-section>
 
-          <q-card-section>
-            BlockCraft: {{ app_version }}
-            <br />
-            Electron: {{ electron_version }}
-            <br />
-            Chrome: {{ chrome_version }}
-            <br />
-            Node.js: {{ node_version }}
-            <br />Author:
-            <a @click="openUrl('https://www.mahua-a.top')" href="#">@hempflower</a>
-            <br />Github:
-            <a
-              @click="openUrl('https://github.com/blocklycraft/BlocklyCraft-Creator')"
-              href="#"
-            >https://github.com/blocklycraft/BlocklyCraft-Creator</a>
-          </q-card-section>
+            <q-card-section>
+              BlockCraft: {{ app_version }}
+              <br />
+              Electron: {{ electron_version }}
+              <br />
+              Chrome: {{ chrome_version }}
+              <br />
+              Node.js: {{ node_version }}
+              <br />Author:
+              <a @click="openUrl('https://www.mahua-a.top')" href="#">@hempflower</a>
+              <br />Github:
+              <a
+                @click="openUrl('https://github.com/blocklycraft/BlocklyCraft-Creator')"
+                href="#"
+              >https://github.com/blocklycraft/BlocklyCraft-Creator</a>
+            </q-card-section>
 
-          <q-card-actions align="right">
-            <q-btn flat label="OK" v-close-popup />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
+            <q-card-actions align="right">
+              <q-btn flat label="OK" v-close-popup />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
 
-      <q-dialog v-model="new_pro_dl_show" persistent>
-        <q-card class="bg-background" :dark="dark" style="min-width: 500px">
-          <q-card-section>
-            <div class="text-h6">{{ $t('project.create') }}</div>
-          </q-card-section>
-          <q-card-section>
-            <q-form class="q-gutter-md">
-              <q-input v-model="create_pro_dl.path" :label="$t('project.path')" dense :dark="dark">
-                <template v-slot:after>
-                  <q-btn round dense flat icon="explore" />
-                </template>
-              </q-input>
-              <q-input :dark="dark" v-model="create_pro_dl.name" :label="$t('project.name')" dense></q-input>
-            </q-form>
-          </q-card-section>
+        <q-dialog v-model="new_pro_dl_show" persistent>
+          <q-card class="bg-background" :dark="dark" style="min-width: 500px">
+            <q-card-section>
+              <div class="text-h6">{{ $t('project.create') }}</div>
+            </q-card-section>
+            <q-card-section>
+              <q-form class="q-gutter-md">
+                <q-input
+                  v-model="create_pro_dl.path"
+                  :label="$t('project.path')"
+                  dense
+                  :dark="dark"
+                >
+                  <template v-slot:after>
+                    <q-btn round dense flat icon="explore" />
+                  </template>
+                </q-input>
+                <q-input
+                  :dark="dark"
+                  v-model="create_pro_dl.name"
+                  :label="$t('project.name')"
+                  dense
+                ></q-input>
+              </q-form>
+            </q-card-section>
 
-          <q-card-actions align="right">
-            <q-btn flat :label="$t('dialog.cancel')" color="primary" v-close-popup />
-            <q-btn flat :label="$t('dialog.create')" color="primary" v-close-popup />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
+            <q-card-actions align="right">
+              <q-btn flat :label="$t('dialog.cancel')" color="primary" v-close-popup />
+              <q-btn flat :label="$t('dialog.create')" color="primary" v-close-popup />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
 
-      <q-dialog v-model="setting_dl_show" persistent>
-        <q-card class="bg-background" :dark="dark" style="min-width: 500px;">
-          <q-card-section>
-            <div class="text-h6">{{ $t('menu.setting') }}</div>
-          </q-card-section>
-          <q-separator :dark="dark" />
-          <q-card-section>
-            <div class="q-gutter-md">
-              <q-select
-                :dark="dark"
-                map-options
-                emit-value
-                outlined
-                v-model="setting_lang_sel_model"
-                :options="langs"
-                :label="$t('app.lang')"
-                @input="setlocal"
-              />
-              <q-toggle
-                :dark="dark"
-                @input="setDark"
-                :label="$t('app.dark')"
-                v-model="setting_them_sel_model"
-              >
-                <q-tooltip>{{$t('tip.dark_restart')}}</q-tooltip>
-              </q-toggle>
-            </div>
-          </q-card-section>
+        <q-dialog v-model="setting_dl_show" persistent>
+          <q-card class="bg-background" :dark="dark" style="min-width: 500px;">
+            <q-card-section>
+              <div class="text-h6">{{ $t('menu.setting') }}</div>
+            </q-card-section>
+            <q-separator :dark="dark" />
+            <q-card-section>
+              <div class="q-gutter-md">
+                <q-select
+                  :dark="dark"
+                  map-options
+                  emit-value
+                  outlined
+                  v-model="setting_lang_sel_model"
+                  :options="langs"
+                  :label="$t('app.lang')"
+                  @input="setlocal"
+                />
+                <q-toggle
+                  :dark="dark"
+                  @input="setDark"
+                  :label="$t('app.dark')"
+                  v-model="setting_them_sel_model"
+                >
+                  <q-tooltip>{{$t('tip.dark_restart')}}</q-tooltip>
+                </q-toggle>
+              </div>
+            </q-card-section>
 
-          <q-card-actions align="right">
-            <q-btn flat :label="$t('dialog.close')" v-close-popup />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
+            <q-card-actions align="right">
+              <q-btn flat :label="$t('dialog.close')" v-close-popup />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
 
-      <q-dialog v-model="getStart_dl" persistent>
-        <q-card class="bg-background" :dark="dark" style="min-width: 500px;">
-          <q-card-section>
-            <div class="text-h6">{{$t('start.title')}}</div>
-          </q-card-section>
-          <q-separator :dark="dark" />
-          <q-card-section>
-            <div class="q-gutter-md">
-              <div>{{$t('start.msg')}}</div>
-            </div>
-          </q-card-section>
-          <q-card-actions vertical>
-            <q-btn no-caps flat @click="new_pro_dl_show = true" :label="$t('start.create')" />
-            <q-btn no-caps flat @click="open_project" :label="$t('start.open')" />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
+        <q-dialog v-model="getStart_dl" persistent>
+          <q-card class="bg-background" :dark="dark" style="min-width: 500px;">
+            <q-card-section>
+              <div class="text-h6">{{$t('start.title')}}</div>
+            </q-card-section>
+            <q-separator :dark="dark" />
+            <q-card-section>
+              <div class="q-gutter-md">
+                <div>{{$t('start.msg')}}</div>
+              </div>
+            </q-card-section>
+            <q-card-actions vertical>
+              <q-btn no-caps flat @click="new_pro_dl_show = true" :label="$t('start.create')" />
+              <q-btn no-caps flat @click="open_project" :label="$t('start.open')" />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
         <Index style="height: 100%"></Index>
       </div>
-  
     </div>
 
     <vue-snotify></vue-snotify>
@@ -188,8 +197,7 @@ import Index from "../pages/Index";
 const settings = require("electron-settings");
 import theme_light from "../theme/light";
 import theme_dark from "../theme/dark";
-import projectManager from '../project/projectManager'
-
+import projectManager from "../project/projectManager";
 
 export default {
   name: "layouts",
@@ -205,11 +213,11 @@ export default {
         let path = filePaths[0];
         this.$eventHub.$emit("project-close");
         let result = projectManager.openProject(path);
-        this.$logger.info("Open project result:"+result);
-        if (result!='SUCCESS'){
+        this.$logger.info("Open project result:" + result);
+        if (result != "SUCCESS") {
           this.$eventHub.$emit("project-close");
-           this.$snotify.error("未能打开改项目");
-           return ;
+          this.$snotify.error("未能打开改项目");
+          return;
         }
         this.$eventHub.$emit("project-open");
         this.$snotify.info("项目打开事件");
@@ -258,10 +266,10 @@ export default {
         this.openProject
       );
     },
-    close_project(){
-      this.$eventHub.$emit('project-close');
+    close_project() {
+      this.$eventHub.$emit("project-close");
       projectManager.unloadProject();
-      this.$logger.info('[BlockCraft]Project unloaded!');
+      this.$logger.info("[BlockCraft]Project unloaded!");
       this.getStart_dl = true;
     },
     changeDark(mode) {
@@ -305,8 +313,6 @@ export default {
     this.$eventHub.$on("dark-change", () => {
       this.changeDark(this.$BlockCraft.dark);
     });
-
-
   }
 };
 </script>
