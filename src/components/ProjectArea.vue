@@ -75,9 +75,7 @@ export default {
     this.$eventHub.$on("project-close", this.closeProject);
     this.$eventHub.$on("dark-change", this.changeDark);
   },
-  mounted() {
-    
-  },
+  mounted() {},
   methods: {
     openProject() {
       this.$logger.info("[ProjectArea]rec project-open");

@@ -2,28 +2,28 @@ let path = '';
 let version = '0.0.1';
 
 export default {
-    getVersion (){
+    getVersion() {
         return version;
     },
-    setDirectory (path){
-        
+    setDirectory(path) {
+
     },
-    getDirectory (){
+    getDirectory() {
         return path;
     },
-    refreshPackage (){
+    refreshPackage() {
 
     },
-    getPackage (){
+    getPackage() {
 
     },
-    installPackageOffline (path){
+    installPackageOffline(path) {
 
     },
-    installPackageOnline (name, repos){
+    installPackageOnline(name, repos) {
 
     },
-    uninstallPackage (name){
+    uninstallPackage(name) {
 
     }
 }

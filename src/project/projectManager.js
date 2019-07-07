@@ -50,7 +50,7 @@ export default {
             logger.error(e);
             return "MISSING_INFO"
         }
-  
+
         if (info != null) {
             if (info.name == undefined || info.version == undefined) {
                 //Missing must require info

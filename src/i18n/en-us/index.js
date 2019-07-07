@@ -1,12 +1,12 @@
 
 export default {
 
-  app:{
+  app: {
     lang: 'language',
     aboutme: 'About - BlockCraft',
     dark: 'Dark mode'
   },
-  menu:{
+  menu: {
     file: 'File',
     new: 'New..',
     open: 'Open',
@@ -24,7 +24,7 @@ export default {
     create: 'New project',
     open: 'Open project',
   },
-  project:{
+  project: {
     create: 'Create project',
     path: 'Project path',
     name: 'Project name',
@@ -32,7 +32,7 @@ export default {
     project: 'Project',
     blocks: 'Blocks'
   },
-  dialog:{
+  dialog: {
     cancel: 'cancel',
     create: 'create',
     yes: 'Yes',
@@ -40,12 +40,12 @@ export default {
     info: 'info',
     close: 'close'
   },
-  plugin:{
+  plugin: {
     name: 'Plugin name',
     version: 'Plugin version',
     author: 'Author'
   },
-  tip:{
+  tip: {
     "dark_restart": 'If you change mode,we suggest you restart BlockCraft!'
   }
 }
