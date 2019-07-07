@@ -1,10 +1,6 @@
 <script>
   import { colors } from 'quasar'
   export default {
-    project: {
-      opened: false,
-      path: ''
-    },
     versions:{
       blockcraft:'0.0.3-indev'
     },
