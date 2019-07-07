@@ -82,7 +82,6 @@ export default {
     openProject() {
       this.$logger.info("[ProjectArea]rec project-open");
       let info = projectManager.getProjectInfo();
-      console.log (projectManager.getProjectInfo())
       this.project_info.name = info.name;
       this.project_info.version = info.version;
       this.project_info.Author = info.author ? info.author : "";
