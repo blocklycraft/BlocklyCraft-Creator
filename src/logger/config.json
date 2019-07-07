@@ -1,0 +1,34 @@
+{
+    "appenders": {
+        "LogFile": {
+            "type": "dateFile",
+            "filename": "./logs/LogFile",
+            "alwaysIncludePattern": true,
+            "pattern": "-yyyy-MM-dd.log",
+            "encoding": "utf-8"
+        },
+        "LogConsole": {
+            "type": "console"
+        }
+    },
+    "categories": {
+        "default": {
+            "appenders": [
+                "LogFile"
+            ],
+            "level": "all"
+        },
+        "xcLogFile": {
+            "appenders": [
+                "LogFile"
+            ],
+            "level": "all"
+        },
+        "xcLogConsole": {
+            "appenders": [
+                "LogConsole"
+            ],
+            "level": "ALL"
+        }
+    }
+}

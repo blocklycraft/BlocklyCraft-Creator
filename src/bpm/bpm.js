@@ -11,19 +11,19 @@ export default {
     getDirectory (){
         return path;
     },
-    refreshLib (){
+    refreshPackage (){
 
     },
-    getLib (){
+    getPackage (){
 
     },
-    installLibOffline (path){
+    installPackageOffline (path){
 
     },
-    installLibOnline (name, repos){
+    installPackageOnline (name, repos){
 
     },
-    uninstallLib (name){
+    uninstallPackage (name){
 
     }
 }

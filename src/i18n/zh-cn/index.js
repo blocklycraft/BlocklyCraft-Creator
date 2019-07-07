@@ -13,7 +13,14 @@ export default {
     help: '帮助',
     about: '关于..',
     github: 'Github地址',
-    doc: '帮助文档'
+    doc: '帮助文档',
+    close: '关闭项目'
+  },
+  start: {
+    title: '开始使用',
+    msg: 'BlockCraft 目前处于空闲状况。现在你可以:',
+    create: '新建项目',
+    open: '打开项目',
   },
   project:{
     create: '创建项目',

@@ -6,6 +6,11 @@ const settings = require('electron-settings');
 import theme_light from '../theme/light'
 import theme_dark from '../theme/dark'
 
+const log4js = require('log4js');
+log4js.configure (require('../logger/config.json'));
+const logger = log4js.getLogger ();
+logger.level = "debug";
+
 
 
 // "async" is optional
@@ -14,8 +19,8 @@ export default ({ Vue, /* app, router, Vue, ... */ }) => {
   Vue.use(Snotify);
 
   Vue.prototype.$BlockCraft = Common;
-  Vue.prototype.$eventHub= new Vue();
-  //register themes
+  Vue.prototype.$eventHub = new Vue();
+  Vue.prototype.$logger = logger;
 
   //Read theme config from file
   Common.dark = settings.get('dark');

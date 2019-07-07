@@ -15,7 +15,14 @@ export default {
     help: 'Help',
     about: 'About..',
     github: 'Github repo',
-    doc: 'Document'
+    doc: 'Document',
+    close: 'Close project'
+  },
+  start: {
+    title: 'GetStart',
+    msg: 'BlockCraft being idle.Now you can:',
+    create: 'New project',
+    open: 'Open project',
   },
   project:{
     create: 'Create project',
