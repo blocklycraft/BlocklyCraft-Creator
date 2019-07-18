@@ -222,6 +222,7 @@ export default {
         this.$eventHub.$emit("project-open");
         this.$snotify.info("项目打开事件");
         this.getStart_dl = false;
+
       }
     },
     setDark(dark) {

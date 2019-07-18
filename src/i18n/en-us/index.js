@@ -38,7 +38,8 @@ export default {
     yes: 'Yes',
     no: 'No',
     info: 'info',
-    close: 'close'
+    close: 'close',
+    enter: 'enter'
   },
   plugin: {
     name: 'Plugin name',
@@ -46,6 +47,9 @@ export default {
     author: 'Author'
   },
   tip: {
-    "dark_restart": 'If you change mode,we suggest you restart BlockCraft!'
+    dark_restart: 'If you change mode,we suggest you restart BlockCraft!',
+    block_delete_title:"Do you really want to delete this building block?",
+    block_delete_msg:"This operation is irrevocable. Do you really want to delete'{name}'?",
+    block_rename_title:"Rename the building block",
   }
 }
