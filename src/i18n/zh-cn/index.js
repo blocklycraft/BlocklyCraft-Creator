@@ -36,7 +36,8 @@ export default {
     yes: '是',
     no: '否',
     info: '信息',
-    close: '关闭'
+    close: '关闭',
+    enter: '确认'
   },
   plugin:{
     name: '插件名称',
@@ -44,6 +45,9 @@ export default {
     author: '作者'
   },
   tip:{
-    "dark_restart": '在切换模式后，我们建议您重启软件！'
+    dark_restart: '在切换模式后，我们建议您重启软件！',
+    block_delete_title:"真的要删除此积木板吗？",
+    block_delete_msg:"此操作不可撤销,你真的要删除'{name}'吗？",
+    block_rename_title:"重命名积木板"
   }
 }

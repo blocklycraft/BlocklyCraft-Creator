@@ -75,12 +75,17 @@
       <q-tab-panel name="blocks" style="padding: 0px">
         <q-list separator>
           <div v-for="block_inf in blocks" :key="block_inf.hash">
-            <q-item clickable v-ripple active-class="item-active">
+            <q-item
+              clickable
+              v-ripple
+              active-class="item-active"
+             
+            >
               <q-item-section>{{block_inf.name}}</q-item-section>
               <q-item-section side>
                 <div class="text-grey-8 q-gutter-xs">
-                  <q-btn size="12px" flat dense round icon="edit" />
-                  <q-btn size="12px" flat dense round icon="delete" />
+                  <q-btn size="12px" flat dense round icon="edit"  @click="renameBlock(block_inf.hash)"/>
+                  <q-btn size="12px" flat dense round icon="delete"  @click="deleteBlock(block_inf.hash)"/>
                 </div>
               </q-item-section>
             </q-item>
@@ -93,6 +98,8 @@
 
 <script>
 import projectManager from "../project/projectManager";
+import { rename } from "fs";
+import logger from "../logger/logger";
 
 export default {
   name: "ProjectArea",
@@ -111,14 +118,15 @@ export default {
         },
         {
           name: "插件入口1",
-          hash: "sdfdsgffdhgkjlbdjsikg"
+          hash: "sdfdsgffdhgkbdjsikg"
         }
       ],
       disable: false,
       dark: false,
       editor: {
         opened_block: null
-      }
+      },
+      opening_dialog: null
     };
   },
   beforeMount() {
@@ -140,6 +148,11 @@ export default {
       this.dark = this.$BlockCraft.dark;
     },
     closeProject() {
+      if (this.opening_dialog != null) {
+        this.opening_dialog.hide();
+        this.opening_dialog = null;
+      }
+
       this.$logger.info("[ProjectArea]rec project-close");
       this.project_info.name = "";
       this.project_info.Author = "";
@@ -183,6 +196,82 @@ export default {
       this.project_info.author = author;
       projectManager.getProjectInfo().author = author;
       projectManager.writeTofile();
+    },
+    hash2name(hash) {
+      for (let blo of this.blocks) {
+        if (blo.hash == hash) {
+          return blo.name;
+        }
+      }
+      return null;
+    },
+    deleteBlock(hash) {
+      if (this.hash2name(hash) == null) {
+        return;
+        logger.warn("Can't not delete block,because is not existing!");
+      }
+      this.opening_dialog = this.$q
+        .dialog({
+          title: this.$t("tip.block_delete_title"),
+          message: this.$t("tip.block_delete_msg", {
+            name: this.hash2name(hash)
+          }),
+          cancel: true,
+          persistent: true,
+          dark: this.dark,
+          ok: this.$t("dialog.yes"),
+          cancel: this.$t("dialog.cancel")
+        })
+        .onOk(() => {
+          let index = 0;
+          for (let blo of this.blocks) {
+            if (blo.hash == hash) {
+              this.blocks.splice(index, 1);
+              break;
+            }
+            index++;
+          }
+          this.opening_dialog = null;
+        }).onCancel(()=>{
+          this.opening_dialog = null;
+        }).onDismiss(()=>{
+          this.opening_dialog = null;
+        });
+    },
+    renameBlock(hash) {
+      console.log(this.hash2name(hash));
+      if (this.hash2name(hash) == null) {
+        return;
+        logger.warn("Can't not rename block,because is not existing!");
+      }
+      this.opening_dialog = this.$q
+        .dialog({
+          title: this.$t("tip.block_rename_title"),
+          cancel: true,
+          persistent: true,
+          dark: this.dark,
+          ok: this.$t("dialog.yes"),
+          cancel: this.$t("dialog.cancel"),
+          prompt: {
+          model: '',
+          type: 'text' // optional
+        },
+        })
+        .onOk(new_name => {
+
+          for (let blo of this.blocks) {
+            if (blo.hash == hash) {
+              blo.name = new_name;
+              break;
+            }
+            index++;
+          }
+          this.opening_dialog = null;
+        }).onCancel(()=>{
+          this.opening_dialog = null;
+        }).onDismiss(()=>{
+          this.opening_dialog = null;
+        });
     }
   }
 };
