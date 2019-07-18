@@ -4,7 +4,6 @@ import logger from "../logger/logger"
 let project = {
     path: null,
     locked: false,
-
     info: {
         name: null,
         author: null,
@@ -57,11 +56,7 @@ export default {
                 logger.warn("Could not load project,because it missing name or version!");
                 return "MISSING_INFO"
             }
-            project.info.name = info.name;
-            project.info.version = info.version;
-            if (info.author != undefined) {
-                project.info.author = info.author
-            }
+            project.info = info;
             return "SUCCESS"
         }
         logger.warn("Could not load project,because it missing name or version!");
@@ -73,15 +68,21 @@ export default {
         }
         project.locked = true;
         //First, unload current project
-        //Make sure use this func after 'project-unload' event.
+        //Make sure call this func after 'project-unload' event.
         project.path = null;
-        project.info = {
-            name: null,
-            author: null,
-            version: null
-        }
+        project.info = {}
         project.locked = false;
         return "SUCCESS"
+    },
+    writeTofile(){
+        if (project.locked) {
+            return "PROJECT_LOCKED";
+        }
+        if(this.getProjectPath()==null){
+            logger.warn("Can't write project info into file,because the path is null!");
+            return "PATH_LOST";
+        }
+        jsonfile.writeFileSync(this.getProjectPath()+'/info.json',project.info)
     }
 
 }

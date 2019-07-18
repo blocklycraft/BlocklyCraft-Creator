@@ -258,13 +258,13 @@ export default {
     },
     open_project() {
       const { dialog } = require("electron").remote;
-      dialog.showOpenDialog(
+      let path = dialog.showOpenDialog(
         {
           title: this.$i18n.t("project.open"),
           properties: ["openDirectory"]
-        },
-        this.openProject
+        }
       );
+      this.openProject(path)
     },
     close_project() {
       this.$eventHub.$emit("project-close");
