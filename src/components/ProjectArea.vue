@@ -80,13 +80,27 @@
               v-ripple
               active-class="item-active"
               :active="curr_blocks === block_inf.hash"
-              
+              @click="openBlock(block_inf.hash)"
             >
               <q-item-section>{{block_inf.name}}</q-item-section>
               <q-item-section side>
                 <div class="text-grey-8 q-gutter-xs">
-                  <q-btn size="12px" flat dense round icon="edit"  @click="renameBlock(block_inf.hash)"/>
-                  <q-btn size="12px" flat dense round icon="delete"  @click="deleteBlock(block_inf.hash)"/>
+                  <q-btn
+                    size="12px"
+                    flat
+                    dense
+                    round
+                    icon="edit"
+                    @click="renameBlock(block_inf.hash)"
+                  />
+                  <q-btn
+                    size="12px"
+                    flat
+                    dense
+                    round
+                    icon="delete"
+                    @click="deleteBlock(block_inf.hash)"
+                  />
                 </div>
               </q-item-section>
             </q-item>
@@ -121,7 +135,7 @@ export default {
           hash: "sdfdsgffdhgkbdjsikg"
         }
       ],
-      curr_blocks: '',
+      curr_blocks: "",
       disable: false,
       dark: false,
       editor: {
@@ -135,6 +149,9 @@ export default {
     this.$eventHub.$on("project-open", this.openProject);
     this.$eventHub.$on("project-close", this.closeProject);
     this.$eventHub.$on("dark-change", this.changeDark);
+    this.$eventHub.$on("load-error", hash => {
+      this.curr_blocks = hash;
+    });
   },
   mounted() {},
   methods: {
@@ -228,7 +245,7 @@ export default {
           for (let blo of this.blocks) {
             if (blo.hash == hash) {
               //如果编辑器打开的是这个积木，那么关闭
-              if(editor.opened_block == hash){
+              if (editor.opened_block == hash) {
                 //编辑器还没完成:-(
               }
               this.blocks.splice(index, 1);
@@ -237,26 +254,26 @@ export default {
             index++;
           }
           this.opening_dialog = null;
-        }).onCancel(()=>{
+        })
+        .onCancel(() => {
           this.opening_dialog = null;
-        }).onDismiss(()=>{
+        })
+        .onDismiss(() => {
           this.opening_dialog = null;
         });
     },
-    openBlock(hash){
-      if(!this.hash2name(hash)){
+    openBlock(hash) {
+      if (!this.hash2name(hash)) {
         logger.warn("Can't not open block,it seem not exist!");
         return;
       }
-      this.$eventHub.$emit('open-block',hash)
-      
+      this.$eventHub.$emit("open-block", hash);
+      //this.curr_blocks = hash; //成功后再更改
     },
     renameBlock(hash) {
-
       if (this.hash2name(hash) == null) {
         logger.warn("Can't not rename block,because is not existing!");
         return;
-        
       }
       this.opening_dialog = this.$q
         .dialog({
@@ -267,12 +284,11 @@ export default {
           ok: this.$t("dialog.enter"),
           cancel: this.$t("dialog.cancel"),
           prompt: {
-          model: this.hash2name(hash),
-          type: 'text' // optional
-        },
+            model: this.hash2name(hash),
+            type: "text" // optional
+          }
         })
         .onOk(new_name => {
-
           for (let blo of this.blocks) {
             if (blo.hash == hash) {
               blo.name = new_name;
@@ -280,9 +296,11 @@ export default {
             }
           }
           this.opening_dialog = null;
-        }).onCancel(()=>{
+        })
+        .onCancel(() => {
           this.opening_dialog = null;
-        }).onDismiss(()=>{
+        })
+        .onDismiss(() => {
           this.opening_dialog = null;
         });
     }
