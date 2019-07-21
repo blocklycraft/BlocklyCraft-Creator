@@ -2,7 +2,7 @@
 import { colors } from "quasar";
 export default {
   versions: {
-    blockcraft: "0.0.3-indev"
+    blockcraft: "0.0.4-indev"
   },
   dark: false,
   applyTheme(theme) {
