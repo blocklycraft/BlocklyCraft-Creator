@@ -79,7 +79,8 @@
               clickable
               v-ripple
               active-class="item-active"
-             
+              :active="curr_blocks === block_inf.hash"
+              
             >
               <q-item-section>{{block_inf.name}}</q-item-section>
               <q-item-section side>
@@ -98,7 +99,6 @@
 
 <script>
 import projectManager from "../project/projectManager";
-import { rename } from "fs";
 import logger from "../logger/logger";
 
 export default {
@@ -121,6 +121,7 @@ export default {
           hash: "sdfdsgffdhgkbdjsikg"
         }
       ],
+      curr_blocks: '',
       disable: false,
       dark: false,
       editor: {
@@ -219,13 +220,17 @@ export default {
           cancel: true,
           persistent: true,
           dark: this.dark,
-          ok: this.$t("dialog.yes"),
+          ok: this.$t("dialog.enter"),
           cancel: this.$t("dialog.cancel")
         })
         .onOk(() => {
           let index = 0;
           for (let blo of this.blocks) {
             if (blo.hash == hash) {
+              //如果编辑器打开的是这个积木，那么关闭
+              if(editor.opened_block == hash){
+                //编辑器还没完成:-(
+              }
               this.blocks.splice(index, 1);
               break;
             }
@@ -238,11 +243,20 @@ export default {
           this.opening_dialog = null;
         });
     },
-    renameBlock(hash) {
-      console.log(this.hash2name(hash));
-      if (this.hash2name(hash) == null) {
+    openBlock(hash){
+      if(!this.hash2name(hash)){
+        logger.warn("Can't not open block,it seem not exist!");
         return;
+      }
+      this.$eventHub.$emit('open-block',hash)
+      
+    },
+    renameBlock(hash) {
+
+      if (this.hash2name(hash) == null) {
         logger.warn("Can't not rename block,because is not existing!");
+        return;
+        
       }
       this.opening_dialog = this.$q
         .dialog({
@@ -250,10 +264,10 @@ export default {
           cancel: true,
           persistent: true,
           dark: this.dark,
-          ok: this.$t("dialog.yes"),
+          ok: this.$t("dialog.enter"),
           cancel: this.$t("dialog.cancel"),
           prompt: {
-          model: '',
+          model: this.hash2name(hash),
           type: 'text' // optional
         },
         })
@@ -264,7 +278,6 @@ export default {
               blo.name = new_name;
               break;
             }
-            index++;
           }
           this.opening_dialog = null;
         }).onCancel(()=>{

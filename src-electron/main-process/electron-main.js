@@ -31,6 +31,11 @@ function createWindow() {
     useContentSize: true,
     frame: false,
     show: false,
+    webPreferences: {
+      nodeIntegration: true,
+      nodeIntegrationInWorker: true,
+      webviewTag:true
+    }
 
   });
 

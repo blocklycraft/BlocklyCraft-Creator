@@ -1,6 +1,5 @@
-let path = '';
-let version = '0.0.1';
-
+let path = null;
+let packages = [];
 export default {
     getVersion() {
         return version;
@@ -11,7 +10,7 @@ export default {
     getDirectory() {
         return path;
     },
-    refreshPackage() {
+    refreshPackages() {
 
     },
     getPackage() {
@@ -25,5 +24,11 @@ export default {
     },
     uninstallPackage(name) {
 
+    },
+    getToolbox(){
+
+    },
+    getBlocks(){
+        
     }
 }
