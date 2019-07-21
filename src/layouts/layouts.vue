@@ -184,7 +184,7 @@
             </q-card-actions>
           </q-card>
         </q-dialog>
-        <Index style="height: 100%"></Index>
+        <Index style="height: calc(100% - 69px)"></Index>
       </div>
     </div>
 
