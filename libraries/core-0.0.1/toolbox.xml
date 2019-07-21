@@ -1,0 +1,11 @@
+<xml>
+ <category name="Control">
+    <block type="test_01"></block>
+    <block type="test_02"></block>
+
+  </category>
+  <category name="Logic">
+    <block type="test_03"></block>
+
+  </category>
+</xml>

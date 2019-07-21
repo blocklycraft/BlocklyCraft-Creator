@@ -17,8 +17,19 @@ export default {
     webview.addEventListener("dom-ready", () => {
       webview.openDevTools();
     });
+    webview.addEventListener("ipc-message", event => {
+      if(event.channel=='load-error'){
+          this.$snotify.error("未能打开此积木板，该积木板可能被删除或依赖不兼容。");
+          return;
+      }
+      if(event.channel=='load-success'){
+        this.$eventHub.$emit('load-success',event.args[0])
+      }
+
+    });
     this.$eventHub.$on("project-open", this.loadProject);
     this.$eventHub.$on("project-close", this.unloadProject);
+    this.$eventHub.$on("open-block",this.openBlock)
   },
   data() {
     return {
@@ -72,6 +83,7 @@ export default {
         }
       });
       this.dirty = true;
+      webview.send("open-project", projectManager.getProjectPath());
       webview.executeJavaScript(blocks_script);
       let xml_str = new xml2js.Builder({
         headless: true,
@@ -86,12 +98,11 @@ export default {
       this.show = "display: none";
     },
     openBlock(hash) {
-      if (!fs.existsSync(this.getProjectPath() + "/blocks/" + hash)) {
-        logger.warn("[PM]Can't not open block,it seem not exist!");
+      if (!fs.existsSync(projectManager.getProjectPath() + "/blocks/" + hash)) {
+        this.$snotify.error("未能打开积木板，他可能被强行删除了！");
         return;
       }
-      let block_str = fs.readFileSync(this.getProjectPath() + "/blocks/" + hash);
-
+      webview.send("block-open", hash);
     }
   }
 };
