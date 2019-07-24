@@ -7,7 +7,8 @@ let project = {
     info: {
         name: null,
         author: null,
-        version: null
+        version: null,
+        blocks:[]
     }
 }
 
@@ -51,9 +52,9 @@ export default {
         }
 
         if (info != null) {
-            if (info.name == undefined || info.version == undefined) {
+            if (info.name == undefined || info.version == undefined || info.blocks == undefined) {
                 //Missing must require info
-                logger.warn("Could not load project,because it missing name or version!");
+                logger.warn("Could not load project,because it missing name, version or blocks!");
                 return "MISSING_INFO"
             }
             project.info = info;
@@ -74,15 +75,41 @@ export default {
         project.locked = false;
         return "SUCCESS"
     },
-    writeTofile(){
+    writeTofile() {
         if (project.locked) {
             return "PROJECT_LOCKED";
         }
-        if(this.getProjectPath()==null){
+        if (this.getProjectPath() == null) {
             logger.warn("Can't write project info into file,because the path is null!");
             return "PATH_LOST";
         }
-        jsonfile.writeFileSync(this.getProjectPath()+'/info.json',project.info)
+        jsonfile.writeFileSync(this.getProjectPath() + '/info.json', project.info)
+    },
+    deleteBlock(name) {
+
+    },
+    addBlock(name) {
+        let re = /^[\u4E00-\u9FA5A-Za-z0-9_\-]+$/
+        if(!re.test(name)){
+            logger.warn("invaild name");
+            return;
+        }
+        for(let block of project.info.blocks){
+            if(block==name){
+                logger.warn("Could not add block,beacuse is already exists!");
+                return;
+            }
+        }
+        console.log(project.info.blocks)
+        project.info.blocks.push(name);
+        this.writeTofile();
+    },
+    renameBlock(name,newname) {
+        
+    },
+    getBlockList(){
+        return project.info.blocks;
     }
+
 
 }

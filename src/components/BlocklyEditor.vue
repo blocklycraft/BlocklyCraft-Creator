@@ -97,8 +97,8 @@ export default {
       }
       this.show = "display: none";
     },
-    openBlock(hash) {
-      if (!fs.existsSync(projectManager.getProjectPath() + "/blocks/" + hash)) {
+    openBlock(name) {
+      if (!fs.existsSync(projectManager.getProjectPath() + "/blocks/" + name)) {
         this.$snotify.error("未能打开积木板，他可能被强行删除了！");
         return;
       }
