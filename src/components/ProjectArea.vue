@@ -84,6 +84,7 @@
               v-ripple
               active-class="item-active"
               :active="curr_blocks === block_inf"
+              style="text-overflow: ellipsis;"
             >
               <q-item-section @click="openBlock(block_inf)">{{block_inf}}</q-item-section>
               <q-item-section side>
@@ -121,7 +122,7 @@ export default {
         author: "",
         version: ""
       },
-      blocks: ["积木板1", "积木板2"],
+      blocks: [],
       curr_blocks: "",
       disable: false,
       dark: false,
@@ -275,11 +276,13 @@ export default {
               //直接赋值会导致视图无法更新
               //详情见:https://cn.vuejs.org/v2/guide/reactivity.html
               projectManager.renameBlock(name, new_name);
-              let curr_blocks = projectManager.getBlockList();
-              if (curr_blocks != null) {
-                this.blocks = curr_blocks;
-              }
             }
+          }
+          let curr_blocks = projectManager.getBlockList();
+
+          if (curr_blocks != null) {
+            this.blocks = {};
+            this.blocks = curr_blocks;
           }
           this.opening_dialog = null;
         })
@@ -326,8 +329,6 @@ export default {
           if (curr_blocks != null) {
             this.blocks = curr_blocks;
           }
-          console.log(curr_blocks);
-
           this.opening_dialog = null;
         })
         .onCancel(() => {

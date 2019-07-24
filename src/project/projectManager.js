@@ -8,7 +8,7 @@ let project = {
         name: null,
         author: null,
         version: null,
-        blocks:[]
+        blocks: []
     }
 }
 
@@ -86,29 +86,66 @@ export default {
         jsonfile.writeFileSync(this.getProjectPath() + '/info.json', project.info)
     },
     deleteBlock(name) {
+        let index = 0;
+        for(let block of project.info.blocks){
+            if(block == name){
+                project.info.blocks.slice(index,1);
+            }
+            index++;
+        }
+        this.writeTofile();
+        //同时删除文件
+        if(fs.existsSync(this.getProjectPath() + '/blocks/' + name + '.block')){
+            fs.unlinkSync(this.getProjectPath() + '/blocks/' + name + '.block');
+        }
+        
 
     },
     addBlock(name) {
         let re = /^[\u4E00-\u9FA5A-Za-z0-9_\-]+$/
-        if(!re.test(name)){
+        if (!re.test(name)) {
             logger.warn("invaild name");
             return;
         }
-        for(let block of project.info.blocks){
-            if(block==name){
+        for (let block of project.info.blocks) {
+            if (block == name) {
                 logger.warn("Could not add block,beacuse is already exists!");
                 return;
             }
         }
-        console.log(project.info.blocks)
+        //创建对应的文件
+        this.mkdir()
+        if (fs.existsSync(this.getProjectPath() + '/blocks/' + name + '.block')) {
+            fs.unlinkSync(this.getProjectPath() + '/blocks/' + name + '.block');
+        }
+        fs.writeFileSync(this.getProjectPath() + '/blocks/' + name + '.block', '');
+
         project.info.blocks.push(name);
         this.writeTofile();
     },
-    renameBlock(name,newname) {
-        
+    renameBlock(name, newname) {
+        let re = /^[\u4E00-\u9FA5A-Za-z0-9_\-]+$/
+        if (!re.test(name)) {
+            logger.warn("invaild name");
+            return;
+        }
+        let index = 0;
+        for (let block of project.info.blocks) {
+            if (block == name) {
+                project.info.blocks[index] = newname;
+            }
+            index++;
+        }
+
+        this.writeTofile();
     },
-    getBlockList(){
+    getBlockList() {
         return project.info.blocks;
+    },
+    mkdir() {
+        if (!fs.existsSync(this.getProjectPath() + '/blocks')) {
+            fs.mkdirSync(this.getProjectPath() + '/blocks');
+        }
     }
 
 
