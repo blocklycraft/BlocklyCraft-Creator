@@ -1,32 +1,33 @@
-sudo: required
-dist: trusty
-stages:
-  - compile
-  - test
-jobs:
-  include:
-    - stage: "Tests"                # naming the Tests stage
-      name: "test docker"            # names the first Tests stage job
-      script: docker build -t blocklycraftcreator .
 language: node_js
 node_js: "10"
 services:
   - docker
+cache:
+  directories:
+    - node_modules
+sudo: required
+dist: trusty
+stages:
+  - test
+  - build
 matrix:
   include:
     - name: "macOS"
       os: osx
-
     - name: "Windows"
       os: windows
-
     - name: "Linux"
       os: linux
+jobs:
+  include:
+    - stage: "build"                # naming the Tests stage
+      name: "build docker image"            # names the first Tests stage job
+      script: docker build -t blocklycraftcreator .
+    - stage: "test" 
+      script: npm install
+    - script: npm install --global yarn
+    - script: quasar build -m electron
 
-
-cache:
-  directories:
-    - node_modules
 
 install:
   - npm install
