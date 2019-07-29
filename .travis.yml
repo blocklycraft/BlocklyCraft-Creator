@@ -3,7 +3,8 @@ dist: trusty
 
 language: node_js
 node_js: "10"
-
+services:
+  - docker
 matrix:
   include:
     - name: "macOS"
@@ -26,4 +27,4 @@ install:
 
 script:
   - quasar build -m electron
-
+  - docker build -t blocklycraftcreator .
