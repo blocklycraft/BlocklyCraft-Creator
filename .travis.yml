@@ -3,6 +3,11 @@ dist: trusty
 stages:
   - compile
   - test
+jobs:
+  include:
+    - stage: "Tests"                # naming the Tests stage
+      name: "test docker"            # names the first Tests stage job
+      script: docker build -t blocklycraftcreator .
 language: node_js
 node_js: "10"
 services:
@@ -29,8 +34,3 @@ install:
 
 script:
   - quasar build -m electron
-jobs:
-  include:
-    - stage: "Tests"                # naming the Tests stage
-      name: "test docker"            # names the first Tests stage job
-      script: docker build -t blocklycraftcreator .
