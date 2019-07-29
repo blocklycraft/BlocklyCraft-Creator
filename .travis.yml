@@ -20,8 +20,8 @@ stages:
 #      os: linux
 jobs:
   include:
-    - stage: "build"                # naming the Tests stage
-      name: "build docker image"            # names the first Tests stage job
+    - stage: "build"        
+      name: "build docker image"
       script: docker build -t blocklycraftcreator .
     - stage: "test for linux" 
       os: linux
