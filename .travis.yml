@@ -38,9 +38,3 @@ jobs:
       script: npm install
       script: npm install --global yarn
       script: quasar build -m electron
-install:
-  - npm install
-  - npm install --global yarn
-
-script:
-  - quasar build -m electron
