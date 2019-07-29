@@ -10,25 +10,34 @@ dist: trusty
 stages:
   - test
   - build
-matrix:
-  include:
-    - name: "macOS"
-      os: osx
-    - name: "Windows"
-      os: windows
-    - name: "Linux"
-      os: linux
+#matrix:
+#  include:
+#    - name: "macOS"
+#      os: osx
+#    - name: "Windows"
+#      os: windows
+#    - name: "Linux"
+#      os: linux
 jobs:
   include:
     - stage: "build"                # naming the Tests stage
       name: "build docker image"            # names the first Tests stage job
       script: docker build -t blocklycraftcreator .
-    - stage: "test" 
+    - stage: "test for linux" 
+      os: linux
       script: npm install
-    - script: npm install --global yarn
-    - script: quasar build -m electron
-
-
+      script: npm install --global yarn
+      script: quasar build -m electron
+    - stage: "test for Windows" 
+      os: windows
+      script: npm install
+      script: npm install --global yarn
+      script: quasar build -m electron
+    - stage: "test for macOS" 
+      os: osx
+      script: npm install
+      script: npm install --global yarn
+      script: quasar build -m electron
 install:
   - npm install
   - npm install --global yarn
