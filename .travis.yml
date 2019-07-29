@@ -27,4 +27,8 @@ install:
 
 script:
   - quasar build -m electron
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; docker build -t blocklycraftcreator .; fi
+jobs:
+  include:
+    - stage: "Tests"                # naming the Tests stage
+      name: "test docker"            # names the first Tests stage job
+      script: docker build -t blocklycraftcreator .
