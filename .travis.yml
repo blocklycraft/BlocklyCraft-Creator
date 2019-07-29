@@ -27,4 +27,4 @@ install:
 
 script:
   - quasar build -m electron
-  - docker build -t blocklycraftcreator .
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; docker build -t blocklycraftcreator .; fi
