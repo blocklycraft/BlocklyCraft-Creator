@@ -19,9 +19,7 @@ export default {
     });
     webview.addEventListener("ipc-message", event => {
       if (event.channel == "load-error") {
-        this.$snotify.error(
-          "未能打开此积木板，该积木板可能被删除或依赖不兼容。"
-        );
+        this.$snotify.error(this.$t("tip.invaild_block"));
         return;
       }
       if (event.channel == "load-success") {
@@ -30,7 +28,10 @@ export default {
     });
     this.$eventHub.$on("project-open", this.loadProject);
     this.$eventHub.$on("project-close", this.unloadProject);
-    this.$eventHub.$on("open-block", this.openBlock);
+    this.$eventHub.$on("block-open", this.openBlock);
+    this.$eventHub.$on("block-rename", this.renameBlock);
+    this.$eventHub.$on("block-close", this.closeBlock);
+    this.$eventHub.$on("block-save", this.saveBlock);
   },
   data() {
     return {
@@ -83,6 +84,7 @@ export default {
           }
         }
       });
+
       this.dirty = true;
       webview.send("open-project", projectManager.getProjectPath());
       webview.executeJavaScript(blocks_script);
@@ -90,7 +92,7 @@ export default {
         headless: true,
         renderOpts: { pretty: false }
       }).buildObject(toolbox_tree);
-      webview.executeJavaScript("Workspace.updateToolbox('" + xml_str + "');");
+      webview.executeJavaScript("workspace.updateToolbox('" + xml_str + "');");
     },
     unloadProject() {
       if (this.dirty) {
@@ -104,10 +106,19 @@ export default {
           projectManager.getProjectPath() + "/blocks/" + name + ".block"
         )
       ) {
-        this.$snotify.error("未能打开积木板，他可能被强行删除了！");
+        this.$snotify.error(this.$t("tip.invaild_block"));
         return;
       }
-      webview.send("block-open", hash);
+      webview.send("block-open", name);
+    },
+    renameBlock(name) {
+      webview.send("block-rename", name);
+    },
+    closeBlock() {
+      webview.send("block-close");
+    },
+    saveBlock() {
+      webview.executeJavaScript("saveBlock()");
     }
   }
 };

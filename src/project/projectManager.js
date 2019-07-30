@@ -87,18 +87,18 @@ export default {
     },
     deleteBlock(name) {
         let index = 0;
-        for(let block of project.info.blocks){
-            if(block == name){
-                project.info.blocks.splice(index,1);
+        for (let block of project.info.blocks) {
+            if (block == name) {
+                project.info.blocks.splice(index, 1);
             }
             index++;
         }
         this.writeTofile();
         //同时删除文件
-        if(fs.existsSync(this.getProjectPath() + '/blocks/' + name + '.block')){
+        if (fs.existsSync(this.getProjectPath() + '/blocks/' + name + '.block')) {
             fs.unlinkSync(this.getProjectPath() + '/blocks/' + name + '.block');
         }
-        
+
 
     },
     addBlock(name) {
@@ -118,7 +118,7 @@ export default {
         if (fs.existsSync(this.getProjectPath() + '/blocks/' + name + '.block')) {
             fs.unlinkSync(this.getProjectPath() + '/blocks/' + name + '.block');
         }
-        fs.writeFileSync(this.getProjectPath() + '/blocks/' + name + '.block', '');
+        fs.writeFileSync(this.getProjectPath() + '/blocks/' + name + '.block', '<xml></xml>');
 
         project.info.blocks.push(name);
         this.writeTofile();
@@ -134,7 +134,7 @@ export default {
             if (block == name) {
                 project.info.blocks[index] = newname;
                 //重命名对应文件
-                fs.renameSync(this.getProjectPath() + '/blocks/' + name + '.block',this.getProjectPath() + '/blocks/' + newname + '.block')
+                fs.renameSync(this.getProjectPath() + '/blocks/' + name + '.block', this.getProjectPath() + '/blocks/' + newname + '.block')
             }
             index++;
         }
