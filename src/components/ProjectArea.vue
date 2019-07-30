@@ -181,7 +181,7 @@ export default {
       return re.test(val);
     },
     changeName(name, name_) {
-      if (name == name_) {
+      if (name === name_) {
         return;
         //不需要更新，因为前后都是一样的
       }
@@ -190,7 +190,7 @@ export default {
       projectManager.writeTofile();
     },
     changeVersion(ver, ver_) {
-      if (ver == ver_) {
+      if (ver === ver_) {
         return;
         //不需要更新，因为前后都是一样的
       }
@@ -199,7 +199,7 @@ export default {
       projectManager.writeTofile();
     },
     changeAuthor(author, author_) {
-      if (author == author_) {
+      if (author === author_) {
         return;
         //不需要更新，因为前后都是一样的
       }

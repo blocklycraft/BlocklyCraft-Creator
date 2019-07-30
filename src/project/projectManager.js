@@ -89,7 +89,7 @@ export default {
         let index = 0;
         for(let block of project.info.blocks){
             if(block == name){
-                project.info.blocks.slice(index,1);
+                project.info.blocks.splice(index,1);
             }
             index++;
         }
@@ -133,6 +133,8 @@ export default {
         for (let block of project.info.blocks) {
             if (block == name) {
                 project.info.blocks[index] = newname;
+                //重命名对应文件
+                fs.renameSync(this.getProjectPath() + '/blocks/' + name + '.block',this.getProjectPath() + '/blocks/' + newname + '.block')
             }
             index++;
         }
