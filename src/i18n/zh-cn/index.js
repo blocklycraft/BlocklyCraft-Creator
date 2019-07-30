@@ -1,10 +1,10 @@
 export default {
-  app:{
+  app: {
     lang: '语言',
     aboutme: '关于 - BlockCraft',
     dark: '黑暗模式'
   },
-  menu:{
+  menu: {
     file: '文件',
     new: '新建',
     open: '打开',
@@ -22,15 +22,17 @@ export default {
     create: '新建项目',
     open: '打开项目',
   },
-  project:{
+  project: {
     create: '创建项目',
     path: '项目路径',
     name: '项目名称',
     open: '打开项目',
     project: '项目',
-    blocks: '积木'
+    blocks: '积木',
+    create_block: '创建新的积木板',
+    rename_block: "重命名积木板"
   },
-  dialog:{
+  dialog: {
     cancel: '取消',
     create: '创建',
     yes: '是',
@@ -39,15 +41,17 @@ export default {
     close: '关闭',
     enter: '确认'
   },
-  plugin:{
+  plugin: {
     name: '插件名称',
     version: '插件版本',
     author: '作者'
   },
-  tip:{
+  tip: {
     dark_restart: '在切换模式后，我们建议您重启软件！',
-    block_delete_title:"真的要删除此积木板吗？",
-    block_delete_msg:"此操作不可撤销,你真的要删除'{name}'吗？",
-    block_rename_title:"重命名积木板"
+    block_delete_title: "真的要删除此积木板吗？",
+    block_delete_msg: "此操作不可撤销,你真的要删除'{name}'吗？",
+    invaild_name: '此名称无效，请重新输入一个名称。',
+    already_exist: '积木板{name},已经存在，请重新输入一个名字。',
+    invaild_block: '无法打开此积木板'
   }
 }

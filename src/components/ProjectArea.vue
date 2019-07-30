@@ -75,6 +75,7 @@
       <q-tab-panel name="blocks" style="padding: 0px">
         <q-toolbar class="text-text">
           <q-btn @click="addBlock" flat round dense icon="add_circle_outline" />
+          <q-btn @click="saveBlock" flat round dense icon="save" />
         </q-toolbar>
 
         <q-list separator>
@@ -83,7 +84,7 @@
               clickable
               v-ripple
               active-class="item-active"
-              :active="curr_blocks === block_inf"
+              :active="curr_block === block_inf"
               style="text-overflow: ellipsis;"
             >
               <q-item-section @click="openBlock(block_inf)">{{block_inf}}</q-item-section>
@@ -123,12 +124,9 @@ export default {
         version: ""
       },
       blocks: [],
-      curr_blocks: "",
+      curr_block: "",
       disable: false,
       dark: false,
-      editor: {
-        opened_block: null
-      },
       opening_dialog: null
     };
   },
@@ -137,8 +135,8 @@ export default {
     this.$eventHub.$on("project-open", this.openProject);
     this.$eventHub.$on("project-close", this.closeProject);
     this.$eventHub.$on("dark-change", this.changeDark);
-    this.$eventHub.$on("load-error", name => {
-      this.curr_blocks = name;
+    this.$eventHub.$on("load-success", name => {
+      this.curr_block = name;
     });
   },
   mounted() {},
@@ -165,8 +163,10 @@ export default {
 
       this.$logger.info("[ProjectArea]rec project-close");
       this.project_info.name = "";
-      this.project_info.Author = "";
+      this.project_info.author = "";
       this.project_info.version = "";
+      this.blocks = [];
+      this.curr_block = "";
     },
     inputcheck(val) {
       let re = /^[A-Za-z0-9]+$/;
@@ -225,11 +225,11 @@ export default {
           for (let blo of this.blocks) {
             if (blo == name) {
               //如果编辑器打开的是这个积木，那么关闭
-              if (this.editor.opened_block == name) {
+              if (this.curr_block == name) {
                 //编辑器还没完成:-(
+                this.$eventHub.$emit("block-close");
               }
               projectManager.deleteBlock(name);
-              this.blocks.splice(index, 1);
               break;
             }
             index++;
@@ -249,12 +249,12 @@ export default {
     },
     openBlock(name) {
       //通知编辑器打开
-      this.$eventHub.$emit("open-block", name);
+      this.$eventHub.$emit("block-open", name);
     },
     renameBlock(name) {
       this.opening_dialog = this.$q
         .dialog({
-          title: this.$t("tip.block_rename_title"),
+          title: this.$t("project.rename_block"),
           cancel: true,
           persistent: true,
           dark: this.dark,
@@ -278,11 +278,19 @@ export default {
               projectManager.renameBlock(name, new_name);
             }
           }
+
           let curr_blocks = projectManager.getBlockList();
 
           if (curr_blocks != null) {
             this.blocks = {};
             this.blocks = curr_blocks;
+          }
+          //发送'block-rename'事件(如果编辑器打开的正是当前积木时)
+
+          if (this.curr_block === name) {
+            this.curr_block = new_name;
+            console.log(this.curr_block);
+            this.$eventHub.$emit("block-rename", new_name);
           }
           this.opening_dialog = null;
         })
@@ -296,7 +304,7 @@ export default {
     addBlock() {
       this.opening_dialog = this.$q
         .dialog({
-          title: "新建积木板",
+          title: this.$t("project.create_block"),
           cancel: true,
           persistent: true,
           dark: this.dark,
@@ -309,18 +317,18 @@ export default {
         })
         .onOk(name => {
           if ("" == name) {
-            this.$snotify.error("积木板名称不能为空！");
+            this.$snotify.error(this.$t("tip.invaild_name"));
             return;
           }
           let re = /^[\u4E00-\u9FA5A-Za-z0-9_\-]+$/;
           if (!re.test(name)) {
-            this.$snotify.error("积木板名称中仅可包含中英文数字和-_");
+            this.$snotify.error(this.$t("tip.invaild_name"));
             return;
           }
           console.log(this.blocks);
           for (let block of this.blocks) {
             if (block == name) {
-              this.$snotify.error("积木板：" + name + "已经存在");
+              this.$snotify.error(this.$t("tip.already_exist", { name: name }));
               return;
             }
           }
@@ -337,6 +345,9 @@ export default {
         .onDismiss(() => {
           this.opening_dialog = null;
         });
+    },
+    saveBlock() {
+      this.$eventHub.$emit("block-save");
     }
   }
 };

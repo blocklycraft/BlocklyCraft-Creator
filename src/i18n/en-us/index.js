@@ -30,7 +30,9 @@ export default {
     name: 'Project name',
     open: 'Open project',
     project: 'Project',
-    blocks: 'Blocks'
+    blocks: 'Blocks',
+    create_block: 'Create new building blocks',
+    rename_block: "Rename building blocks"
   },
   dialog: {
     cancel: 'cancel',
@@ -50,6 +52,9 @@ export default {
     dark_restart: 'If you change mode,we suggest you restart BlockCraft!',
     block_delete_title:"Do you really want to delete this building block?",
     block_delete_msg:"This operation is irrevocable. Do you really want to delete'{name}'?",
-    block_rename_title:"Rename the building block",
+    invaild_name: 'Invalid name, please re-enter a correct name.',
+    already_exist: 'Block {name} already exists. Please re-enter a name.',
+    invaild_block: 'Unable to open this building block'
   }
+
 }
