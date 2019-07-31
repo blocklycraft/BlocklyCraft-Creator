@@ -13,6 +13,28 @@ let project = {
 }
 
 export default {
+    createProject(path, name) {
+        //此方法不会更改当前打开的项目
+        if (fs.existsSync(path)) {
+            if (fs.lstatSync(path).isDirectory()) {
+                if (fs.readdirSync(path).length != 0) {
+                    console.log(fs.readdirSync(path).length)
+                    //路径已经存在且不为空，不能创建项目
+                    return false;
+                }
+            }
+        }else{
+            fs.mkdirSync(path);
+        }
+
+        let project_info = {
+            name: name,
+            version: '1.0.0',
+            blocks:[]
+        }
+        fs.writeFileSync(path + '/info.json', JSON.stringify(project_info))
+        return true
+    },
     getProjectPath() {
         return project.path;
     },

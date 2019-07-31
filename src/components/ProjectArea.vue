@@ -69,6 +69,21 @@
               <q-input v-model="project_info.version" dense autofocus :dark="dark" />
             </q-popup-edit>
           </q-item>
+          <q-item clickable v-ripple @click="command_list_dl=true">
+            <q-item-section>
+              <q-item-label>{{ $t('plugin.commands') }}</q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-item clickable v-ripple @click="permission_list_dl=true">
+            <q-item-section>
+              <q-item-label>{{ $t('plugin.permission') }}</q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-item clickable v-ripple>
+            <q-item-section>
+              <q-item-label>{{ $t('plugin.build') }}</q-item-label>
+            </q-item-section>
+          </q-item>
         </q-list>
       </q-tab-panel>
 
@@ -106,6 +121,123 @@
         </q-list>
       </q-tab-panel>
     </q-tab-panels>
+    <!--命令列表对话框-->
+    <q-dialog v-model="command_list_dl" :dark="dark">
+      <q-card class="bg-background" :dark="dark" style="min-width: 500px;">
+        <q-card-section>
+          <div class="text-h6">命令列表</div>
+        </q-card-section>
+        <q-card-section>
+          <q-list :dark="dark" separator>
+            <q-item clickable v-ripple>
+              <q-item-section>Item</q-item-section>
+              <q-item-section side>
+                <div class="q-gutter-xs">
+                  <q-btn size="12px" flat dense round icon="edit" />
+                  <q-btn size="12px" flat dense round icon="delete" />
+                </div>
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section>Item</q-item-section>
+              <q-item-section side>
+                <div class="q-gutter-xs">
+                  <q-btn size="12px" flat dense round icon="edit" />
+                  <q-btn size="12px" flat dense round icon="delete" />
+                </div>
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section>Item</q-item-section>
+              <q-item-section side>
+                <div class="q-gutter-xs">
+                  <q-btn size="12px" flat dense round icon="edit" />
+                  <q-btn size="12px" flat dense round icon="delete" />
+                </div>
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section>Item</q-item-section>
+              <q-item-section side>
+                <div class="q-gutter-xs">
+                  <q-btn size="12px" flat dense round icon="edit" />
+                  <q-btn size="12px" flat dense round icon="delete" />
+                </div>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+    <!--权限列表对话框-->
+    <q-dialog v-model="permission_list_dl" :dark="dark">
+      <q-card class="bg-background" :dark="dark" style="min-width: 500px;">
+        <q-card-section>
+          <div class="text-h6">权限列表</div>
+        </q-card-section>
+        <q-card-section>
+          <q-list :dark="dark" separator>
+            <q-item clickable v-ripple>
+              <q-item-section>Item</q-item-section>
+              <q-item-section side>
+                <div class="q-gutter-xs">
+                  <q-btn size="12px" flat dense round icon="edit" />
+                  <q-btn size="12px" flat dense round icon="delete" />
+                </div>
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section>Item</q-item-section>
+              <q-item-section side>
+                <div class="q-gutter-xs">
+                  <q-btn size="12px" flat dense round icon="edit" />
+                  <q-btn size="12px" flat dense round icon="delete" />
+                </div>
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section>Item</q-item-section>
+              <q-item-section side>
+                <div class="q-gutter-xs">
+                  <q-btn size="12px" flat dense round icon="edit" />
+                  <q-btn size="12px" flat dense round icon="delete" />
+                </div>
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section>Item</q-item-section>
+              <q-item-section side>
+                <div class="q-gutter-xs">
+                  <q-btn size="12px" flat dense round icon="edit" />
+                  <q-btn size="12px" flat dense round icon="delete" />
+                </div>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+    <q-dialog v-model="permission_command_dl" :dark="dark">
+      <q-card class="bg-background" :dark="dark" style="min-width: 500px;">
+        <q-card-section>
+          <div class="text-h6">编辑命令</div>
+        </q-card-section>
+        <q-card-section>
+
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog v-model="permission_edit_dl" :dark="dark">
+      <q-card class="bg-background" :dark="dark" style="min-width: 500px;">
+        <q-card-section>
+          <div class="text-h6">编辑权限</div>
+        </q-card-section>
+        <q-card-section>
+
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -121,13 +253,28 @@ export default {
       project_info: {
         name: "",
         author: "",
-        version: ""
+        version: "",
+        command_list_data: [
+          {
+            command: "test",
+            permission: "test.test",
+            usage: "/<command>"
+          }
+        ],
+        permission_list_data: [
+          {
+            permission: "test.test",
+            default: "true"
+          }
+        ]
       },
       blocks: [],
       curr_block: "",
       disable: false,
       dark: false,
-      opening_dialog: null
+      opening_dialog: null,
+      command_list_dl: false,
+      permission_list_dl: false
     };
   },
   beforeMount() {

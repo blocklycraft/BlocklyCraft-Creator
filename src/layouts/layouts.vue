@@ -113,7 +113,7 @@
                   :dark="dark"
                 >
                   <template v-slot:after>
-                    <q-btn round dense flat icon="explore" />
+                    <q-btn round dense flat icon="explore" @click="selectPath" />
                   </template>
                 </q-input>
                 <q-input
@@ -127,7 +127,7 @@
 
             <q-card-actions align="right">
               <q-btn flat :label="$t('dialog.cancel')" color="primary" v-close-popup />
-              <q-btn flat :label="$t('dialog.create')" color="primary" v-close-popup />
+              <q-btn flat :label="$t('dialog.create')" color="primary" @click="createProject" />
             </q-card-actions>
           </q-card>
         </q-dialog>
@@ -208,9 +208,9 @@ export default {
       this.$i18n.locale = lang;
       settings.set("language", lang);
     },
-    openProject(filePaths) {
-      if (filePaths !== undefined && filePaths.length > 0) {
-        let path = filePaths[0];
+    openProject(filePath) {
+      if (filePath !== undefined) {
+        let path = filePath;
         this.$eventHub.$emit("project-close");
         let result = projectManager.openProject(path);
         this.$logger.info("Open project result:" + result);
@@ -222,7 +222,6 @@ export default {
         this.$eventHub.$emit("project-open");
 
         this.getStart_dl = false;
-
       }
     },
     setDark(dark) {
@@ -259,13 +258,14 @@ export default {
     },
     open_project() {
       const { dialog } = require("electron").remote;
-      let path = dialog.showOpenDialog(
-        {
-          title: this.$i18n.t("project.open"),
-          properties: ["openDirectory"]
-        }
-      );
-      this.openProject(path)
+      let path = dialog.showOpenDialog({
+        title: this.$i18n.t("project.open"),
+        properties: ["openDirectory"]
+      });
+      if(path.length === 0){
+        return;
+      }
+      this.openProject(path[0]);
     },
     close_project() {
       this.$eventHub.$emit("project-close");
@@ -275,6 +275,53 @@ export default {
     },
     changeDark(mode) {
       this.dark = mode;
+    },
+    createProject() {
+      const fs = require("fs");
+      let re = /[a-zA-Z]:(\\.+)*/;
+      if (!re.test(this.create_pro_dl.path)) {
+        this.$snotify.error("无法创建项目:无效的文件路径");
+        return;
+      }
+      re = /^[A-Za-z0-9_\-]+$/;
+      if (!re.test(this.create_pro_dl.name)) {
+        this.$snotify.error("无法创建项目:插件名称无效");
+        return;
+      }
+      if (fs.existsSync(this.create_pro_dl.path)) {
+        if (fs.lstatSync(this.create_pro_dl.path).isDirectory()) {
+          if (fs.readdirSync(this.create_pro_dl.path).length != 0) {
+            console.log(fs.readdirSync(this.create_pro_dl.path).length);
+            //路径已经存在且不为空，不能创建项目
+            this.$snotify.error("无法创建项目:文件夹已存在且不为空");
+            return;
+          }
+        }
+      }
+      let res = projectManager.createProject(
+        this.create_pro_dl.path,
+        this.create_pro_dl.name
+      );
+      if (!res) {
+        this.$snotify.error("创建项目失败！");
+        return;
+      }
+      this.new_pro_dl_show = false;
+      this.getStart_dl = false;
+      this.openProject(this.create_pro_dl.path)
+      
+    },
+    selectPath() {
+      const { dialog } = require("electron").remote;
+      let path = dialog.showOpenDialog({
+        title: this.$i18n.t("project.create"),
+        properties: ["openDirectory"]
+      });
+      if (path.length === 0) {
+        return;
+      }
+      this.create_pro_dl.path = path[0];
+      
     }
   },
   data() {
