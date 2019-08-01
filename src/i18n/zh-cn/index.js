@@ -14,7 +14,9 @@ export default {
     about: '关于..',
     github: 'Github地址',
     doc: '帮助文档',
-    close: '关闭项目'
+    close: '关闭项目',
+    libraries: '依赖库',
+
   },
   start: {
     title: '开始使用',
@@ -30,7 +32,12 @@ export default {
     project: '项目',
     blocks: '积木',
     create_block: '创建新的积木板',
-    rename_block: "重命名积木板"
+    rename_block: "重命名积木板",
+    add_command: '添加命令',
+    add_permission: '添加权限',
+    edit_command: '编辑命令',
+    edit_permission: '编辑权限'
+    
   },
   dialog: {
     cancel: '取消',
@@ -39,15 +46,19 @@ export default {
     no: '否',
     info: '信息',
     close: '关闭',
-    enter: '确认'
+    enter: '确认',
+    
   },
   plugin: {
     name: '插件名称',
     version: '插件版本',
     author: '作者',
     commands: '命令列表',
-    permission: '权限列表',
-    build: '构建插件'
+    permissions: '权限列表',
+    build: '构建插件',
+    command: '命令',
+    permission: '权限',
+    default_own: '默认拥有者(op,player,false,true)'
   },
   tip: {
     dark_restart: '在切换模式后，我们建议您重启软件！',

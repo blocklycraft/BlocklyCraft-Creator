@@ -4,12 +4,7 @@ import logger from "../logger/logger"
 let project = {
     path: null,
     locked: false,
-    info: {
-        name: null,
-        author: null,
-        version: null,
-        blocks: []
-    }
+    info: {}
 }
 
 export default {
@@ -23,14 +18,14 @@ export default {
                     return false;
                 }
             }
-        }else{
+        } else {
             fs.mkdirSync(path);
         }
 
         let project_info = {
             name: name,
             version: '1.0.0',
-            blocks:[]
+            blocks: []
         }
         fs.writeFileSync(path + '/info.json', JSON.stringify(project_info))
         return true
@@ -80,6 +75,7 @@ export default {
                 return "MISSING_INFO"
             }
             project.info = info;
+            this.fixUp()
             return "SUCCESS"
         }
         logger.warn("Could not load project,because it missing name or version!");
@@ -120,8 +116,6 @@ export default {
         if (fs.existsSync(this.getProjectPath() + '/blocks/' + name + '.block')) {
             fs.unlinkSync(this.getProjectPath() + '/blocks/' + name + '.block');
         }
-
-
     },
     addBlock(name) {
         let re = /^[\u4E00-\u9FA5A-Za-z0-9_\-]+$/
@@ -170,7 +164,97 @@ export default {
         if (!fs.existsSync(this.getProjectPath() + '/blocks')) {
             fs.mkdirSync(this.getProjectPath() + '/blocks');
         }
+    },
+    fixUp() {
+        //修正项目信息中的错误(如字段缺失)
+        if (project.info === {}) {
+            //没打开项目....
+            return;
+        }
+        if (project.info.blocks == undefined) {
+            project.info.blocks = [];
+        }
+        if (project.info.commands == undefined) {
+            project.info.commands = []
+        }
+        if (project.info.permissions == undefined) {
+            project.info.permissions = []
+        }
+        this.writeTofile()
+    },
+    getCommands() {
+        return project.info.commands;
+    },
+    getPermissions() {
+        return project.info.permissions;
+    },
+    deleteCommand(command) {
+        let index = 0;
+        for (let cmd of project.info.commands) {
+            if (cmd.command === command) {
+                project.info.commands.splice(index, 1);
+                break;
+            }
+            index++;
+        }
+        this.writeTofile()
+    },
+    deletePermission(permission) {
+        let index = 0;
+        for (let per of project.info.permissions) {
+            if (per.permission === permission) {
+                project.info.permissions.splice(index, 1);
+                break;
+            }
+            index++;
+        }
+        this.writeTofile()
+    },
+    changeCommand(command, data) {
+        let index = 0
+        for (let cmd of project.info.commands) {
+            if (cmd.command === command) {
+                project.info.commands[index].command = data.command
+                project.info.commands[index].permission = data.permission
+                this.writeTofile()
+                return;
+            }
+            index++;
+        }
+        //没有的话，新建喽
+        this.addCommand(data)
+
+    },
+    changePermission(permission, data) {
+        let index = 0
+        for (let per of project.info.permissions) {
+            if (per.permission === permission) {
+                project.info.permissions[index].permission = data.permission;
+                project.info.permissions[index].default = data.default;
+                this.writeTofile()
+                return
+            }
+            index++;
+        }
+        this.addPermission(data)
+
+    },
+    addCommand(command) {
+        for (let cmd of project.info.commands) {
+            if (command.command === cmd.command) {
+                return;
+            }
+        }
+        project.info.commands.push({command:command.command,permission:command.permission})
+        this.writeTofile()
+    },
+    addPermission(permission) {
+        for (let per of project.info.permissions) {
+            if (permission.permission === per.permission) {
+                return;
+            }
+        }
+        project.info.permissions.push({permission:permission.permission,default:permission.default})
+        this.writeTofile()
     }
-
-
 }

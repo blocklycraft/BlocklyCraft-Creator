@@ -76,7 +76,7 @@
           </q-item>
           <q-item clickable v-ripple @click="permission_list_dl=true">
             <q-item-section>
-              <q-item-label>{{ $t('plugin.permission') }}</q-item-label>
+              <q-item-label>{{ $t('plugin.permissions') }}</q-item-label>
             </q-item-section>
           </q-item>
           <q-item clickable v-ripple>
@@ -125,43 +125,30 @@
     <q-dialog v-model="command_list_dl" :dark="dark">
       <q-card class="bg-background" :dark="dark" style="min-width: 500px;">
         <q-card-section>
-          <div class="text-h6">命令列表</div>
+          <div class="text-h6">{{$t('plugin.commands')}}</div>
         </q-card-section>
         <q-card-section>
-          <q-list :dark="dark" separator>
-            <q-item clickable v-ripple>
-              <q-item-section>Item</q-item-section>
+          <q-toolbar class="text-text">
+            <q-btn @click="addCommand" flat dense icon="add_circle_outline">{{$t('project.add_command')}}</q-btn>
+          </q-toolbar>
+          <q-list
+            v-for="command in project_info.commands"
+            :dark="dark"
+            separator
+            :key="command.command"
+          >
+            <q-item clickable v-ripple @click="edit_command(command)">
+              <q-item-section>{{command.command}}</q-item-section>
               <q-item-section side>
                 <div class="q-gutter-xs">
-                  <q-btn size="12px" flat dense round icon="edit" />
-                  <q-btn size="12px" flat dense round icon="delete" />
-                </div>
-              </q-item-section>
-            </q-item>
-            <q-item clickable v-ripple>
-              <q-item-section>Item</q-item-section>
-              <q-item-section side>
-                <div class="q-gutter-xs">
-                  <q-btn size="12px" flat dense round icon="edit" />
-                  <q-btn size="12px" flat dense round icon="delete" />
-                </div>
-              </q-item-section>
-            </q-item>
-            <q-item clickable v-ripple>
-              <q-item-section>Item</q-item-section>
-              <q-item-section side>
-                <div class="q-gutter-xs">
-                  <q-btn size="12px" flat dense round icon="edit" />
-                  <q-btn size="12px" flat dense round icon="delete" />
-                </div>
-              </q-item-section>
-            </q-item>
-            <q-item clickable v-ripple>
-              <q-item-section>Item</q-item-section>
-              <q-item-section side>
-                <div class="q-gutter-xs">
-                  <q-btn size="12px" flat dense round icon="edit" />
-                  <q-btn size="12px" flat dense round icon="delete" />
+                  <q-btn
+                    @click="deleteCommand(command.command)"
+                    size="12px"
+                    flat
+                    dense
+                    round
+                    icon="delete"
+                  />
                 </div>
               </q-item-section>
             </q-item>
@@ -173,43 +160,23 @@
     <q-dialog v-model="permission_list_dl" :dark="dark">
       <q-card class="bg-background" :dark="dark" style="min-width: 500px;">
         <q-card-section>
-          <div class="text-h6">权限列表</div>
+          <div class="text-h6">{{$t('plugin.permissions')}}</div>
         </q-card-section>
         <q-card-section>
-          <q-list :dark="dark" separator>
-            <q-item clickable v-ripple>
-              <q-item-section>Item</q-item-section>
+          <q-toolbar class="text-text">
+            <q-btn @click="addPermission" flat dense icon="add_circle_outline">{{$t('project.add_permission')}}</q-btn>
+          </q-toolbar>
+          <q-list
+            v-for="permission in project_info.permissions"
+            :dark="dark"
+            separator
+            :key="permission.permission"
+          >
+            <q-item clickable v-ripple @click="edit_permission(permission)">
+              <q-item-section>{{permission.permission}}</q-item-section>
               <q-item-section side>
                 <div class="q-gutter-xs">
-                  <q-btn size="12px" flat dense round icon="edit" />
-                  <q-btn size="12px" flat dense round icon="delete" />
-                </div>
-              </q-item-section>
-            </q-item>
-            <q-item clickable v-ripple>
-              <q-item-section>Item</q-item-section>
-              <q-item-section side>
-                <div class="q-gutter-xs">
-                  <q-btn size="12px" flat dense round icon="edit" />
-                  <q-btn size="12px" flat dense round icon="delete" />
-                </div>
-              </q-item-section>
-            </q-item>
-            <q-item clickable v-ripple>
-              <q-item-section>Item</q-item-section>
-              <q-item-section side>
-                <div class="q-gutter-xs">
-                  <q-btn size="12px" flat dense round icon="edit" />
-                  <q-btn size="12px" flat dense round icon="delete" />
-                </div>
-              </q-item-section>
-            </q-item>
-            <q-item clickable v-ripple>
-              <q-item-section>Item</q-item-section>
-              <q-item-section side>
-                <div class="q-gutter-xs">
-                  <q-btn size="12px" flat dense round icon="edit" />
-                  <q-btn size="12px" flat dense round icon="delete" />
+                  <q-btn size="12px" flat dense round icon="delete" @click="deletePermission(permission.permission)"/>
                 </div>
               </q-item-section>
             </q-item>
@@ -217,25 +184,45 @@
         </q-card-section>
       </q-card>
     </q-dialog>
-    <q-dialog v-model="permission_command_dl" :dark="dark">
-      <q-card class="bg-background" :dark="dark" style="min-width: 500px;">
+    <q-dialog v-model="command_edit_dl" :dark="dark">
+      <q-card class="bg-background bg-background" :dark="dark" style="min-width: 500px;">
         <q-card-section>
-          <div class="text-h6">编辑命令</div>
+          <div class="text-h6">{{$t('project.edit_command')}}</div>
         </q-card-section>
         <q-card-section>
-
+          <div class="q-gutter-md">
+            <q-input
+              :disable="curr_edit_command_disable"
+              v-model="curr_edit_command.command"
+              :dark="dark"
+              outlined
+              :label="$t('plugin.command')"
+            />
+            <q-input v-model="curr_edit_command.permission" :dark="dark" outlined :label="$t('plugin.permission')" />
+          </div>
         </q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat v-close-popup>{{$t('dialog.cancel')}}</q-btn>
+          <q-btn @click="editCommand" flat>{{$t('dialog.enter')}}</q-btn>
+        </q-card-actions>
       </q-card>
     </q-dialog>
 
     <q-dialog v-model="permission_edit_dl" :dark="dark">
       <q-card class="bg-background" :dark="dark" style="min-width: 500px;">
         <q-card-section>
-          <div class="text-h6">编辑权限</div>
+          <div class="text-h6">{{$t('project.edit_permission')}}</div>
         </q-card-section>
         <q-card-section>
-
+          <div class="q-gutter-md">
+            <q-input :disable="curr_edit_permission_disable" v-model="curr_edit_permission.permission" :dark="dark" outlined :label="$t('plugin.permission')" />
+            <q-input v-model="curr_edit_permission.default" :dark="dark" outlined :label="$t('plugin.default_own')" />
+          </div>
         </q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat v-close-popup>{{$t('dialog.cancel')}}</q-btn>
+          <q-btn @click="editPermission" flat>{{$t('dialog.enter')}}</q-btn>
+        </q-card-actions>
       </q-card>
     </q-dialog>
   </div>
@@ -254,19 +241,8 @@ export default {
         name: "",
         author: "",
         version: "",
-        command_list_data: [
-          {
-            command: "test",
-            permission: "test.test",
-            usage: "/<command>"
-          }
-        ],
-        permission_list_data: [
-          {
-            permission: "test.test",
-            default: "true"
-          }
-        ]
+        commands: [],
+        permissions: []
       },
       blocks: [],
       curr_block: "",
@@ -274,7 +250,19 @@ export default {
       dark: false,
       opening_dialog: null,
       command_list_dl: false,
-      permission_list_dl: false
+      permission_list_dl: false,
+      command_edit_dl: false,
+      permission_edit_dl: false,
+      curr_edit_command_disable: false,
+      curr_edit_permission_disable: false,
+      curr_edit_command: {
+        command: "",
+        permission: ""
+      },
+      curr_edit_permission: {
+        permission: "",
+        default: "true"
+      }
     };
   },
   beforeMount() {
@@ -286,7 +274,6 @@ export default {
       this.curr_block = name;
     });
   },
-  mounted() {},
   methods: {
     openProject() {
       this.$logger.info("[ProjectArea]rec project-open");
@@ -295,9 +282,13 @@ export default {
       this.project_info.version = info.version;
       this.project_info.author = info.author ? info.author : "";
       let curr_blocks = projectManager.getBlockList();
+      this.project_info.commands = projectManager.getCommands();
+      this.project_info.permissions = projectManager.getPermissions();
       if (curr_blocks != null) {
         this.blocks = curr_blocks;
       }
+      document.title = "BlockCraft : " + projectManager.getProjectPath();
+      this.$eventHub.$emit("title-update", document.title);
     },
     changeDark() {
       this.dark = this.$BlockCraft.dark;
@@ -314,6 +305,10 @@ export default {
       this.project_info.version = "";
       this.blocks = [];
       this.curr_block = "";
+
+      //更新标题
+      document.title = "BlockCraft";
+      this.$eventHub.$emit("title-update", document.title);
     },
     inputcheck(val) {
       let re = /^[A-Za-z0-9]+$/;
@@ -495,6 +490,64 @@ export default {
     },
     saveBlock() {
       this.$eventHub.$emit("block-save");
+    },
+    edit_command(cmd) {
+      //用于弹出对话框
+      this.curr_edit_command_disable = true;
+      this.curr_edit_command.command = cmd.command;
+      this.curr_edit_command.permission = cmd.permission;
+      this.command_edit_dl = true;
+    },
+    edit_permission(per) {
+      //用于弹出对话框
+      this.curr_edit_permission_disable = true;
+      this.curr_edit_permission.permission = per.permission;
+      this.curr_edit_permission.default = per.default;
+      this.permission_edit_dl = true;
+    },
+    editCommand() {
+      if(this.curr_edit_command.command === ''||this.curr_edit_command.permission === ''){
+        return;
+      }
+      projectManager.changeCommand(
+        this.curr_edit_command.command,
+        this.curr_edit_command
+      );
+      this.project_info.commands = projectManager.getCommands();
+      this.command_edit_dl = false;
+    },
+    editPermission() {
+      if(this.curr_edit_permission.permission === ''||this.curr_edit_permission.default === ''){
+        return;
+      }
+      projectManager.changePermission(
+        this.curr_edit_permission.permission,
+        this.curr_edit_permission
+      );
+      this.project_info.permissions = projectManager.getPermissions();
+      console.log(this.project_info.permissions)
+      this.permission_edit_dl = false;
+    },
+    deleteCommand(cmd) {
+      projectManager.deleteCommand(cmd);
+      this.project_info.commands = projectManager.getCommands();
+    },
+    deletePermission(per) {
+      projectManager.deletePermission(per);
+      this.project_info.permissions = projectManager.getPermissions();
+    },
+    addPermission() {
+      this.curr_edit_permission_disable = false;
+      this.curr_edit_permission.default = "";
+      this.curr_edit_permission.permission = "";
+      this.permission_edit_dl = true;
+
+    },
+    addCommand() {
+      this.curr_edit_command_disable = false;
+      this.curr_edit_command.command = "";
+      this.curr_edit_command.permission = "";
+      this.command_edit_dl = true;
     }
   }
 };
