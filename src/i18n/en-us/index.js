@@ -16,7 +16,8 @@ export default {
     about: 'About..',
     github: 'Github repo',
     doc: 'Document',
-    close: 'Close project'
+    close: 'Close project',
+    libraries: 'Libraries',
   },
   start: {
     title: 'GetStart',
@@ -32,7 +33,11 @@ export default {
     project: 'Project',
     blocks: 'Blocks',
     create_block: 'Create new building blocks',
-    rename_block: "Rename building blocks"
+    rename_block: "Rename building blocks",
+    add_command: 'Add command',
+    add_permission: 'Add permission',
+    edit_command: 'Edit command',
+    edit_permission: 'Edit permission'
   },
   dialog: {
     cancel: 'cancel',
@@ -46,7 +51,13 @@ export default {
   plugin: {
     name: 'Plugin name',
     version: 'Plugin version',
-    author: 'Author'
+    author: 'Author',
+    commands: 'Commands',
+    permissions: 'Permissions',
+    build: 'Build Plugin',
+    command: 'Command',
+    permission: 'Permission',
+    default_own: 'default(op,player,false,true)'
   },
   tip: {
     dark_restart: 'If you change mode,we suggest you restart BlockCraft!',

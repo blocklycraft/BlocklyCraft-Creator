@@ -7,7 +7,7 @@
       <div>
         <q-bar class="q-electron-drag bg-secondary text-white">
           <q-icon name="mode_edit" />
-          <div>BlockCraft</div>
+          <div>{{title}}</div>
 
           <q-space />
 
@@ -16,8 +16,8 @@
           <q-btn dense flat icon="close" @click="closeApp" />
         </q-bar>
 
-        <div class="q-pa-sm q-pl-md row items-center bg-secondary text-white">
-          <div class="cursor-pointer non-selectable">
+        <div class="q-pa-sm row items-center bg-secondary text-white">
+          <div class="q-ml-md cursor-pointer non-selectable">
             {{ $t('menu.file') }}
             <q-menu>
               <q-list dense style="min-width: 100px">
@@ -44,6 +44,10 @@
           </div>
 
           <div class="q-ml-md cursor-pointer non-selectable">
+            {{ $t('menu.libraries') }}
+          </div>
+
+          <div class="q-ml-md cursor-pointer non-selectable">
             {{ $t('menu.help') }}
             <q-menu auto-close>
               <q-list dense style="min-width: 100px">
@@ -65,6 +69,8 @@
             </q-menu>
           </div>
         </div>
+
+
       </div>
       <q-separator :dark="dark" />
 
@@ -262,7 +268,7 @@ export default {
         title: this.$i18n.t("project.open"),
         properties: ["openDirectory"]
       });
-      if(path.length === 0){
+      if (path.length === 0) {
         return;
       }
       this.openProject(path[0]);
@@ -308,8 +314,7 @@ export default {
       }
       this.new_pro_dl_show = false;
       this.getStart_dl = false;
-      this.openProject(this.create_pro_dl.path)
-      
+      this.openProject(this.create_pro_dl.path);
     },
     selectPath() {
       const { dialog } = require("electron").remote;
@@ -321,7 +326,9 @@ export default {
         return;
       }
       this.create_pro_dl.path = path[0];
-      
+    },
+    changeTitle(title) {
+      this.title = title;
     }
   },
   data() {
@@ -337,7 +344,7 @@ export default {
       electron_version: process.versions.electron,
       chrome_version: process.versions.chrome,
       node_version: process.versions.node,
-
+      title: "BlockCraft",
       create_pro_dl: {
         path: "",
         name: ""
@@ -354,13 +361,12 @@ export default {
       ]
     };
   },
-  beforeMount() {
-    this.dark = this.$BlockCraft.dark;
-  },
   mounted() {
+    this.dark = this.$BlockCraft.dark;
     this.$eventHub.$on("dark-change", () => {
       this.changeDark(this.$BlockCraft.dark);
     });
+    this.$eventHub.$on("title-update", this.changeTitle);
   }
 };
 </script>
