@@ -180,6 +180,9 @@ export default {
         if (project.info.permissions == undefined) {
             project.info.permissions = []
         }
+        if (project.info.package == undefined) {
+            project.info.package = ''
+        }
         this.writeTofile()
     },
     getCommands() {

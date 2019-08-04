@@ -66,6 +66,11 @@ export default {
     block_delete_msg: "此操作不可撤销,你真的要删除'{name}'吗？",
     invaild_name: '此名称无效，请重新输入一个名称。',
     already_exist: '积木板{name},已经存在，请重新输入一个名字。',
-    invaild_block: '无法打开此积木板'
+    invaild_block: '无法打开此积木板',
+    invaild_package: '无效的包名',
+    invaild_path: '无效的文件路径',
+    project_exist: '此文件夹中存在其他内容。',
+    can_not_create: '无法创建项目:',
+    create_fail: '创建项目时出现了意外错误'
   }
 }

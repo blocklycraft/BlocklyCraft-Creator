@@ -128,6 +128,12 @@
                   :label="$t('project.name')"
                   dense
                 ></q-input>
+                <q-input
+                  :dark="dark"
+                  v-model="create_pro_dl.package"
+                  :label="$t('project.package')"
+                  dense
+                ></q-input>
               </q-form>
             </q-card-section>
 
@@ -286,12 +292,17 @@ export default {
       const fs = require("fs");
       let re = /[a-zA-Z]:(\\.+)*/;
       if (!re.test(this.create_pro_dl.path)) {
-        this.$snotify.error("无法创建项目:无效的文件路径");
+        this.$snotify.error(this.$t("tip.can_not_create")+this.$t("tip.invaild_path"));
         return;
       }
       re = /^[A-Za-z0-9_\-]+$/;
       if (!re.test(this.create_pro_dl.name)) {
-        this.$snotify.error("无法创建项目:插件名称无效");
+        this.$snotify.error(this.$t("tip.can_not_create")+this.$t("tip.invaild_name"));
+        return;
+      }
+      re = /[a-zA-Z]+[0-9a-zA-Z_]*(\.[a-zA-Z]+[0-9a-zA-Z_]*)*/
+      if(!re.test(this.create_pro_dl.package)){
+        this.$snotify.error(this.$t("tip.can_not_create")+this.$t("tip.invaild_package"));
         return;
       }
       if (fs.existsSync(this.create_pro_dl.path)) {
@@ -299,7 +310,7 @@ export default {
           if (fs.readdirSync(this.create_pro_dl.path).length != 0) {
             console.log(fs.readdirSync(this.create_pro_dl.path).length);
             //路径已经存在且不为空，不能创建项目
-            this.$snotify.error("无法创建项目:文件夹已存在且不为空");
+            this.$snotify.error(this.$t("tip.can_not_create")+this.$t("tip.project_exist"));
             return;
           }
         }
@@ -309,7 +320,7 @@ export default {
         this.create_pro_dl.name
       );
       if (!res) {
-        this.$snotify.error("创建项目失败！");
+        this.$snotify.error(this.$t("tip.can_not_create")+this.$t("tip.create_fail"));
         return;
       }
       this.new_pro_dl_show = false;
@@ -347,7 +358,8 @@ export default {
       title: "BlockCraft",
       create_pro_dl: {
         path: "",
-        name: ""
+        name: "",
+        package: ""
       },
       langs: [
         {
