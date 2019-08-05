@@ -53,6 +53,7 @@ export default {
     name: '插件名称',
     version: '插件版本',
     author: '作者',
+    package: '包名',
     commands: '命令列表',
     permissions: '权限列表',
     build: '构建插件',

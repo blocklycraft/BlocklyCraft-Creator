@@ -59,7 +59,7 @@
     const { ipcRenderer } = require('electron')
     const fs = require('fs')
     ipcRenderer.on('block-open', (event, arg) => {
-
+      console.log("我们接收到了命令")
       if (curr_pro_path == '') {
         return;
       }
@@ -67,7 +67,6 @@
         saveBlock()
       }
       workspace.clear()
-
       if (!fs.existsSync(curr_pro_path + '/blocks/' + arg + '.block')) {
         //不存在,显示错误信息
         ipcRenderer.sendToHost('load-error')
@@ -78,7 +77,6 @@
         let xml = Blockly.Xml.textToDom(block_xml);
         Blockly.Xml.domToWorkspace(xml, workspace);
         ipcRenderer.sendToHost('load-success', arg)
-
         curr_block_name = arg;
 
       } catch (e) {

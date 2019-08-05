@@ -9,6 +9,7 @@ import projectManager from "../project/projectManager";
 const fs = require("fs");
 const parseString = require("xml2js").parseString;
 const xml2js = require("xml2js");
+const { app } = require("electron").remote;
 let webview;
 export default {
   name: "BlocklyEditor",
@@ -16,6 +17,7 @@ export default {
     webview = document.getElementById("editor_view");
     webview.addEventListener("dom-ready", () => {
       webview.openDevTools();
+      console.log("OK!");
     });
     webview.addEventListener("ipc-message", event => {
       if (event.channel == "load-error") {
@@ -41,18 +43,16 @@ export default {
   },
   methods: {
     loadProject() {
-      if (this.dirty) {
-        webview.reload();
-      }
       this.show = "";
       //Load project libraries.
       //由于info.json是属于bpm的，故在此并不对其信息进行验证
       //webview.executeJavaScript('console.log("脚本执行成功")');
       let blocks_script = "";
-      //在'_libraries'目录中寻找库
-      let libraries_dir = "./libraries/";
+      //在'libraries'目录中寻找库
+      let libraries_dir = app.getPath("userData") + "/libraries/";
       let libraries_dirs = [];
       const toolbox_tree = {};
+
       const files = fs.readdirSync(libraries_dir);
       files.forEach(function(item, index) {
         let stat = fs.lstatSync(libraries_dir + item);
@@ -96,6 +96,7 @@ export default {
     },
     unloadProject() {
       if (this.dirty) {
+        console.log("UNLOAD PROEJCT");
         webview.reload();
       }
       this.show = "display: none";
