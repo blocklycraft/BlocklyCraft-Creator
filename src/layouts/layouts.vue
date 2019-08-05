@@ -269,6 +269,9 @@ export default {
       exec("start " + url);
     },
     open_project() {
+      if(this.busy){
+        return;
+      }
       const { dialog } = require("electron").remote;
       let path = dialog.showOpenDialog({
         title: this.$i18n.t("project.open"),
@@ -280,6 +283,9 @@ export default {
       this.openProject(path[0]);
     },
     close_project() {
+      if(this.busy){
+        return;
+      }
       this.$eventHub.$emit("project-close");
       projectManager.unloadProject();
       this.$logger.info("[BlockCraft]Project unloaded!");
@@ -340,10 +346,12 @@ export default {
     },
     changeTitle(title) {
       this.title = title;
-    }
+    },
+
   },
   data() {
     return {
+      busy: false,
       dark: false,
       about_dl_show: false,
       new_pro_dl_show: false,
@@ -379,6 +387,9 @@ export default {
       this.changeDark(this.$BlockCraft.dark);
     });
     this.$eventHub.$on("title-update", this.changeTitle);
+    this.$eventHub.$on("busy-mode", (flag)=>{
+      this.busy = flag;
+    });
   }
 };
 </script>

@@ -69,6 +69,23 @@
               <q-input v-model="project_info.version" dense autofocus :dark="dark" />
             </q-popup-edit>
           </q-item>
+
+          <q-item clickable v-ripple>
+            <q-item-section>
+              <q-item-label>{{ $t('plugin.package') }}</q-item-label>
+            </q-item-section>
+            <q-item-section side>
+              <q-item-label caption>{{project_info.package}}</q-item-label>
+            </q-item-section>
+            <q-popup-edit
+              v-model="project_info.package"
+              :title="$t('plugin.package')"
+              :validate="inputcheck3"
+              @save="changePackage"
+            >
+              <q-input v-model="project_info.package" dense autofocus :dark="dark" />
+            </q-popup-edit>
+          </q-item>
           <q-item clickable v-ripple @click="command_list_dl=true">
             <q-item-section>
               <q-item-label>{{ $t('plugin.commands') }}</q-item-label>
@@ -79,7 +96,7 @@
               <q-item-label>{{ $t('plugin.permissions') }}</q-item-label>
             </q-item-section>
           </q-item>
-          <q-item clickable v-ripple>
+          <q-item clickable v-ripple @click="buildPlugin">
             <q-item-section>
               <q-item-label>{{ $t('plugin.build') }}</q-item-label>
             </q-item-section>
@@ -129,7 +146,12 @@
         </q-card-section>
         <q-card-section>
           <q-toolbar class="text-text">
-            <q-btn @click="addCommand" flat dense icon="add_circle_outline">{{$t('project.add_command')}}</q-btn>
+            <q-btn
+              @click="addCommand"
+              flat
+              dense
+              icon="add_circle_outline"
+            >{{$t('project.add_command')}}</q-btn>
           </q-toolbar>
           <q-list
             v-for="command in project_info.commands"
@@ -164,7 +186,12 @@
         </q-card-section>
         <q-card-section>
           <q-toolbar class="text-text">
-            <q-btn @click="addPermission" flat dense icon="add_circle_outline">{{$t('project.add_permission')}}</q-btn>
+            <q-btn
+              @click="addPermission"
+              flat
+              dense
+              icon="add_circle_outline"
+            >{{$t('project.add_permission')}}</q-btn>
           </q-toolbar>
           <q-list
             v-for="permission in project_info.permissions"
@@ -176,7 +203,14 @@
               <q-item-section>{{permission.permission}}</q-item-section>
               <q-item-section side>
                 <div class="q-gutter-xs">
-                  <q-btn size="12px" flat dense round icon="delete" @click="deletePermission(permission.permission)"/>
+                  <q-btn
+                    size="12px"
+                    flat
+                    dense
+                    round
+                    icon="delete"
+                    @click="deletePermission(permission.permission)"
+                  />
                 </div>
               </q-item-section>
             </q-item>
@@ -185,7 +219,7 @@
       </q-card>
     </q-dialog>
     <q-dialog v-model="command_edit_dl" :dark="dark">
-      <q-card class="bg-background bg-background" :dark="dark" style="min-width: 500px;">
+      <q-card class="bg-background" :dark="dark" style="min-width: 500px;">
         <q-card-section>
           <div class="text-h6">{{$t('project.edit_command')}}</div>
         </q-card-section>
@@ -198,7 +232,12 @@
               outlined
               :label="$t('plugin.command')"
             />
-            <q-input v-model="curr_edit_command.permission" :dark="dark" outlined :label="$t('plugin.permission')" />
+            <q-input
+              v-model="curr_edit_command.permission"
+              :dark="dark"
+              outlined
+              :label="$t('plugin.permission')"
+            />
           </div>
         </q-card-section>
         <q-card-actions align="right">
@@ -215,8 +254,19 @@
         </q-card-section>
         <q-card-section>
           <div class="q-gutter-md">
-            <q-input :disable="curr_edit_permission_disable" v-model="curr_edit_permission.permission" :dark="dark" outlined :label="$t('plugin.permission')" />
-            <q-input v-model="curr_edit_permission.default" :dark="dark" outlined :label="$t('plugin.default_own')" />
+            <q-input
+              :disable="curr_edit_permission_disable"
+              v-model="curr_edit_permission.permission"
+              :dark="dark"
+              outlined
+              :label="$t('plugin.permission')"
+            />
+            <q-input
+              v-model="curr_edit_permission.default"
+              :dark="dark"
+              outlined
+              :label="$t('plugin.default_own')"
+            />
           </div>
         </q-card-section>
         <q-card-actions align="right">
@@ -225,15 +275,22 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+    <q-dialog v-model="build_dl" :dark="dark" persistent>
+      <BuildDialog act="Loading" style="min-width:500px"></BuildDialog>
+    </q-dialog>
   </div>
 </template>
 
 <script>
+import BuildDialog from "../components/BuildDialog";
 import projectManager from "../project/projectManager";
 import logger from "../logger/logger";
+import pluginBuilder from "../project/pluginBuilder";
+
 
 export default {
   name: "ProjectArea",
+  components: { BuildDialog },
   data() {
     return {
       pro_tab: "info",
@@ -241,8 +298,10 @@ export default {
         name: "",
         author: "",
         version: "",
+        package: "",
         commands: [],
-        permissions: []
+        permissions: [],
+        path: ""
       },
       blocks: [],
       curr_block: "",
@@ -255,6 +314,7 @@ export default {
       permission_edit_dl: false,
       curr_edit_command_disable: false,
       curr_edit_permission_disable: false,
+      build_dl:false,
       curr_edit_command: {
         command: "",
         permission: ""
@@ -281,9 +341,11 @@ export default {
       this.project_info.name = info.name;
       this.project_info.version = info.version;
       this.project_info.author = info.author ? info.author : "";
+      this.project_info.package = info.package;
       let curr_blocks = projectManager.getBlockList();
       this.project_info.commands = projectManager.getCommands();
       this.project_info.permissions = projectManager.getPermissions();
+      this.project_info.path = projectManager.getProjectPath()
       if (curr_blocks != null) {
         this.blocks = curr_blocks;
       }
@@ -298,11 +360,13 @@ export default {
         this.opening_dialog.hide();
         this.opening_dialog = null;
       }
+      this.build_dl = false;
 
       this.$logger.info("[ProjectArea]rec project-close");
       this.project_info.name = "";
       this.project_info.author = "";
       this.project_info.version = "";
+      this.project_info.package = "";
       this.blocks = [];
       this.curr_block = "";
 
@@ -320,6 +384,10 @@ export default {
     },
     inputcheck2(val) {
       let re = /^[A-Za-z0-9_\-\.]+$/;
+      return re.test(val);
+    },
+    inputcheck3(val) {
+      let re = /[a-zA-Z]+[0-9a-zA-Z_]*(\.[a-zA-Z]+[0-9a-zA-Z_]*)*/;
       return re.test(val);
     },
     changeName(name, name_) {
@@ -347,6 +415,15 @@ export default {
       }
       this.project_info.author = author;
       projectManager.getProjectInfo().author = author;
+      projectManager.writeTofile();
+    },
+    changePackage(packagename, packagename_) {
+      if (packagename === packagename_) {
+        return;
+        //不需要更新，因为前后都是一样的
+      }
+      this.project_info.package = packagename;
+      projectManager.getProjectInfo().package = packagename;
       projectManager.writeTofile();
     },
     deleteBlock(name) {
@@ -506,7 +583,10 @@ export default {
       this.permission_edit_dl = true;
     },
     editCommand() {
-      if(this.curr_edit_command.command === ''||this.curr_edit_command.permission === ''){
+      if (
+        this.curr_edit_command.command === "" ||
+        this.curr_edit_command.permission === ""
+      ) {
         return;
       }
       projectManager.changeCommand(
@@ -517,7 +597,10 @@ export default {
       this.command_edit_dl = false;
     },
     editPermission() {
-      if(this.curr_edit_permission.permission === ''||this.curr_edit_permission.default === ''){
+      if (
+        this.curr_edit_permission.permission === "" ||
+        this.curr_edit_permission.default === ""
+      ) {
         return;
       }
       projectManager.changePermission(
@@ -525,7 +608,7 @@ export default {
         this.curr_edit_permission
       );
       this.project_info.permissions = projectManager.getPermissions();
-      console.log(this.project_info.permissions)
+      console.log(this.project_info.permissions);
       this.permission_edit_dl = false;
     },
     deleteCommand(cmd) {
@@ -541,13 +624,23 @@ export default {
       this.curr_edit_permission.default = "";
       this.curr_edit_permission.permission = "";
       this.permission_edit_dl = true;
-
     },
     addCommand() {
       this.curr_edit_command_disable = false;
       this.curr_edit_command.command = "";
       this.curr_edit_command.permission = "";
       this.command_edit_dl = true;
+    },
+    buildPlugin() {
+      this.build_dl=true;
+      this.$eventHub.$emit("busy-mode")
+      pluginBuilder.genJar(projectManager.getProjectPath(),(data,flag)=>{
+        logger.info(data);
+        if(flag){
+          this.build_dl=false;
+          this.$snotify.info("构建插件完成。");
+        }
+      })
     }
   }
 };

@@ -69,9 +69,9 @@ export default {
         }
 
         if (info != null) {
-            if (info.name == undefined || info.version == undefined || info.blocks == undefined) {
+            if (info.name == undefined || info.version == undefined || info.package == undefined) {
                 //Missing must require info
-                logger.warn("Could not load project,because it missing name, version or blocks!");
+                logger.warn("Could not load project,because it missing name, version or package!");
                 return "MISSING_INFO"
             }
             project.info = info;
