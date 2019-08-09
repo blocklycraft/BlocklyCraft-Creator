@@ -1,10 +1,10 @@
 <template>
   <q-card class="bg-background" :dark="dark">
     <q-card-section>
-      <div @click="debug0" class="text-h6">正在构建插件</div>
+      <div class="text-h6">正在构建插件</div>
     </q-card-section>
     <q-card-section>
-        <span>正在编译插件....</span>
+        <span>{{action}}</span>
       <q-linear-progress indeterminate />
     </q-card-section>
   </q-card>
@@ -16,9 +16,12 @@ import projectManager from "../project/projectManager";
 import logger from '../logger/logger';
 export default {
   name: "BuildDialog",
+  props: [
+    'action'
+  ],
   data() {
     return {
-      dark: false
+      dark: false,
     };
   },
   beforeMount() {
