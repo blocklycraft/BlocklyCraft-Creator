@@ -1,6 +1,7 @@
 const fs = require("fs");
 const jsonfile = require('jsonfile')
 const {shell} = require('electron').remote
+const yaml = require("js-yaml");
 let mvn = 'mvn'
 function projectInfo(path) {
     let json_p = path + '/info.json'
@@ -64,8 +65,38 @@ export default {
 
 
     },
-    genPluginYml(path) {
-
+    genPluginYml(path,callback) {
+        //根据项目信息生成plugin.yml
+        let info = projectInfo(path)
+        if (info == null) {
+            callback('[CHECK]Invaild project!',false)
+            return false;
+        }
+        let pluginYml = {}
+        pluginYml['name'] = info['name'];
+        pluginYml['version'] = info['version'];
+        pluginYml['main'] = info['package']+".PluginMain"
+        if(info['author']!=undefined){
+            pluginYml['author'] = info['author'];
+        }
+        if(info['commands']!=[]){
+            pluginYml['commands'] = {}
+            for(let command of info['commands']){
+                pluginYml['commands'][command.command] = {
+                    permission:command.permission
+                }
+            }
+        }
+        if(info['permissions']!=[]){
+            pluginYml['permissions'] = {}
+            for(let permission of info['permissions']){
+                pluginYml['permissions'][permission.permission] = {
+                    default:permission.default
+                }
+            }
+        }
+        let yml = yaml.dump(pluginYml)
+        fs.writeFileSync(path + '/src/main/resources/plugin.yml',yml);
     },
     checkJava() {
         return process.env['JAVA_HOME'] != undefined
