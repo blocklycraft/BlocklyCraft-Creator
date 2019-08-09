@@ -59,7 +59,7 @@ export default {
     build: '构建插件',
     command: '命令',
     permission: '权限',
-    default_own: '默认拥有者(op,player,false,true)'
+    default_own: '默认拥有者(op,notop,false,true)'
   },
   tip: {
     dark_restart: '在切换模式后，我们建议您重启软件！',

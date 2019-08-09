@@ -276,7 +276,7 @@
       </q-card>
     </q-dialog>
     <q-dialog v-model="build_dl" :dark="dark" persistent>
-      <BuildDialog act="Loading" style="min-width:500px"></BuildDialog>
+      <BuildDialog :action="build_action" style="min-width:500px"></BuildDialog>
     </q-dialog>
   </div>
 </template>
@@ -322,7 +322,8 @@ export default {
       curr_edit_permission: {
         permission: "",
         default: "true"
-      }
+      },
+      build_action: ''
     };
   },
   beforeMount() {
@@ -634,11 +635,16 @@ export default {
     buildPlugin() {
       this.build_dl=true;
       this.$eventHub.$emit("busy-mode")
+      this.build_action = '正在准备构建'
+      this.build_action = '生成plugin.yml'
+      pluginBuilder.genPluginYml(projectManager.getProjectPath());
+      this.build_action = '编译插件'
       pluginBuilder.genJar(projectManager.getProjectPath(),(data,flag)=>{
         logger.info(data);
         if(flag){
           this.build_dl=false;
           this.$snotify.info("构建插件完成。");
+          this.build_action = '完成'
         }
       })
     }
