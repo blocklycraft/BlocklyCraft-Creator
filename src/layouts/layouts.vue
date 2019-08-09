@@ -373,10 +373,6 @@ export default {
         {
           label: "简体中文",
           value: "zh-cn"
-        },
-        {
-          label: "English",
-          value: "en-us"
         }
       ]
     };
