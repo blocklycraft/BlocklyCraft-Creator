@@ -164,6 +164,9 @@ export default {
         if (!fs.existsSync(this.getProjectPath() + '/blocks')) {
             fs.mkdirSync(this.getProjectPath() + '/blocks');
         }
+        if (!fs.existsSync(this.getProjectPath() + '/scripts')) {
+            fs.mkdirSync(this.getProjectPath() + '/scripts');
+        }
     },
     fixUp() {
         //修正项目信息中的错误(如字段缺失)

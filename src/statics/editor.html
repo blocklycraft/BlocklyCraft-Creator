@@ -18,7 +18,9 @@
 <body>
   <div id="workarea" style="height: 100%"></div>
   <div id="workspace" style="position: absolute"></div>
+
   <script src="blockly_compressed.js"></script>
+  <script src="javascript.js"></script>
 
   <script>
     let curr_pro_path = '';
@@ -59,7 +61,6 @@
     const { ipcRenderer } = require('electron')
     const fs = require('fs')
     ipcRenderer.on('block-open', (event, arg) => {
-      console.log("我们接收到了命令")
       if (curr_pro_path == '') {
         return;
       }
@@ -78,7 +79,6 @@
         Blockly.Xml.domToWorkspace(xml, workspace);
         ipcRenderer.sendToHost('load-success', arg)
         curr_block_name = arg;
-
       } catch (e) {
         ipcRenderer.sendToHost('load-error')
         throw e
@@ -104,14 +104,12 @@
       }
       console.log("save data....-" + curr_block_name)
       let xml_str = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(workspace));
-      fs.writeFileSync(curr_pro_path + '/blocks/' + curr_block_name + '.block', xml_str)
+      fs.writeFileSync(curr_pro_path + '/blocks/' + curr_block_name + '.block', xml_str);
+      //同时生成js
+      let jscode = Blockly.JavaScript.workspaceToCode(workspace);
+      fs.writeFileSync(curr_pro_path + '/scripts/' + curr_block_name + '.js', jscode);
     }
-
-
   </script>
-
-
-
 </body>
 
 </html>
