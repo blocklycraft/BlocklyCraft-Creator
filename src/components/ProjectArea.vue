@@ -18,6 +18,7 @@
 
     <q-tab-panels v-model="pro_tab" class="bg-background text-text">
       <q-tab-panel style="padding: 0px" name="info">
+
         <q-list separator :dark="dark">
           <q-item clickable v-ripple>
             <q-item-section>
@@ -69,7 +70,6 @@
               <q-input v-model="project_info.version" dense autofocus :dark="dark" />
             </q-popup-edit>
           </q-item>
-
           <q-item clickable v-ripple>
             <q-item-section>
               <q-item-label>{{ $t('plugin.package') }}</q-item-label>
@@ -103,13 +103,11 @@
           </q-item>
         </q-list>
       </q-tab-panel>
-
       <q-tab-panel name="blocks" style="padding: 0px">
         <q-toolbar class="text-text">
           <q-btn @click="addBlock" flat round dense icon="add_circle_outline" />
           <q-btn @click="saveBlock" flat round dense icon="save" />
         </q-toolbar>
-
         <q-list separator>
           <div v-for="block_inf in blocks" :key="block_inf">
             <q-item
@@ -287,7 +285,6 @@ import projectManager from "../project/projectManager";
 import logger from "../logger/logger";
 import pluginBuilder from "../project/pluginBuilder";
 
-
 export default {
   name: "ProjectArea",
   components: { BuildDialog },
@@ -314,7 +311,7 @@ export default {
       permission_edit_dl: false,
       curr_edit_command_disable: false,
       curr_edit_permission_disable: false,
-      build_dl:false,
+      build_dl: false,
       curr_edit_command: {
         command: "",
         permission: ""
@@ -323,7 +320,7 @@ export default {
         permission: "",
         default: "true"
       },
-      build_action: ''
+      build_action: ""
     };
   },
   beforeMount() {
@@ -346,7 +343,7 @@ export default {
       let curr_blocks = projectManager.getBlockList();
       this.project_info.commands = projectManager.getCommands();
       this.project_info.permissions = projectManager.getPermissions();
-      this.project_info.path = projectManager.getProjectPath()
+      this.project_info.path = projectManager.getProjectPath();
       if (curr_blocks != null) {
         this.blocks = curr_blocks;
       }
@@ -633,20 +630,23 @@ export default {
       this.command_edit_dl = true;
     },
     buildPlugin() {
-      this.build_dl=true;
-      this.$eventHub.$emit("busy-mode")
-      this.build_action = '正在准备构建'
-      this.build_action = '生成plugin.yml'
+      this.build_dl = true;
+      this.$eventHub.$emit("busy-mode");
+      this.build_action = "正在准备构建";
+      this.build_action = "生成plugin.yml";
       pluginBuilder.genPluginYml(projectManager.getProjectPath());
-      this.build_action = '编译插件'
-      pluginBuilder.genJar(projectManager.getProjectPath(),(data,flag)=>{
+      this.build_action = "生成脚本代码";
+      pluginBuilder.genJavaScript(projectManager.getProjectPath());
+      
+      this.build_action = "编译插件";
+      pluginBuilder.genJar(projectManager.getProjectPath(), (data, flag) => {
         logger.info(data);
-        if(flag){
-          this.build_dl=false;
+        if (flag) {
+          this.build_dl = false;
           this.$snotify.info("构建插件完成。");
-          this.build_action = '完成'
+          this.build_action = "完成";
         }
-      })
+      });
     }
   }
 };
