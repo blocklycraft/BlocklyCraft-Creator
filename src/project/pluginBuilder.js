@@ -66,7 +66,7 @@ export default {
         fs.writeFileSync(path + '/src/main/resources/bundle.js',jscode)
 
     },
-    genJar(path, callback) {
+    genJar(path, callback,result) {
         //主要工作:mvn package
         let info = projectInfo(path)
         if (info == null) {
@@ -86,10 +86,16 @@ export default {
         env['PLUGIN_PACKAGE'] = info.package;
         let child = cmd.exec(mvn + " package", { async: true, encoding: encodeing, env: env }, (code, stdout, stderr) => {
             if (code != 0) {
-                callback("[ERROR]Build failed!", false);
+                callback("[ERROR]Build failed!", true);
+                if(result != undefined){
+                    result(false)
+                }
                 return;
             } else {
                 callback("[INFO]Build Success!", true);
+                if(result != undefined){
+                    result(true)
+                }
                 shell.showItemInFolder(path + "/target/" + info.name + "-" + info.version + ".jar")
             }
         })

@@ -646,6 +646,13 @@ export default {
           this.$snotify.info("构建插件完成。");
           this.build_action = "完成";
         }
+      },
+      (result)=>{
+        if(result){
+           this.$snotify.info("构建插件完成。");
+        }else{
+          this.$snotify.error("构建插件失败，详情请查看日志。");
+        }
       });
     }
   }
