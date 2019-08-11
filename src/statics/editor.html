@@ -33,7 +33,7 @@
     let workspace = Blockly.inject(blocklyDiv,
       {
         media: './media/',
-        toolbox: '<xml> <category></category></xml>', scrollbars: true, trashcan: true
+        toolbox: '<xml><category></category></xml>', scrollbars: true, trashcan: true
       });
 
     let onresize = function (e) {
@@ -109,6 +109,30 @@
       let jscode = Blockly.JavaScript.workspaceToCode(workspace);
       fs.writeFileSync(curr_pro_path + '/scripts/' + curr_block_name + '.js', jscode);
     }
+  </script>
+  <script>
+    //自定义对话框
+    let confirm_callback;
+    let prompt_callback;
+    Blockly.alert = function (message, callback) {
+      ipcRenderer.sendToHost('dialog-alert', message)
+      callback()
+    };
+    Blockly.confirm = function (message, callback) {
+      ipcRenderer.sendToHost('dialog-confirm', message)
+      confirm_callback = callback
+    };
+    Blockly.prompt = function (message, defaultValue, callback) {
+      ipcRenderer.sendToHost('dialog-prompt', message, defaultValue)
+      prompt_callback = callback
+
+    };
+    ipcRenderer.on('dialog-confirm',(event,res)=>{
+      confirm_callback(res)
+    })
+    ipcRenderer.on('dialog-prompt',(event,res)=>{
+      prompt_callback(res)
+    })
   </script>
 </body>
 

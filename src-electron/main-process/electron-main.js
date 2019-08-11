@@ -23,6 +23,9 @@ function createWindow() {
    */
   //
   logger.info("Creating window");
+  //只是为了确定白屏原因
+  
+  
 
 
   mainWindow = new BrowserWindow({
@@ -49,6 +52,7 @@ function createWindow() {
   mainWindow.once('ready-to-show', () => {
     logger.info("Window ready to show!");
     mainWindow.show()
+
   })
 }
 
