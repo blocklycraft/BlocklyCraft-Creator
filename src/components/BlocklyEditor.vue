@@ -39,7 +39,9 @@ const fs = require("fs");
 const parseString = require("xml2js").parseString;
 const xml2js = require("xml2js");
 const { app } = require("electron").remote;
+const merge = require('deepmerge')
 let webview;
+
 export default {
   name: "BlocklyEditor",
   mounted() {
@@ -108,7 +110,7 @@ export default {
       //在'libraries'目录中寻找库
       let libraries_dir = app.getPath("userData") + "/libraries/";
       let libraries_dirs = [];
-      const toolbox_tree = {};
+      let toolbox_tree = {};
 
       const files = fs.readdirSync(libraries_dir);
       files.forEach(function(item, index) {
@@ -133,9 +135,10 @@ export default {
                 }
               });
               if (toolbox_xml_obj != null) {
-                //console.dir(toolbox_xml_obj);
-                //直接合并，应该不会出现问题(敷衍)
-                Object.assign(toolbox_tree, toolbox_xml_obj);
+                
+                //直接合并，应该不会出现问题(敷衍) ADD:无法深度合并
+                //Object.assign(toolbox_tree, toolbox_xml_obj);
+                toolbox_tree = merge(toolbox_tree, toolbox_xml_obj)
               }
             }
           }
@@ -149,6 +152,7 @@ export default {
         headless: true,
         renderOpts: { pretty: false }
       }).buildObject(toolbox_tree);
+      console.dir(toolbox_tree);
       webview.executeJavaScript("workspace.updateToolbox('" + xml_str + "');");
     },
     unloadProject() {
