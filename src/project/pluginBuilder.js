@@ -141,5 +141,21 @@ export default {
     checkJava() {
         return process.env['JAVA_HOME'] != undefined
     },
+    check(path){
+        if(!fs.existsSync(path+ '/pom.xml')){
+            console.log(path+ '/pom.xml')
+            return false
+        }
+        if(!fs.existsSync(path+ '/info.json')){
+            console.log(path+ '/info.json')
+            return false
+        }
+        if(!fs.existsSync(path+ '/src/main/resources')){
+            console.log(path+ '/src/main/resources')
+            return false
+        }
+        return true
+
+    }
 
 }
