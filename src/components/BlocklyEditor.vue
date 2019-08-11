@@ -16,7 +16,10 @@ export default {
   mounted() {
     webview = document.getElementById("editor_view");
     webview.addEventListener("dom-ready", () => {
-      webview.openDevTools();
+      //仅在开发环境显示调试工具
+      if (process.env.NODE_ENV != "production") {
+        webview.openDevTools();
+      }
       console.log("OK!");
     });
     webview.addEventListener("ipc-message", event => {

@@ -630,8 +630,14 @@ export default {
       this.command_edit_dl = true;
     },
     buildPlugin() {
+      //进行一些必要的检查
+      if(!pluginBuilder.check(projectManager.getProjectPath())){
+        this.$snotify.error("构建插件失败，项目目录被非法修改。");
+        return
+      }
+
       this.build_dl = true;
-      this.$eventHub.$emit("busy-mode");
+
       this.build_action = "正在准备构建";
       this.build_action = "生成plugin.yml";
       pluginBuilder.genPluginYml(projectManager.getProjectPath());

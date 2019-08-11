@@ -43,9 +43,7 @@
             </q-menu>
           </div>
 
-          <div class="q-ml-md cursor-pointer non-selectable">
-            {{ $t('menu.libraries') }}
-          </div>
+          <div class="q-ml-md cursor-pointer non-selectable">{{ $t('menu.libraries') }}</div>
 
           <div class="q-ml-md cursor-pointer non-selectable">
             {{ $t('menu.help') }}
@@ -69,8 +67,6 @@
             </q-menu>
           </div>
         </div>
-
-
       </div>
       <q-separator :dark="dark" />
 
@@ -199,7 +195,6 @@
         <Index style="height: calc(100% - 69px)"></Index>
       </div>
     </div>
-
     <vue-snotify></vue-snotify>
   </div>
 </template>
@@ -269,7 +264,7 @@ export default {
       exec("start " + url);
     },
     open_project() {
-      if(this.busy){
+      if (this.busy) {
         return;
       }
       const { dialog } = require("electron").remote;
@@ -277,13 +272,16 @@ export default {
         title: this.$i18n.t("project.open"),
         properties: ["openDirectory"]
       });
+      if (path == undefined) {
+        return;
+      }
       if (path.length === 0) {
         return;
       }
       this.openProject(path[0]);
     },
     close_project() {
-      if(this.busy){
+      if (this.busy) {
         return;
       }
       this.$eventHub.$emit("project-close");
@@ -298,17 +296,23 @@ export default {
       const fs = require("fs");
       let re = /[a-zA-Z]:(\\.+)*/;
       if (!re.test(this.create_pro_dl.path)) {
-        this.$snotify.error(this.$t("tip.can_not_create")+this.$t("tip.invaild_path"));
+        this.$snotify.error(
+          this.$t("tip.can_not_create") + this.$t("tip.invaild_path")
+        );
         return;
       }
       re = /^[A-Za-z0-9_\-]+$/;
       if (!re.test(this.create_pro_dl.name)) {
-        this.$snotify.error(this.$t("tip.can_not_create")+this.$t("tip.invaild_name"));
+        this.$snotify.error(
+          this.$t("tip.can_not_create") + this.$t("tip.invaild_name")
+        );
         return;
       }
-      re = /[a-zA-Z]+[0-9a-zA-Z_]*(\.[a-zA-Z]+[0-9a-zA-Z_]*)*/
-      if(!re.test(this.create_pro_dl.package)){
-        this.$snotify.error(this.$t("tip.can_not_create")+this.$t("tip.invaild_package"));
+      re = /[a-zA-Z]+[0-9a-zA-Z_]*(\.[a-zA-Z]+[0-9a-zA-Z_]*)*/;
+      if (!re.test(this.create_pro_dl.package)) {
+        this.$snotify.error(
+          this.$t("tip.can_not_create") + this.$t("tip.invaild_package")
+        );
         return;
       }
       if (fs.existsSync(this.create_pro_dl.path)) {
@@ -316,17 +320,22 @@ export default {
           if (fs.readdirSync(this.create_pro_dl.path).length != 0) {
             console.log(fs.readdirSync(this.create_pro_dl.path).length);
             //路径已经存在且不为空，不能创建项目
-            this.$snotify.error(this.$t("tip.can_not_create")+this.$t("tip.project_exist"));
+            this.$snotify.error(
+              this.$t("tip.can_not_create") + this.$t("tip.project_exist")
+            );
             return;
           }
         }
       }
       let res = projectManager.createProject(
         this.create_pro_dl.path,
-        this.create_pro_dl.name
+        this.create_pro_dl.name,
+        this.create_pro_dl.package
       );
       if (!res) {
-        this.$snotify.error(this.$t("tip.can_not_create")+this.$t("tip.create_fail"));
+        this.$snotify.error(
+          this.$t("tip.can_not_create") + this.$t("tip.create_fail")
+        );
         return;
       }
       this.new_pro_dl_show = false;
@@ -339,6 +348,9 @@ export default {
         title: this.$i18n.t("project.create"),
         properties: ["openDirectory"]
       });
+      if (path == undefined) {
+        return;
+      }
       if (path.length === 0) {
         return;
       }
@@ -346,8 +358,7 @@ export default {
     },
     changeTitle(title) {
       this.title = title;
-    },
-
+    }
   },
   data() {
     return {
@@ -383,7 +394,7 @@ export default {
       this.changeDark(this.$BlockCraft.dark);
     });
     this.$eventHub.$on("title-update", this.changeTitle);
-    this.$eventHub.$on("busy-mode", (flag)=>{
+    this.$eventHub.$on("busy-mode", flag => {
       this.busy = flag;
     });
   }

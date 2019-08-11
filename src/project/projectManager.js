@@ -1,5 +1,9 @@
 const jsonfile = require('jsonfile')
 const fs = require("fs");
+const unzip = require('electron').remote.require('unzip')
+
+import Path from 'path'
+
 import logger from "../logger/logger"
 let project = {
     path: null,
@@ -8,7 +12,7 @@ let project = {
 }
 
 export default {
-    createProject(path, name) {
+    createProject(path, name, packagename) {
         //此方法不会更改当前打开的项目
         if (fs.existsSync(path)) {
             if (fs.lstatSync(path).isDirectory()) {
@@ -21,11 +25,16 @@ export default {
         } else {
             fs.mkdirSync(path);
         }
+        //解压种子项目
+        fs.createReadStream(Path.join(__statics, '/seed.zip')).pipe(unzip.Extract({ path: path }));
 
         let project_info = {
             name: name,
             version: '1.0.0',
-            blocks: []
+            package: packagename,
+            blocks: [],
+            commands: [],
+            permissions: []
         }
         fs.writeFileSync(path + '/info.json', JSON.stringify(project_info))
         return true
@@ -251,7 +260,7 @@ export default {
                 return;
             }
         }
-        project.info.commands.push({command:command.command,permission:command.permission})
+        project.info.commands.push({ command: command.command, permission: command.permission })
         this.writeTofile()
     },
     addPermission(permission) {
@@ -260,7 +269,7 @@ export default {
                 return;
             }
         }
-        project.info.permissions.push({permission:permission.permission,default:permission.default})
+        project.info.permissions.push({ permission: permission.permission, default: permission.default })
         this.writeTofile()
     }
 }
