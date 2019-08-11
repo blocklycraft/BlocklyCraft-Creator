@@ -1,6 +1,35 @@
 <template>
   <div style="width:100%; height:100%">
     <webview id="editor_view" src="statics/editor.html" :style="show" nodeIntegration></webview>
+    <!--Dialog-->
+    <q-dialog v-model="confirm" persistent >
+      <q-card class="bg-background" :dark="dark">
+        <q-card-section class="row items-center">
+          <span class="q-ml-sm">{{confirm_text}}</span>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat label="取消" color="primary" v-close-popup @click="confirm_(false)" />
+          <q-btn flat label="确认" color="primary" v-close-popup @click="confirm_(true)" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog v-model="prompt" persistent >
+      <q-card style="min-width: 400px" class="bg-background" :dark="dark">
+        <q-card-section>
+          <div class="text-h6">{{prompt_text}}</div>
+        </q-card-section>
+
+        <q-card-section>
+          <q-input :dark="dark" dense v-model="prompt_input" autofocus @keyup.enter="prompt_()" />
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="取消" v-close-popup />
+          <q-btn flat label="确认" v-close-popup @click="prompt_()" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -29,6 +58,22 @@ export default {
       }
       if (event.channel == "load-success") {
         this.$eventHub.$emit("load-success", event.args[0]);
+        return;
+      }
+      if (event.channel == "dialog-alert") {
+        this.$snotify.info(event.args[0]);
+        return;
+      }
+      if (event.channel == "dialog-confirm") {
+        this.confirm_text = event.args[0];
+        this.confirm = true;
+        return;
+      }
+      if (event.channel == "dialog-prompt") {
+        this.prompt_text = event.args[0];
+        this.prompt_input = event.args[1];
+        this.prompt = true;
+        return;
       }
     });
     this.$eventHub.$on("project-open", this.loadProject);
@@ -37,14 +82,23 @@ export default {
     this.$eventHub.$on("block-rename", this.renameBlock);
     this.$eventHub.$on("block-close", this.closeBlock);
     this.$eventHub.$on("block-save", this.saveBlock);
+    this.$eventHub.$on("dark-change", this.changeDark(this.$BlockCraft.dark));
   },
   data() {
     return {
       show: "display:none",
-      dirty: false
+      dark: false,
+      confirm: false,
+      confirm_text: "",
+      prompt: false,
+      prompt_text: "",
+      prompt_input: ""
     };
   },
   methods: {
+    changeDark(dark){
+      this.dark = dark;
+    },
     loadProject() {
       this.show = "";
       //Load project libraries.
@@ -123,6 +177,17 @@ export default {
     },
     saveBlock() {
       webview.executeJavaScript("saveBlock()");
+    },
+    confirm_(res) {
+      webview.send("dialog-confirm", res);
+      this.confirm = false;
+    },
+    prompt_() {
+      if (this.prompt_input === "") {
+        return;
+      }
+      this.prompt = false;
+      webview.send("dialog-prompt", this.prompt_input);
     }
   }
 };
