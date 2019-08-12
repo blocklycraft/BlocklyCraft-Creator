@@ -1,5 +1,12 @@
 <script>
 import { colors } from "quasar";
+import logger from "../logger/logger";
+//捕获所有异常
+
+window.onerror = function (msg){
+  logger.error(msg)
+  return true;
+}
 export default {
   versions: {
     blockcraft: "0.0.9-indev"

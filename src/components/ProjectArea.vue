@@ -18,7 +18,6 @@
 
     <q-tab-panels v-model="pro_tab" class="bg-background text-text">
       <q-tab-panel style="padding: 0px" name="info">
-
         <q-list separator :dark="dark">
           <q-item clickable v-ripple>
             <q-item-section>
@@ -631,35 +630,36 @@ export default {
     },
     buildPlugin() {
       //进行一些必要的检查
-      if(!pluginBuilder.check(projectManager.getProjectPath())){
+      if (!pluginBuilder.check(projectManager.getProjectPath())) {
         this.$snotify.error("构建插件失败，项目目录被非法修改。");
-        return
+        return;
       }
-
+      if (projectManager.getBlockList().length == 0) {
+        this.$snotify.error("构建插件失败，你至少需要创建一个积木板。");
+        return;
+      }
       this.build_dl = true;
-
       this.build_action = "正在准备构建";
       this.build_action = "生成plugin.yml";
       pluginBuilder.genPluginYml(projectManager.getProjectPath());
       this.build_action = "生成脚本代码";
       pluginBuilder.genJavaScript(projectManager.getProjectPath());
-      
       this.build_action = "编译插件";
-      pluginBuilder.genJar(projectManager.getProjectPath(), (data, flag) => {
-        logger.info(data);
-        if (flag) {
+      pluginBuilder.genJar(
+        projectManager.getProjectPath(),
+        result => {
           this.build_dl = false;
-          this.$snotify.info("构建插件完成。");
           this.build_action = "完成";
-        }
-      },
-      (result)=>{
-        if(result){
-           this.$snotify.info("构建插件完成。");
-        }else{
-          this.$snotify.error("构建插件失败，详情请查看日志。");
-        }
-      });
+          if (result) {
+            this.$snotify.info(
+              "构建插件成功，我们已经自动打开插件所在文件夹。"
+            );
+          } else {
+            this.$snotify.error("构建插件失败，详情请查看日志。");
+          }
+        },
+        result => {}
+      );
     }
   }
 };

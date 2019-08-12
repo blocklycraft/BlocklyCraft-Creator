@@ -5,6 +5,8 @@ const yaml = require("js-yaml");
 const { app } = require("electron").remote;
 let UglifyJS = require('electron').remote.require("uglify-js");
 
+import logger from "../logger/logger";
+
 let mvn = 'mvn'
 function projectInfo(path) {
     let json_p = path + '/info.json'
@@ -29,43 +31,56 @@ function projectInfo(path) {
     return null
 }
 export default {
-    genJavaScript(path, callback) {
+    genJavaScript(path) {
+        logger.info('[pluginBuilder]Starting generate script')
         let bundle = {};
         let libraries_dir = app.getPath("userData") + "/libraries/";
+        if (!fs.existsSync(app.getPath("userData") + "/libraries/")) {
+            logger.error('[pluginBuilder]Libraries doesn \'t existing, I will quit!')
+            return;
+        }
         let files = fs.readdirSync(libraries_dir);
         files.forEach(function (item, index) {
             let stat = fs.lstatSync(libraries_dir + item);
             if (stat.isDirectory() === true) {
                 if (fs.existsSync(libraries_dir + item + "/bundle.js")) {
-                    bundle[item] = fs.readFileSync(libraries_dir + item + "/bundle.js","utf8")
+                    bundle[item] = fs.readFileSync(libraries_dir + item + "/bundle.js", "utf8")
                 }
             }
         });
-        
-        let bundle_code = UglifyJS.minify(bundle,{mangle: false}).code;
-        console.log(bundle_code)
+        if (bundle == {}) {
+            return;
+        }
+
+        let bundle_code = UglifyJS.minify(bundle, { mangle: false }).code;
 
         //打包积木代码
         let blocks = {}
+        if (!fs.existsSync(path + '/scripts')) {
+            logger.error('[pluginBuilder]script doesn \'t existing, I will quit!')
+            return;
+        }
         files = fs.readdirSync(path + '/scripts');
         files.forEach(function (item, index) {
             let stat = fs.lstatSync(path + '/scripts/' + item);
             if (stat.isDirectory() === false) {
                 //获取扩展名
                 var ext = item.substring(item.lastIndexOf(".") + 1, item.length);
-                if(ext === 'js'){
-                    blocks[item] = fs.readFileSync(path + '/scripts/' + item,"utf8")
+                if (ext === 'js') {
+                    blocks[item] = fs.readFileSync(path + '/scripts/' + item, "utf8")
                 }
             }
         });
-        console.log(UglifyJS.minify(blocks,{mangle: false}))
-        let block_code = UglifyJS.minify(blocks,{mangle: false}).code;
+        if (blocks == {}) {
+            return;
+        }
+        let block_code = UglifyJS.minify(blocks, { mangle: false }).code;
         let jscode = bundle_code + '\n' + block_code;
         //输出js文件
-        fs.writeFileSync(path + '/src/main/resources/bundle.js',jscode)
+        fs.writeFileSync(path + '/src/main/resources/bundle.js', jscode)
 
     },
-    genJar(path, callback,result) {
+    genJar(path, callback) {
         //主要工作:mvn package
         let info = projectInfo(path)
         if (info == null) {
@@ -85,21 +100,16 @@ export default {
         env['PLUGIN_PACKAGE'] = info.package;
         let child = cmd.exec(mvn + " package", { async: true, encoding: encodeing, env: env }, (code, stdout, stderr) => {
             if (code != 0) {
-                callback("[ERROR]Build failed!", true);
-                if(result != undefined){
-                    result(false)
-                }
-                return;
+                logger.error('[pluginBuilder]Build failed, because the maven non-zero exited!')
+                callback(false);
             } else {
-                callback("[INFO]Build Success!", true);
-                if(result != undefined){
-                    result(true)
-                }
+                logger.info('[pluginBuilder]Build success!')
+                callback(true);
                 shell.showItemInFolder(path + "/target/" + info.name + "-" + info.version + ".jar")
             }
         })
         child.stdout.on('data', function (data) {
-            callback('[MAVEN]' + data)
+            logger.info('[pluginBuilder][MVN]' + data)
         })
 
 
@@ -140,17 +150,17 @@ export default {
     checkJava() {
         return process.env['JAVA_HOME'] != undefined
     },
-    check(path){
-        if(!fs.existsSync(path+ '/pom.xml')){
-            console.log(path+ '/pom.xml')
+    check(path) {
+        if (!fs.existsSync(path + '/pom.xml')) {
+            console.log(path + '/pom.xml')
             return false
         }
-        if(!fs.existsSync(path+ '/info.json')){
-            console.log(path+ '/info.json')
+        if (!fs.existsSync(path + '/info.json')) {
+            console.log(path + '/info.json')
             return false
         }
-        if(!fs.existsSync(path+ '/src/main/resources')){
-            console.log(path+ '/src/main/resources')
+        if (!fs.existsSync(path + '/src/main/resources')) {
+            console.log(path + '/src/main/resources')
             return false
         }
         return true
