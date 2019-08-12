@@ -127,10 +127,10 @@
       prompt_callback = callback
 
     };
-    ipcRenderer.on('dialog-confirm',(event,res)=>{
+    ipcRenderer.on('dialog-confirm', (event, res) => {
       confirm_callback(res)
     })
-    ipcRenderer.on('dialog-prompt',(event,res)=>{
+    ipcRenderer.on('dialog-prompt', (event, res) => {
       prompt_callback(res)
     })
   </script>
