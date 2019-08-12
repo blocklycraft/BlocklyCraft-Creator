@@ -2,7 +2,7 @@
   <div style="width:100%; height:100%">
     <webview id="editor_view" src="statics/editor.html" :style="show" nodeIntegration></webview>
     <!--Dialog-->
-    <q-dialog v-model="confirm" persistent >
+    <q-dialog v-model="confirm" persistent>
       <q-card class="bg-background" :dark="dark">
         <q-card-section class="row items-center">
           <span class="q-ml-sm">{{confirm_text}}</span>
@@ -14,7 +14,7 @@
       </q-card>
     </q-dialog>
 
-    <q-dialog v-model="prompt" persistent >
+    <q-dialog v-model="prompt" persistent>
       <q-card style="min-width: 400px" class="bg-background" :dark="dark">
         <q-card-section>
           <div class="text-h6">{{prompt_text}}</div>
@@ -39,8 +39,10 @@ const fs = require("fs");
 const parseString = require("xml2js").parseString;
 const xml2js = require("xml2js");
 const { app } = require("electron").remote;
-const merge = require('deepmerge')
+const merge = require("deepmerge");
 let webview;
+
+let runlate;
 
 export default {
   name: "BlocklyEditor",
@@ -52,6 +54,11 @@ export default {
         webview.openDevTools();
       }
       console.log("OK!");
+      webview.send("open-project", projectManager.getProjectPath());
+      if (runlate != null) {
+        runlate();
+        runlate = null;
+      }
     });
     webview.addEventListener("ipc-message", event => {
       if (event.channel == "load-error") {
@@ -98,7 +105,7 @@ export default {
     };
   },
   methods: {
-    changeDark(dark){
+    changeDark(dark) {
       this.dark = dark;
     },
     loadProject() {
@@ -135,25 +142,22 @@ export default {
                 }
               });
               if (toolbox_xml_obj != null) {
-                
-                //直接合并，应该不会出现问题(敷衍) ADD:无法深度合并
+                //直接合并，应该不会出现问题(敷衍) 补充:此方法无法深度合并
                 //Object.assign(toolbox_tree, toolbox_xml_obj);
-                toolbox_tree = merge(toolbox_tree, toolbox_xml_obj)
+                toolbox_tree = merge(toolbox_tree, toolbox_xml_obj);
               }
             }
           }
         }
       });
-
       this.dirty = true;
-      webview.send("open-project", projectManager.getProjectPath());
       webview.executeJavaScript(blocks_script);
       let xml_str = new xml2js.Builder({
         headless: true,
         renderOpts: { pretty: false }
       }).buildObject(toolbox_tree);
-      console.dir(toolbox_tree);
       webview.executeJavaScript("workspace.updateToolbox('" + xml_str + "');");
+    
     },
     unloadProject() {
       if (this.dirty) {
@@ -163,6 +167,7 @@ export default {
       this.show = "display: none";
     },
     openBlock(name) {
+      console.log("[BlocklyEditor]收到打开方块事件");
       if (
         !fs.existsSync(
           projectManager.getProjectPath() + "/blocks/" + name + ".block"
@@ -171,6 +176,8 @@ export default {
         this.$snotify.error(this.$t("tip.invaild_block"));
         return;
       }
+      //NOTE：由于在loadProject下send存在bug,故暂时这么移到这里，并不会影响性能^-^
+      webview.send("open-project", projectManager.getProjectPath());
       webview.send("block-open", name);
     },
     renameBlock(name) {
