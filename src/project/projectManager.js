@@ -125,6 +125,9 @@ export default {
         if (fs.existsSync(this.getProjectPath() + '/blocks/' + name + '.block')) {
             fs.unlinkSync(this.getProjectPath() + '/blocks/' + name + '.block');
         }
+        if (fs.existsSync(this.getProjectPath() + '/scripts/' + name + '.js')) {
+            fs.unlinkSync(this.getProjectPath() + '/scripts/' + name + '.js');
+        }
     },
     addBlock(name) {
         let re = /^[\u4E00-\u9FA5A-Za-z0-9_\-]+$/
@@ -160,6 +163,7 @@ export default {
                 project.info.blocks[index] = newname;
                 //重命名对应文件
                 fs.renameSync(this.getProjectPath() + '/blocks/' + name + '.block', this.getProjectPath() + '/blocks/' + newname + '.block')
+                fs.renameSync(this.getProjectPath() + '/scripts/' + name + '.js', this.getProjectPath() + '/scripts/' + newname + '.js')
             }
             index++;
         }
