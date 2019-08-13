@@ -74,6 +74,7 @@ export default {
         if (blocks == {}) {
             return;
         }
+        console.log(UglifyJS.minify(blocks, { mangle: false }))
         let block_code = UglifyJS.minify(blocks, { mangle: false }).code;
         let jscode = bundle_code + '\n' + block_code;
         //输出js文件
