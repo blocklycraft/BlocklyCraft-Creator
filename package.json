@@ -1,6 +1,6 @@
 {
   "name": "blockcreator",
-  "version": "0.0.9-indev",
+  "version": "0.0.10-indev",
   "description": "A Bukkit plugin creator!!",
   "productName": "BlockCraft",
   "cordovaId": "cn.orecraft.blockcraft",

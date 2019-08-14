@@ -1,6 +1,7 @@
 <script>
 import { colors } from "quasar";
 import logger from "../logger/logger";
+
 //捕获所有异常
 
 window.onerror = function (msg){
@@ -9,7 +10,7 @@ window.onerror = function (msg){
 }
 export default {
   versions: {
-    blockcraft: "0.0.9-indev"
+    blockcraft: "0.0.10-indev"
   },
   dark: false,
   applyTheme(theme) {
