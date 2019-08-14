@@ -95,6 +95,19 @@
     ipcRenderer.on('block-close', (event, arg) => {
       workspace.clear()
     })
+    ipcRenderer.on('block-rebuild', (event, arg) => {
+      let xmlText = fs.readFileSync(curr_pro_path + '/blocks/' + arg + '.block')
+      try {
+        var xml = Blockly.Xml.textToDom(xmlText)
+      } catch (e) {
+        ipcRenderer.sendToHost('load-error')
+        return;
+      }
+      let tempwork = new Blockly.Workspace();
+      Blockly.Xml.domToWorkspace(xml, tempwork);
+      let jscode = Blockly.JavaScript.workspaceToCode(tempwork);
+      fs.writeFileSync(curr_pro_path + '/scripts/' + arg + '.js', jscode);
+    })
   </script>
   <script>
     //events
@@ -106,8 +119,12 @@
       let xml_str = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(workspace));
       fs.writeFileSync(curr_pro_path + '/blocks/' + curr_block_name + '.block', xml_str);
       //同时生成js
+
+      /*
+      * 由于构建前会将积木代码重新生成，因此不需要在这里生成了
       let jscode = Blockly.JavaScript.workspaceToCode(workspace);
       fs.writeFileSync(curr_pro_path + '/scripts/' + curr_block_name + '.js', jscode);
+      */
     }
   </script>
   <script>
