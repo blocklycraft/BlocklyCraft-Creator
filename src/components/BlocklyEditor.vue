@@ -89,6 +89,7 @@ export default {
     this.$eventHub.$on("project-close", this.unloadProject);
     this.$eventHub.$on("block-open", this.openBlock);
     this.$eventHub.$on("block-rename", this.renameBlock);
+    this.$eventHub.$on("block-rebuild", this.rebuildBlock);
     this.$eventHub.$on("block-close", this.closeBlock);
     this.$eventHub.$on("block-save", this.saveBlock);
     this.$eventHub.$on("dark-change", this.changeDark(this.$BlockCraft.dark));
@@ -188,6 +189,10 @@ export default {
     },
     saveBlock() {
       webview.executeJavaScript("saveBlock()");
+    },
+    rebuildBlock(name){
+      webview.send("open-project", projectManager.getProjectPath());
+      webview.send("block-rebuild",name);
     },
     confirm_(res) {
       webview.send("dialog-confirm", res);
