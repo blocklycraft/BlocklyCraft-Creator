@@ -1,4 +1,5 @@
 # 积木编辑器       
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a6149baf833c4121bea7fc32aedaa1ce)](https://app.codacy.com/app/hempflower/BlocklyCraft-Creator?utm_source=github.com&utm_medium=referral&utm_content=blocklycraft/BlocklyCraft-Creator&utm_campaign=Badge_Grade_Settings)
 [![Build Status](https://travis-ci.com/blocklycraft/BlocklyCraft-Creator.svg?branch=master)](https://travis-ci.com/blocklycraft/BlocklyCraft-Creator)
 
 > 让Bukkit插件制作变得更容易^-^      
