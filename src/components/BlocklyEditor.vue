@@ -1,6 +1,10 @@
 <template>
-  <div style="width:100%; height:100%">
+  <div style="width:100%; height:100%;overflow: hidden" >
+    <!--Blockly 支持node.js了，再见了Webview
     <webview id="editor_view" src="statics/editor.html" :style="show" nodeIntegration></webview>
+    -->
+    <div id="workarea" style="height: 100%"></div>
+    <div id="workspace" style="position: absolute" class="text-text"></div>
     <!--Dialog-->
     <q-dialog v-model="confirm" persistent>
       <q-card class="bg-background" :dark="dark">
@@ -19,11 +23,9 @@
         <q-card-section>
           <div class="text-h6">{{prompt_text}}</div>
         </q-card-section>
-
         <q-card-section>
           <q-input :dark="dark" dense v-model="prompt_input" autofocus @keyup.enter="prompt_()" />
         </q-card-section>
-
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="取消" v-close-popup />
           <q-btn flat label="确认" v-close-popup @click="prompt_()" />
@@ -40,53 +42,48 @@ const parseString = require("xml2js").parseString;
 const xml2js = require("xml2js");
 const { app } = require("electron").remote;
 const merge = require("deepmerge");
-let webview;
-
-let runlate;
+import * as Blockly from "blockly/core";
+import "blockly/blocks";
+import "blockly/javascript";
+import * as Zh from "blockly/msg/zh-hans";
 
 export default {
   name: "BlocklyEditor",
   mounted() {
-    webview = document.getElementById("editor_view");
-    webview.addEventListener("dom-ready", () => {
-      //仅在开发环境显示调试工具
-      if (process.env.NODE_ENV != "production") {
-        webview.openDevTools();
-      }
-      console.log("OK!");
-      webview.send("open-project", projectManager.getProjectPath());
-      if (runlate != null) {
-        runlate();
-        runlate = null;
-      }
+    this.blocklyArea = document.getElementById("workarea");
+    this.blocklyDiv = document.getElementById("workspace");
+    Blockly.setLocale(Zh);
+    this.workspace = Blockly.inject(this.blocklyDiv, {
+      toolbox: "<xml><category></category></xml>",
+      scrollbars: true,
+      trashcan: true
     });
-    webview.addEventListener("ipc-message", event => {
-      if (event.channel == "load-error") {
-        this.$snotify.error(this.$t("tip.invaild_block"));
-        return;
-      }
-      if (event.channel == "load-success") {
-        this.$eventHub.$emit("load-success", event.args[0]);
-        return;
-      }
-      if (event.channel == "dialog-alert") {
-        this.$snotify.info(event.args[0]);
-        return;
-      }
-      if (event.channel == "dialog-confirm") {
-        this.confirm_text = event.args[0];
-        this.confirm = true;
-        return;
-      }
-      if (event.channel == "dialog-prompt") {
-        this.prompt_text = event.args[0];
-        this.prompt_input = event.args[1];
-        this.prompt = true;
-        return;
-      }
-    });
+    console.log(this.workspace);
+    let onresize = e => {
+      // Compute the absolute coordinates and dimensions of blocklyArea.
+      let element = this.blocklyArea;
+      let x = 0;
+      let y = 0;
+      /*
+      do {
+        x += element.offsetLeft;
+        y += element.offsetTop;
+        element = element.offsetParent;
+      } while (element);
+      */
+      // Position blocklyDiv over blocklyArea.
+      this.blocklyDiv.style.left = x + "px";
+      this.blocklyDiv.style.top = y + "px";
+      this.blocklyDiv.style.width = this.blocklyArea.offsetWidth + "px";
+      this.blocklyDiv.style.height = this.blocklyArea.offsetHeight + "px";
+      Blockly.svgResize(this.workspace);
+    };
+    window.addEventListener("resize", onresize, false);
+    onresize();
+    Blockly.svgResize(this.workspace);
+    this.loadLibrary()
+
     this.$eventHub.$on("project-open", this.loadProject);
-    this.$eventHub.$on("project-close", this.unloadProject);
     this.$eventHub.$on("block-open", this.openBlock);
     this.$eventHub.$on("block-rename", this.renameBlock);
     this.$eventHub.$on("block-rebuild", this.rebuildBlock);
@@ -96,24 +93,34 @@ export default {
   },
   data() {
     return {
-      show: "display:none",
       dark: false,
       confirm: false,
       confirm_text: "",
       prompt: false,
       prompt_text: "",
-      prompt_input: ""
+      prompt_input: "",
+      workspace: null,
+      blocklyArea: null,
+      blocklyDiv: null
     };
   },
   methods: {
     changeDark(dark) {
       this.dark = dark;
     },
-    loadProject() {
-      this.show = "";
-      //Load project libraries.
-      //由于info.json是属于bpm的，故在此并不对其信息进行验证
-      //webview.executeJavaScript('console.log("脚本执行成功")');
+    loadProject() {},
+    openBlock(name) {
+      if (
+        !fs.existsSync(
+          projectManager.getProjectPath() + "/blocks/" + name + ".block"
+        )
+      ) {
+        this.$snotify.error(this.$t("tip.invaild_block"));
+        return;
+      }
+      //NOTE：由于在loadProject下send存在bug,故暂时这么移到这里，并不会影响性能^-^
+    },
+    loadLibrary() {
       let blocks_script = "";
       //在'libraries'目录中寻找库
       let libraries_dir = app.getPath("userData") + "/libraries/";
@@ -143,59 +150,24 @@ export default {
                 }
               });
               if (toolbox_xml_obj != null) {
-                //直接合并，应该不会出现问题(敷衍) 补充:此方法无法深度合并
-                //Object.assign(toolbox_tree, toolbox_xml_obj);
                 toolbox_tree = merge(toolbox_tree, toolbox_xml_obj);
               }
             }
           }
         }
       });
-      this.dirty = true;
-      webview.executeJavaScript(blocks_script);
+
       let xml_str = new xml2js.Builder({
         headless: true,
         renderOpts: { pretty: false }
       }).buildObject(toolbox_tree);
-      webview.executeJavaScript("workspace.updateToolbox('" + xml_str + "');");
-    
+      Blockly.updateToolbox(xml_str);
     },
-    unloadProject() {
-      if (this.dirty) {
-        console.log("UNLOAD PROEJCT");
-        webview.reload();
-      }
-      this.show = "display: none";
-    },
-    openBlock(name) {
-      console.log("[BlocklyEditor]收到打开方块事件");
-      if (
-        !fs.existsSync(
-          projectManager.getProjectPath() + "/blocks/" + name + ".block"
-        )
-      ) {
-        this.$snotify.error(this.$t("tip.invaild_block"));
-        return;
-      }
-      //NOTE：由于在loadProject下send存在bug,故暂时这么移到这里，并不会影响性能^-^
-      webview.send("open-project", projectManager.getProjectPath());
-      webview.send("block-open", name);
-    },
-    renameBlock(name) {
-      webview.send("block-rename", name);
-    },
-    closeBlock() {
-      webview.send("block-close");
-    },
-    saveBlock() {
-      webview.executeJavaScript("saveBlock()");
-    },
-    rebuildBlock(name){
-      webview.send("open-project", projectManager.getProjectPath());
-      webview.send("block-rebuild",name);
-    },
+    renameBlock(name) {},
+    closeBlock() {},
+    saveBlock() {},
+    rebuildBlock(name) {},
     confirm_(res) {
-      webview.send("dialog-confirm", res);
       this.confirm = false;
     },
     prompt_() {
@@ -203,7 +175,6 @@ export default {
         return;
       }
       this.prompt = false;
-      webview.send("dialog-prompt", this.prompt_input);
     }
   }
 };

@@ -1,14 +1,14 @@
 <template>
   <div style="height: 100%">
-    <q-splitter v-model="splitterModel" :limits="[20, 30]" style="height: 100%" :dark="dark">
+    <q-splitter v-model="splitterModel" :limits="[20, 20]" style="height: 100%" :dark="dark">
       <template v-slot:before>
         <div style="height: 100%;">
           <ProjectArea />
         </div>
       </template>
-      <template v-slot:after>
-        <div style="height: 100%;">
-          <BlocklyEditor></BlocklyEditor>
+      <template v-slot:after style="overflow: hidden">
+        <div style="height: 100%;overflow: hidden">
+          <BlocklyEditor style="overflow: hidden"></BlocklyEditor>
         </div>
       </template>
     </q-splitter>

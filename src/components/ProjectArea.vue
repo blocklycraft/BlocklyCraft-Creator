@@ -639,9 +639,11 @@ export default {
         return;
       }
       //重新生成脚本代码
+      /*即将重写
       for(let block of projectManager.getBlockList()){
         this.$eventHub.$emit('block-rebuild',block)
       }
+      */
       this.build_dl = true;
       this.build_action = "正在准备构建";
       this.build_action = "生成plugin.yml";
