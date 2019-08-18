@@ -46,6 +46,7 @@ const parseString = require('xml2js').parseString
 const xml2js = require('xml2js')
 const { app } = require('electron').remote
 const merge = require('deepmerge')
+const vm = require('vm')
 
 export default {
   name: 'BlocklyEditor',
@@ -53,7 +54,6 @@ export default {
     this.$eventHub.$on('project-open', this.loadProject)
     this.$eventHub.$on('block-open', this.openBlock)
     this.$eventHub.$on('block-rename', this.renameBlock)
-    this.$eventHub.$on('block-rebuild', this.rebuildBlock)
     this.$eventHub.$on('block-close', this.closeBlock)
     this.$eventHub.$on('block-save', this.saveBlock)
     this.$eventHub.$on('dark-change', this.changeDark)
@@ -156,6 +156,9 @@ export default {
           }
         }
       })
+      const sandbox = { Blockly: Blockly }
+      vm.createContext(sandbox)
+      vm.runInContext(blockScript, sandbox)
 
       const xmlStr = new xml2js.Builder({
         headless: true,
