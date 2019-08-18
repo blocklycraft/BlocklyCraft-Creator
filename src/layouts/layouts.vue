@@ -21,7 +21,7 @@
             {{ $t('menu.file') }}
             <q-menu>
               <q-list dense style="min-width: 100px">
-                <q-item clickable v-close-popup @click="new_pro_dl_show = true">
+                <q-item clickable v-close-popup @click="projectDialog = true">
                   <q-item-section>{{ $t('menu.new') }}</q-item-section>
                 </q-item>
                 <q-item clickable v-close-popup @click="open_project">
@@ -32,7 +32,7 @@
                 </q-item>
 
                 <q-separator />
-                <q-item clickable v-close-popup @click="setting_dl_show = true">
+                <q-item clickable v-close-popup @click="settingDialog = true">
                   <q-item-section>{{ $t('menu.setting') }}</q-item-section>
                 </q-item>
 
@@ -49,7 +49,7 @@
             {{ $t('menu.help') }}
             <q-menu auto-close>
               <q-list dense style="min-width: 100px">
-                <q-item clickable @click="about_dl_show = true">
+                <q-item clickable @click="aboutDialog = true">
                   <q-item-section>{{ $t('menu.about') }}</q-item-section>
                 </q-item>
                 <q-item
@@ -72,20 +72,20 @@
 
       <div class="text-text bg-background" style="height: 100%">
         <!-- DIALOGS -->
-        <q-dialog v-model="about_dl_show">
+        <q-dialog v-model="aboutDialog">
           <q-card class="bg-background" :dark="dark" style="min-width: 500px">
             <q-card-section>
               <div class="text-h6 text-accent">{{ $t('app.aboutme') }}</div>
             </q-card-section>
 
             <q-card-section>
-              BlockCraft: {{ app_version }}
+              BlockCraft: {{ appVersion }}
               <br />
-              Electron: {{ electron_version }}
+              Electron: {{ electronVersion }}
               <br />
-              Chrome: {{ chrome_version }}
+              Chrome: {{ chromeVersion }}
               <br />
-              Node.js: {{ node_version }}
+              Node.js: {{ nodeVersion }}
               <br />Author:
               <a @click="openUrl('https://www.mahua-a.top')" href="#">@hempflower</a>
               <br />Github:
@@ -101,7 +101,7 @@
           </q-card>
         </q-dialog>
 
-        <q-dialog v-model="new_pro_dl_show" persistent>
+        <q-dialog v-model="projectDialog" persistent>
           <q-card class="bg-background" :dark="dark" style="min-width: 500px">
             <q-card-section>
               <div class="text-h6">{{ $t('project.create') }}</div>
@@ -109,7 +109,7 @@
             <q-card-section>
               <q-form class="q-gutter-md">
                 <q-input
-                  v-model="create_pro_dl.path"
+                  v-model="createProjectData.path"
                   :label="$t('project.path')"
                   dense
                   :dark="dark"
@@ -120,13 +120,13 @@
                 </q-input>
                 <q-input
                   :dark="dark"
-                  v-model="create_pro_dl.name"
+                  v-model="createProjectData.name"
                   :label="$t('project.name')"
                   dense
                 ></q-input>
                 <q-input
                   :dark="dark"
-                  v-model="create_pro_dl.package"
+                  v-model="createProjectData.package"
                   :label="$t('project.package')"
                   dense
                 ></q-input>
@@ -140,7 +140,7 @@
           </q-card>
         </q-dialog>
 
-        <q-dialog v-model="setting_dl_show" persistent>
+        <q-dialog v-model="settingDialog" persistent>
           <q-card class="bg-background" :dark="dark" style="min-width: 500px;">
             <q-card-section>
               <div class="text-h6">{{ $t('menu.setting') }}</div>
@@ -153,7 +153,7 @@
                   map-options
                   emit-value
                   outlined
-                  v-model="setting_lang_sel_model"
+                  v-model="languageSetting"
                   :options="langs"
                   :label="$t('app.lang')"
                   @input="setlocal"
@@ -162,7 +162,7 @@
                   :dark="dark"
                   @input="setDark"
                   :label="$t('app.dark')"
-                  v-model="setting_them_sel_model"
+                  v-model="themeSetting"
                 >
                   <q-tooltip>{{$t('tip.dark_restart')}}</q-tooltip>
                 </q-toggle>
@@ -175,7 +175,7 @@
           </q-card>
         </q-dialog>
 
-        <q-dialog v-model="getStart_dl" persistent>
+        <q-dialog v-model="getstartDialog" persistent>
           <q-card class="bg-background" :dark="dark" style="min-width: 500px;">
             <q-card-section>
               <div class="text-h6">{{$t('start.title')}}</div>
@@ -187,7 +187,7 @@
               </div>
             </q-card-section>
             <q-card-actions vertical>
-              <q-btn no-caps flat @click="new_pro_dl_show = true" :label="$t('start.create')" />
+              <q-btn no-caps flat @click="projectDialog = true" :label="$t('start.create')" />
               <q-btn no-caps flat @click="open_project" :label="$t('start.open')" />
             </q-card-actions>
           </q-card>
@@ -200,205 +200,205 @@
 </template>
 
 <script>
-import Index from "../pages/Index";
-const settings = require("electron-settings");
-import theme_light from "../theme/light";
-import theme_dark from "../theme/dark";
-import projectManager from "../project/projectManager";
+import Index from '../pages/Index'
+import themeLight from '../theme/light'
+import themeDark from '../theme/dark'
+import projectManager from '../project/projectManager'
+const settings = require('electron-settings')
 
 export default {
-  name: "layouts",
+  name: 'layouts',
   components: { Index },
   methods: {
-    setlocal(lang) {
-      const settings = require("electron-settings");
-      this.$i18n.locale = lang;
-      settings.set("language", lang);
+    setlocal (lang) {
+      const settings = require('electron-settings')
+      this.$i18n.locale = lang
+      settings.set('language', lang)
     },
-    openProject(filePath) {
+    openProject (filePath) {
       if (filePath !== undefined) {
-        let path = filePath;
-        this.$eventHub.$emit("project-close");
-        let result = projectManager.openProject(path);
-        this.$logger.info("Open project result:" + result);
-        if (result != "SUCCESS") {
-          this.$eventHub.$emit("project-close");
-          this.$snotify.error("未能打开改项目");
-          return;
+        const path = filePath
+        this.$eventHub.$emit('project-close')
+        const result = projectManager.openProject(path)
+        this.$logger.info('Open project result:' + result)
+        if (result !== 'SUCCESS') {
+          this.$eventHub.$emit('project-close')
+          this.$snotify.error('未能打开改项目')
+          return
         }
-        this.$eventHub.$emit("project-open");
+        this.$eventHub.$emit('project-open')
 
-        this.getStart_dl = false;
+        this.getstartDialog = false
       }
     },
-    setDark(dark) {
+    setDark (dark) {
       if (dark) {
-        this.$BlockCraft.applyTheme(theme_dark);
-        this.$BlockCraft.dark = true;
-        this.dark = true;
+        this.$BlockCraft.applyTheme(themeDark)
+        this.$BlockCraft.dark = true
+        this.dark = true
       } else {
-        this.$BlockCraft.applyTheme(theme_light);
-        this.$BlockCraft.dark = false;
-        this.dark = false;
+        this.$BlockCraft.applyTheme(themeLight)
+        this.$BlockCraft.dark = false
+        this.dark = false
       }
-      settings.set("dark", dark);
-      this.$eventHub.$emit("dark-change");
+      settings.set('dark', dark)
+      this.$eventHub.$emit('dark-change')
     },
-    minimize() {
-      this.$q.electron.remote.BrowserWindow.getFocusedWindow().minimize();
+    minimize () {
+      this.$q.electron.remote.BrowserWindow.getFocusedWindow().minimize()
     },
-    maximize() {
-      const win = this.$q.electron.remote.BrowserWindow.getFocusedWindow();
+    maximize () {
+      const win = this.$q.electron.remote.BrowserWindow.getFocusedWindow()
 
       if (win.isMaximized()) {
-        win.unmaximize();
+        win.unmaximize()
       } else {
-        win.maximize();
+        win.maximize()
       }
     },
-    closeApp() {
-      this.$q.electron.remote.BrowserWindow.getFocusedWindow().close();
+    closeApp () {
+      this.$q.electron.remote.BrowserWindow.getFocusedWindow().close()
     },
-    openUrl(url) {
-      let exec = require("child_process").exec;
-      exec("start " + url);
+    openUrl (url) {
+      const exec = require('child_process').exec
+      exec('start ' + url)
     },
-    open_project() {
+    open_project () {
       if (this.busy) {
-        return;
+        return
       }
-      const { dialog } = require("electron").remote;
-      let path = dialog.showOpenDialog({
-        title: this.$i18n.t("project.open"),
-        properties: ["openDirectory"]
-      });
-      if (path == undefined) {
-        return;
+      const { dialog } = require('electron').remote
+      const path = dialog.showOpenDialog({
+        title: this.$i18n.t('project.open'),
+        properties: ['openDirectory']
+      })
+      if (path === undefined) {
+        return
       }
       if (path.length === 0) {
-        return;
+        return
       }
-      this.openProject(path[0]);
+      this.openProject(path[0])
     },
-    close_project() {
+    close_project () {
       if (this.busy) {
-        return;
+        return
       }
-      this.$eventHub.$emit("project-close");
-      projectManager.unloadProject();
-      this.$logger.info("[BlockCraft]Project unloaded!");
-      this.getStart_dl = true;
+      this.$eventHub.$emit('project-close')
+      projectManager.unloadProject()
+      this.$logger.info('[BlockCraft]Project unloaded!')
+      this.getstartDialog = true
     },
-    changeDark(mode) {
-      this.dark = mode;
+    changeDark (mode) {
+      this.dark = mode
     },
-    createProject() {
-      const fs = require("fs");
-      let re = /[a-zA-Z]:(\\.+)*/;
-      if (!re.test(this.create_pro_dl.path)) {
+    createProject () {
+      const fs = require('fs')
+      let re = /[a-zA-Z]:(\\.+)*/
+      if (!re.test(this.createProjectData.path)) {
         this.$snotify.error(
-          this.$t("tip.can_not_create") + this.$t("tip.invaild_path")
-        );
-        return;
+          this.$t('tip.can_not_create') + this.$t('tip.invaild_path')
+        )
+        return
       }
-      re = /^[A-Za-z0-9_\-]+$/;
-      if (!re.test(this.create_pro_dl.name)) {
+      re = /^[A-Za-z0-9_-]+$/
+      if (!re.test(this.createProjectData.name)) {
         this.$snotify.error(
-          this.$t("tip.can_not_create") + this.$t("tip.invaild_name")
-        );
-        return;
+          this.$t('tip.can_not_create') + this.$t('tip.invaild_name')
+        )
+        return
       }
-      re = /[a-zA-Z]+[0-9a-zA-Z_]*(\.[a-zA-Z]+[0-9a-zA-Z_]*)*/;
-      if (!re.test(this.create_pro_dl.package)) {
+      re = /[a-zA-Z]+[0-9a-zA-Z_]*(\.[a-zA-Z]+[0-9a-zA-Z_]*)*/
+      if (!re.test(this.createProjectData.package)) {
         this.$snotify.error(
-          this.$t("tip.can_not_create") + this.$t("tip.invaild_package")
-        );
-        return;
+          this.$t('tip.can_not_create') + this.$t('tip.invaild_package')
+        )
+        return
       }
-      if (fs.existsSync(this.create_pro_dl.path)) {
-        if (fs.lstatSync(this.create_pro_dl.path).isDirectory()) {
-          if (fs.readdirSync(this.create_pro_dl.path).length != 0) {
-            console.log(fs.readdirSync(this.create_pro_dl.path).length);
-            //路径已经存在且不为空，不能创建项目
+      if (fs.existsSync(this.createProjectData.path)) {
+        if (fs.lstatSync(this.createProjectData.path).isDirectory()) {
+          if (fs.readdirSync(this.createProjectData.path).length !== 0) {
+            console.log(fs.readdirSync(this.createProjectData.path).length)
+            // 路径已经存在且不为空，不能创建项目
             this.$snotify.error(
-              this.$t("tip.can_not_create") + this.$t("tip.project_exist")
-            );
-            return;
+              this.$t('tip.can_not_create') + this.$t('tip.project_exist')
+            )
+            return
           }
         }
       }
-      let res = projectManager.createProject(
-        this.create_pro_dl.path,
-        this.create_pro_dl.name,
-        this.create_pro_dl.package
-      );
+      const res = projectManager.createProject(
+        this.createProjectData.path,
+        this.createProjectData.name,
+        this.createProjectData.package
+      )
       if (!res) {
         this.$snotify.error(
-          this.$t("tip.can_not_create") + this.$t("tip.create_fail")
-        );
-        return;
+          this.$t('tip.can_not_create') + this.$t('tip.create_fail')
+        )
+        return
       }
-      this.new_pro_dl_show = false;
-      this.getStart_dl = false;
-      this.openProject(this.create_pro_dl.path);
+      this.projectDialog = false
+      this.getstartDialog = false
+      this.openProject(this.createProjectData.path)
     },
-    selectPath() {
-      const { dialog } = require("electron").remote;
-      let path = dialog.showOpenDialog({
-        title: this.$i18n.t("project.create"),
-        properties: ["openDirectory"]
-      });
-      if (path == undefined) {
-        return;
+    selectPath () {
+      const { dialog } = require('electron').remote
+      const path = dialog.showOpenDialog({
+        title: this.$i18n.t('project.create'),
+        properties: ['openDirectory']
+      })
+      if (path === undefined) {
+        return
       }
       if (path.length === 0) {
-        return;
+        return
       }
-      this.create_pro_dl.path = path[0];
+      this.createProjectData.path = path[0]
     },
-    changeTitle(title) {
-      this.title = title;
+    changeTitle (title) {
+      this.title = title
     }
   },
-  data() {
+  data () {
     return {
       busy: false,
       dark: false,
-      about_dl_show: false,
-      new_pro_dl_show: false,
-      setting_dl_show: false,
-      setting_lang_sel_model: this.$i18n.locale,
-      setting_them_sel_model: settings.get("dark"),
-      getStart_dl: true,
-      app_version: this.$BlockCraft.versions.blockcraft,
-      electron_version: process.versions.electron,
-      chrome_version: process.versions.chrome,
-      node_version: process.versions.node,
-      title: "BlockCraft",
-      create_pro_dl: {
-        path: "",
-        name: "",
-        package: ""
+      aboutDialog: false,
+      projectDialog: false,
+      settingDialog: false,
+      languageSetting: this.$i18n.locale,
+      themeSetting: settings.get('dark'),
+      getstartDialog: true,
+      appVersion: this.$BlockCraft.versions.blockcraft,
+      electronVersion: process.versions.electron,
+      chromeVersion: process.versions.chrome,
+      nodeVersion: process.versions.node,
+      title: 'BlockCraft',
+      createProjectData: {
+        path: '',
+        name: '',
+        package: ''
       },
       langs: [
         {
-          label: "简体中文",
-          value: "zh-cn"
+          label: '简体中文',
+          value: 'zh-cn'
         }
       ]
-    };
+    }
   },
-  mounted() {
-    this.dark = this.$BlockCraft.dark;
-    this.$eventHub.$on("dark-change", () => {
-      this.changeDark(this.$BlockCraft.dark);
-    });
-    this.$eventHub.$on("title-update", this.changeTitle);
-    this.$eventHub.$on("busy-mode", flag => {
-      this.busy = flag;
-    });
+  mounted () {
+    this.dark = this.$BlockCraft.dark
+    this.$eventHub.$on('dark-change', () => {
+      this.changeDark(this.$BlockCraft.dark)
+    })
+    this.$eventHub.$on('title-update', this.changeTitle)
+    this.$eventHub.$on('busy-mode', flag => {
+      this.busy = flag
+    })
   }
-};
+}
 </script>
 
 <style scoped>

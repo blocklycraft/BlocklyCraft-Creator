@@ -19,29 +19,29 @@
 </style>
 
 <script>
-import ProjectArea from "../components/ProjectArea";
-import BlocklyEditor from "../components/BlocklyEditor";
+import ProjectArea from '../components/ProjectArea';
+import BlocklyEditor from '../components/BlocklyEditor';
 export default {
-  name: "PageIndex",
+  name: 'PageIndex',
   components: { BlocklyEditor, ProjectArea },
-  data() {
+  data () {
     return {
       splitterModel: 20,
       dark: false
-    };
-  },
-  methods: {
-    changeDark(mode) {
-      this.dark = mode;
     }
   },
-  mounted() {
-    this.$eventHub.$on("dark-change", () => {
-      this.changeDark(this.$BlockCraft.dark);
-    });
+  methods: {
+    changeDark (mode) {
+      this.dark = mode
+    }
   },
-  beforeMount() {
-    this.dark = this.$BlockCraft.dark;
+  mounted () {
+    this.$eventHub.$on('dark-change', () => {
+      this.changeDark(this.$BlockCraft.dark)
+    })
+  },
+  beforeMount () {
+    this.dark = this.$BlockCraft.dark
   }
-};
+}
 </script>

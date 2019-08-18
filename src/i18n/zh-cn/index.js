@@ -15,14 +15,14 @@ export default {
     github: 'Github地址',
     doc: '帮助文档',
     close: '关闭项目',
-    libraries: '依赖库',
+    libraries: '依赖库'
 
   },
   start: {
     title: '开始使用',
     msg: 'BlockCraft 目前处于空闲状况。现在你可以:',
     create: '新建项目',
-    open: '打开项目',
+    open: '打开项目'
   },
   project: {
     create: '创建项目',
@@ -32,12 +32,12 @@ export default {
     project: '项目',
     blocks: '积木',
     create_block: '创建新的积木板',
-    rename_block: "重命名积木板",
+    rename_block: '重命名积木板',
     add_command: '添加命令',
     add_permission: '添加权限',
     edit_command: '编辑命令',
     edit_permission: '编辑权限'
-    
+
   },
   dialog: {
     cancel: '取消',
@@ -46,8 +46,8 @@ export default {
     no: '否',
     info: '信息',
     close: '关闭',
-    enter: '确认',
-    
+    enter: '确认'
+
   },
   plugin: {
     name: '插件名称',
@@ -63,7 +63,7 @@ export default {
   },
   tip: {
     dark_restart: '在切换模式后，我们建议您重启软件！',
-    block_delete_title: "真的要删除此积木板吗？",
+    block_delete_title: '真的要删除此积木板吗？',
     block_delete_msg: "此操作不可撤销,你真的要删除'{name}'吗？",
     invaild_name: '此名称无效，请重新输入一个名称。',
     already_exist: '积木板{name},已经存在，请重新输入一个名字。',
