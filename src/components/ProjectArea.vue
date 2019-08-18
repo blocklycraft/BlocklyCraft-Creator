@@ -279,9 +279,9 @@
 </template>
 
 <script>
-import BuildDialog from '../components/BuildDialog';
-import projectManager from '../project/projectManager';
-import pluginBuilder from '../project/pluginBuilder';
+import BuildDialog from '../components/BuildDialog'
+import projectManager from '../project/projectManager'
+import pluginBuilder from '../project/pluginBuilder'
 export default {
   name: 'ProjectArea',
   components: { BuildDialog },
@@ -335,7 +335,7 @@ export default {
       const info = projectManager.getProjectInfo()
       this.projectInfo.name = info.name
       this.projectInfo.version = info.version
-      this.projectInfo.author = info.author ? info.author : '';
+      this.projectInfo.author = info.author ? info.author : ''
       this.projectInfo.package = info.package
       const currBlocks = projectManager.getBlockList()
       this.projectInfo.commands = projectManager.getCommands()
@@ -358,15 +358,15 @@ export default {
       this.buildDialog = false
 
       this.$logger.info('[ProjectArea]rec project-close')
-      this.projectInfo.name = '';
-      this.projectInfo.author = '';
-      this.projectInfo.version = '';
-      this.projectInfo.package = '';
+      this.projectInfo.name = ''
+      this.projectInfo.author = ''
+      this.projectInfo.version = ''
+      this.projectInfo.package = ''
       this.blocks = []
-      this.currBlock = '';
+      this.currBlock = ''
 
       // 更新标题
-      document.title = 'BlockCraft';
+      document.title = 'BlockCraft'
       this.$eventHub.$emit('title-update', document.title)
     },
     inputcheck (val) {
@@ -442,7 +442,7 @@ export default {
                 this.$eventHub.$emit('block-close')
               }
               projectManager.deleteBlock(name)
-              break;
+              break
             }
           }
           const currBlocks = projectManager.getBlockList()
@@ -479,7 +479,7 @@ export default {
           const re = /^[\u4E00-\u9FA5A-Za-z0-9_-]+$/
           if (!re.test(newName)) {
             this.$snotify.error('积木板名称中仅可包含中英文数字和-_')
-            return;
+            return
           }
           for (let x = 0; x < this.blocks.length; x++) {
             if (this.blocks[x] === name) {
@@ -527,18 +527,18 @@ export default {
         .onOk(name => {
           if (name === '') {
             this.$snotify.error(this.$t('tip.invaild_name'))
-            return;
+            return
           }
           const re = /^[\u4E00-\u9FA5A-Za-z0-9_-]+$/
           if (!re.test(name)) {
             this.$snotify.error(this.$t('tip.invaild_name'))
-            return;
+            return
           }
           console.log(this.blocks)
           for (const block of this.blocks) {
             if (block === name) {
               this.$snotify.error(this.$t('tip.already_exist', { name: name }))
-              return;
+              return
             }
           }
           projectManager.addBlock(name)
@@ -608,25 +608,25 @@ export default {
     },
     addPermission () {
       this.editPermissionDisable = false
-      this.editPermission.default = '';
-      this.editPermission.permission = '';
+      this.editPermission.default = ''
+      this.editPermission.permission = ''
       this.permissionEditDialog = true
     },
     addCommand () {
       this.editCommandDisable = false
-      this.editCommand.command = '';
-      this.editCommand.permission = '';
+      this.editCommand.command = ''
+      this.editCommand.permission = ''
       this.commandEditDialog = true
     },
     buildPlugin () {
       // 进行一些必要的检查
       if (!pluginBuilder.check(projectManager.getProjectPath())) {
         this.$snotify.error('构建插件失败，项目目录被非法修改。')
-        return;
+        return
       }
       if (projectManager.getBlockList().length === 0) {
         this.$snotify.error('构建插件失败，你至少需要创建一个积木板。')
-        return;
+        return
       }
       // 重新生成脚本代码
       /* 即将重写
@@ -635,17 +635,17 @@ export default {
       }
       */
       this.buildDialog = true
-      this.buildAction = '正在准备构建';
-      this.buildAction = '生成plugin.yml';
+      this.buildAction = '正在准备构建'
+      this.buildAction = '生成plugin.yml'
       pluginBuilder.genPluginYml(projectManager.getProjectPath())
-      this.buildAction = '生成脚本代码';
+      this.buildAction = '生成脚本代码'
       pluginBuilder.genJavaScript(projectManager.getProjectPath())
-      this.buildAction = '编译插件';
+      this.buildAction = '编译插件'
       pluginBuilder.genJar(
         projectManager.getProjectPath(),
         result => {
           this.buildDialog = false
-          this.buildAction = '完成';
+          this.buildAction = '完成'
           if (result) {
             this.$snotify.info(
               '构建插件成功，我们已经自动打开插件所在文件夹。'

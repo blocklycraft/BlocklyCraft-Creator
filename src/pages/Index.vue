@@ -19,8 +19,8 @@
 </style>
 
 <script>
-import ProjectArea from '../components/ProjectArea';
-import BlocklyEditor from '../components/BlocklyEditor';
+import ProjectArea from '../components/ProjectArea'
+import BlocklyEditor from '../components/BlocklyEditor'
 export default {
   name: 'PageIndex',
   components: { BlocklyEditor, ProjectArea },
