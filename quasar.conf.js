@@ -1,3 +1,4 @@
+/* eslint-disable no-template-curly-in-string */
 // Configuration for your app
 
 module.exports = function (ctx) {
@@ -23,11 +24,10 @@ module.exports = function (ctx) {
     ],
 
     framework: {
-      config:{
+      config: {
         loadingBar: { skipHijack: true }
       },
-       all: true, // --- includes everything; for dev only!
-
+      all: true, // --- includes everything; for dev only!
 
       components: [
 
@@ -85,29 +85,29 @@ module.exports = function (ctx) {
         theme_color: '#027be3',
         icons: [
           {
-            'src': 'statics/icons/icon-128x128.png',
-            'sizes': '128x128',
-            'type': 'image/png'
+            src: 'statics/icons/icon-128x128.png',
+            sizes: '128x128',
+            type: 'image/png'
           },
           {
-            'src': 'statics/icons/icon-192x192.png',
-            'sizes': '192x192',
-            'type': 'image/png'
+            src: 'statics/icons/icon-192x192.png',
+            sizes: '192x192',
+            type: 'image/png'
           },
           {
-            'src': 'statics/icons/icon-256x256.png',
-            'sizes': '256x256',
-            'type': 'image/png'
+            src: 'statics/icons/icon-256x256.png',
+            sizes: '256x256',
+            type: 'image/png'
           },
           {
-            'src': 'statics/icons/icon-384x384.png',
-            'sizes': '384x384',
-            'type': 'image/png'
+            src: 'statics/icons/icon-384x384.png',
+            sizes: '384x384',
+            type: 'image/png'
           },
           {
-            'src': 'statics/icons/icon-512x512.png',
-            'sizes': '512x512',
-            'type': 'image/png'
+            src: 'statics/icons/icon-512x512.png',
+            sizes: '512x512',
+            type: 'image/png'
           }
         ]
       }
@@ -119,58 +119,57 @@ module.exports = function (ctx) {
     },
 
     electron: {
-       bundler: 'builder', // or 'packager'
+      bundler: 'builder', // or 'packager'
 
       extendWebpack (cfg) {
         // do something with Electron main process Webpack cfg
         // chainWebpack also available besides this extendWebpack
       },
 
-
       builder: {
         // https://www.electron.build/configuration/configuration
 
         // appId: 'quasar-app'
 
-        "appId": "cn.orecraft.blockcraft",
-        "productName":"BlockCreator",
-        "copyright": "Copyright © year ${author}",
-        "dmg": {
-          "artifactName":"${productName}-${version}-${os}-${arch}.${ext}",
-          "contents": [
+        appId: 'cn.orecraft.blockcraft',
+        productName: 'BlockCreator',
+        copyright: 'Copyright © year ${author}',
+        dmg: {
+          artifactName: '${productName}-${version}-${os}-${arch}.${ext}',
+          contents: [
             {
-              "x": 410,
-              "y": 150,
-              "type": "link",
-              "path": "/Applications"
+              x: 410,
+              y: 150,
+              type: 'link',
+              path: '/Applications'
             },
             {
-              "x": 130,
-              "y": 150,
-              "type": "file"
+              x: 130,
+              y: 150,
+              type: 'file'
             }
           ]
         },
-        "win": {
-          "artifactName":"${productName}-${version}-${os}-${arch}.${ext}",
-          "target": [
+        win: {
+          artifactName: '${productName}-${version}-${os}-${arch}.${ext}',
+          target: [
             {
-              "target": "zip",
-              "arch": [
-                "x64",
-                "ia32"
+              target: 'zip',
+              arch: [
+                'x64',
+                'ia32'
               ]
             }
           ]
         },
-        "linux": {
-          "artifactName":"${productName}-${version}-${os}-${arch}.${ext}",
-          "target": [
+        linux: {
+          artifactName: '${productName}-${version}-${os}-${arch}.${ext}',
+          target: [
             {
-              "target": "tar.gz",
-              "arch": [
-                "x64",
-                "ia32"
+              target: 'tar.gz',
+              arch: [
+                'x64',
+                'ia32'
               ]
             }
           ]
