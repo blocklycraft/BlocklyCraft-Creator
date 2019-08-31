@@ -154,7 +154,7 @@ module.exports = function (ctx) {
           artifactName: '${productName}-${version}-${os}-${arch}.${ext}',
           target: [
             {
-              target: 'nsis-web',
+              target: 'nsis',
               arch: [
                 'x64',
                 'ia32'
