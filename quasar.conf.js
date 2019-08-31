@@ -154,7 +154,7 @@ module.exports = function (ctx) {
           artifactName: '${productName}-${version}-${os}-${arch}.${ext}',
           target: [
             {
-              target: 'zip',
+              target: 'nsisWeb',
               arch: [
                 'x64',
                 'ia32'
@@ -166,7 +166,7 @@ module.exports = function (ctx) {
           artifactName: '${productName}-${version}-${os}-${arch}.${ext}',
           target: [
             {
-              target: 'tar.gz',
+              target: 'AppImage',
               arch: [
                 'x64',
                 'ia32'
